@@ -101,4 +101,7 @@ public class Goblin extends Enemy {
         return this.bounds;
     }
 
+    public void doDamage(int damage) {
+
+    }
 }
