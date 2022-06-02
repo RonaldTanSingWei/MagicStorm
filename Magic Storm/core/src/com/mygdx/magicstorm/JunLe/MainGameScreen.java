@@ -1,26 +1,44 @@
 package com.badlogic.drop;
 
+import com.badlogic.drop.Enemies.Card;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
+
+
 public class MainGameScreen implements Screen {
     final Drop game;
-    Stage stage;
-    boolean touched = false;
+    private ArrayList<Actor> cards = new ArrayList<Actor>();
+    boolean cardSelected = false;
     private Vector2 touchPos;
-    MainPauseScreen pauseScreen;
+    Stage stage;
+    com.badlogic.drop.MainPauseScreen pauseScreen;
+    Actor card1;
+    Actor card2;
+    Actor card3;
+    Group group2;
+    Actor selectedCard;
+    int cardNo = 3;
+    int handSize = cardNo * 120;
+    int spaceAtEachSide = (800 - handSize) / 2;
+    int selectedCardX;
+    int selectedCardY;
+
 
     public enum State {
         PAUSE,
@@ -32,33 +50,41 @@ public class MainGameScreen implements Screen {
     public MainGameScreen(final Drop game){
         this.game = game;
         stage = new Stage(new ScreenViewport());
-        Group group = new Group();
+        Group group1 = new Group();
+        group2 = new Group();
 
+        MyActor monster = new MyActor();
+        card1 = new Image(new Texture(Gdx.files.internal("attack.png")));
         Image player = new Image(new Texture(Gdx.files.internal("Player.png")));
-        Image card1 = new Image(new Texture(Gdx.files.internal("attack.png")));
-        Image card2 = new Image(new Texture(Gdx.files.internal("defend.png")));
-        Image monster = new Image(new Texture(Gdx.files.internal("monster 1.png")));
+        card2 = new Image(new Texture(Gdx.files.internal("defend.png")));
+        card3 = new Image(new Texture(Gdx.files.internal("defend.png")));
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
 
         player.setName("player");
         card1.setName("card1");
         card2.setName("card2");
-        monster.setName("monster");
+        card3.setName("card2");
         background.setName("background");
-
+        monster.setName("monster");
         // order actors are drawn in
-        group.addActor(background);
-        group.addActor(player);
-        group.addActor(card1);
-        group.addActor(card2);
-        group.addActor(monster);
+        group1.addActor(background);
+        group1.addActor(player);
+        group1.addActor(card1);
+        group1.addActor(card2);
+        group1.addActor(card3);
+        group1.addActor(monster);
 
 
-        stage.addActor(group);
+        stage.addActor(group1);
         player.setPosition(0,110);
-        card1.setPosition(280,0);
-        card2.setPosition(400,0);
+        card1.setPosition(220,0);
+        card2.setPosition(340,0);
+        card3.setPosition(460,0);
         monster.setPosition(600,110);
+
+        cards.add(card1);
+        cards.add(card2);
+        cards.add(card3);
 
         Gdx.input.setInputProcessor(this.game);
 
@@ -70,13 +96,12 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        pauseScreen = new MainPauseScreen(this.game, this);
+        pauseScreen = new com.badlogic.drop.MainPauseScreen(this.game, this);
 
         switch (state) {
             case RUN:
             Group group = (Group) stage.getActors().first();
-            Image card1 = (Image) group.findActor("card1");
-            Image card2 = (Image) group.findActor("card2");
+            MyActor monster = (MyActor) group.findActor("monster");
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
@@ -86,8 +111,11 @@ public class MainGameScreen implements Screen {
                 Vector2 coord = stage.screenToStageCoordinates(new Vector2((float) Gdx.input.getX(), (float) Gdx.input.getY()));
                 final Actor hitActor = stage.hit(coord.x, coord.y, true);
                 if (hitActor != null) {
-                    if ((hitActor.getName().equals("card1") || hitActor.getName().equals("card2")) && !touched) {
-                        touched = true;
+                    if ((hitActor.getName().equals("card1") || hitActor.getName().equals("card2")) && !cardSelected) {// set touchable in class initialisation instead
+                        cardSelected = true;
+                        selectedCard = hitActor;
+                        selectedCardX = (int) selectedCard.getX();
+                        selectedCardY = (int) selectedCard.getY();
                         RunnableAction ra = new RunnableAction();
                         ra.setRunnable(new Runnable() {
                             @Override
@@ -97,16 +125,31 @@ public class MainGameScreen implements Screen {
                             }
                         });
                         hitActor.addAction(ra);
+
+                    }
+                    else if ((hitActor.getName().equals("monster")  && cardSelected)) {
+                        cardSelected = false;
+                        selectedCard.remove();
+                        monster.takeDamage(5);
+                        cardNo -= 1;
+                        cards.remove(selectedCard);
+                        handSize = cardNo * 120;
+                        spaceAtEachSide = (800 - handSize) / 2;
+                        for (int i = 0; i < cards.size(); i ++) {
+                            final Actor tempActor = cards.get(i);
+                            tempActor.setPosition(spaceAtEachSide,0);
+                            spaceAtEachSide += 120;
+                        }
+
+
                     }
                 }
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-                card1.setPosition(280, 0);
-                card2.setPosition(400, 0);
-                card1.setScale(1f);
-                card2.setScale(1f);
-                touched = false;
+                selectedCard.setPosition(selectedCardX,selectedCardY);
+                selectedCard.setScale(1f);
+                cardSelected = false;
             }
             case PAUSE:
                 break;
@@ -126,6 +169,7 @@ public class MainGameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
             pause();
         }
+
     }
 
     @Override

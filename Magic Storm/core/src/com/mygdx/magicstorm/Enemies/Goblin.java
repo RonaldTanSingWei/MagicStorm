@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.mygdx.magicstorm.MagicStorm;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -37,16 +38,14 @@ public class Goblin extends Enemy {
     @Override
     public void act(float delta) {
         super.act(delta);
-
-        if (this.getCurrentHp() <= 0) {
-            this.die();
-
-        }
+        moveBy(100,100);
     }
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
+
+        Color color = getColor();
+        this.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         batch.begin();
         batch.draw(texture, bounds.x, bounds.y);
         font.draw(batch, currentHpString, hpBar.getX(), hpBar.getY());
@@ -90,11 +89,13 @@ public class Goblin extends Enemy {
 
     public void dispose() {
     }
-
+public boolean isDead() {
+    return currentHp <= 0;
+}
     public void die() {
-        clearActions();
-
-        this.dispose();
+        this.texture = new Texture(Gdx.files.internal("deadGoblin.png"));
+        currentHpString = "";
+        this.setVisible(false);
     }
 
     public Rectangle getBounds() {

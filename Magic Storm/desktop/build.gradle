@@ -41,7 +41,9 @@ task dist(type: Jar) {
     with jar
 }
 
-
+dependencies {
+    implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+}
 dist.dependsOn classes
 
 eclipse.project.name = appName + "-desktop"

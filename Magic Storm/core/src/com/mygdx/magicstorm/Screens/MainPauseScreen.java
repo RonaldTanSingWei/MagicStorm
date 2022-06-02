@@ -1,5 +1,4 @@
-package com.badlogic.drop;
-
+package com.mygdx.magicstorm.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -18,9 +17,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.magicstorm.MagicStorm;
 
 public class MainPauseScreen implements Screen {
-    final Drop game;
+    final MagicStorm game;
 
     OrthographicCamera camera;
     MainGameScreen gameScreen;
@@ -35,7 +35,7 @@ public class MainPauseScreen implements Screen {
     private Sprite sprite;
 
 
-    public MainPauseScreen(final Drop game, final MainGameScreen gameScreen) {
+    public MainPauseScreen(final MagicStorm game, final MainGameScreen gameScreen) {
         this.game = game;
         this.gameScreen = gameScreen;
         camera = new OrthographicCamera();
