@@ -56,13 +56,11 @@ public class MyActor extends Actor {
         hpBatch.begin();
         font.draw(hpBatch, currentHpString, hpBar.getX(), hpBar.getY());
         hpBatch.end();
-
-
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.rect(hpBar.x, hpBar.y, hpBar.width, hpBar.height);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.end();
-batch.begin();
+        batch.begin();
 
     }
 
@@ -77,19 +75,20 @@ batch.begin();
         super.positionChanged();
     }
     public void takeDamage(int damage) {
-        currentHp -= damage;
+        if (currentHp > 0) {
+            currentHp -= damage;
 
-        currentHpString = currentHp + "/" + maxHP;
+            currentHpString = currentHp + "/" + maxHP;
 
-        hpBar.setWidth(184 * currentHp / maxHP);
-        if (currentHp <=0) {
-            currentHp = 0;
-            //fades to transparent
-            ColorAction colorAction = new ColorAction();
-            colorAction.setEndColor(Color.CLEAR);
-            colorAction.setDuration(2f);
-            MyActor.this.addAction(colorAction);
-            currentHpString = "";
+            hpBar.setWidth(184 * currentHp / maxHP);
+            if (currentHp <= 0) {
+                //fades to transparent
+                ColorAction colorAction = new ColorAction();
+                colorAction.setEndColor(Color.CLEAR);
+                colorAction.setDuration(2f);
+                MyActor.this.addAction(colorAction);
+                currentHpString = "";
+            }
         }
     }
     public int getCurrentHp() {
