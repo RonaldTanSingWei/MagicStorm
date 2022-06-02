@@ -1,33 +1,31 @@
-package com.badlogic.drop;
+package com.mygdx.magicstorm.Enemies;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.utils.Timer;
 
 public class MyActor extends Actor {
-    Sprite sprite = new Sprite (new Texture(Gdx.files.internal("monster 1.png")));
+    Sprite sprite = new Sprite (new Texture(Gdx.files.internal("goblin.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Rectangle hpBar;
     private int currentHp;
     private int maxHP;
     private String currentHpString;
     private BitmapFont font = new BitmapFont();
+    private SpriteBatch hpBatch = new SpriteBatch();
 
 
     public MyActor() {
@@ -54,11 +52,17 @@ public class MyActor extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         sprite.setColor(getColor());
         sprite.draw(batch, parentAlpha);
-        font.draw(batch, currentHpString, hpBar.getX(), hpBar.getY());
+        batch.end();
+        hpBatch.begin();
+        font.draw(hpBatch, currentHpString, hpBar.getX(), hpBar.getY());
+        hpBatch.end();
+
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.rect(hpBar.x, hpBar.y, hpBar.width, hpBar.height);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.end();
+batch.begin();
 
     }
 
@@ -74,6 +78,10 @@ public class MyActor extends Actor {
     }
     public void takeDamage(int damage) {
         currentHp -= damage;
+
+        currentHpString = currentHp + "/" + maxHP;
+
+        hpBar.setWidth(184 * currentHp / maxHP);
         if (currentHp <=0) {
             currentHp = 0;
             //fades to transparent
@@ -81,10 +89,8 @@ public class MyActor extends Actor {
             colorAction.setEndColor(Color.CLEAR);
             colorAction.setDuration(2f);
             MyActor.this.addAction(colorAction);
+            currentHpString = "";
         }
-        currentHpString = currentHp + "/" + maxHP;
-
-        hpBar.setWidth(184 * currentHp / maxHP);
     }
     public int getCurrentHp() {
         return this.currentHp;

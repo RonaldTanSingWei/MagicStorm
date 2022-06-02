@@ -1,5 +1,7 @@
 package com.mygdx.magicstorm.Screens;
 
+
+import com.mygdx.magicstorm.Screens.MainGameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.magicstorm.MagicStorm;
 
 public class MainMenuScreen implements Screen {
@@ -85,14 +87,14 @@ public class MainMenuScreen implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        /*game.batch.begin();
-        game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
-        game.batch.end();
+            /*game.batch.begin();
+            game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
+            game.batch.end();
 
-        if (Gdx.input.isTouched()) {
-            game.setScreen(new MainGameScreen(game));
-            dispose();
-        }*/
+            if (Gdx.input.isTouched()) {
+                game.setScreen(new MainGameScreen(game));
+                dispose();
+            }*/
     }
 
     @Override
@@ -121,3 +123,4 @@ public class MainMenuScreen implements Screen {
     }
 
 }
+
