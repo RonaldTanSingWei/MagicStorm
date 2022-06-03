@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.magicstorm.Enemies.Goblin;
 import com.mygdx.magicstorm.Enemies.MyActor;
+import com.mygdx.magicstorm.Hero;
 import com.mygdx.magicstorm.MagicStorm;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class MainGameScreen implements Screen {
     private Group group = new Group();
 
     private Goblin goblin;
+    private Hero player;
     Actor card1;
     Actor card2;
     Actor card3;
@@ -66,12 +68,12 @@ public class MainGameScreen implements Screen {
 
         Goblin goblin = new Goblin(10, 10);
         card1 = new Image(new Texture(Gdx.files.internal("attack.png")));
-        Image player = new Image(new Texture(Gdx.files.internal("Player.png")));
+        Hero hero = new Hero();
         card2 = new Image(new Texture(Gdx.files.internal("defend.png")));
         card3 = new Image(new Texture(Gdx.files.internal("defend.png")));
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        player.setName("player");
+        hero.setName("hero");
         card1.setName("card1");
         card2.setName("card2");
         card3.setName("card2");
@@ -79,7 +81,7 @@ public class MainGameScreen implements Screen {
         goblin.setName("goblin");
         // order actors are drawn in
         group1.addActor(background);
-        group1.addActor(player);
+        group1.addActor(hero);
         group1.addActor(card1);
         group1.addActor(card2);
         group1.addActor(card3);
@@ -87,7 +89,8 @@ public class MainGameScreen implements Screen {
 
 
         stage.addActor(group1);
-        player.setPosition(0,110);
+        hero.setPosition(100,300);
+        hero.setHpBarPos(100, 270);
         card1.setPosition(220,0);
         card2.setPosition(340,0);
         card3.setPosition(460,0);
@@ -113,7 +116,8 @@ public class MainGameScreen implements Screen {
         switch (state) {
             case RUN:
                 Group group = (Group) stage.getActors().first();
-                Goblin goblin = (Goblin) group.findActor("goblin");
+                Hero hero = group.findActor("hero");
+                Goblin goblin = group.findActor("goblin");
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 stage.act(Gdx.graphics.getDeltaTime());
                 stage.draw();
@@ -154,6 +158,21 @@ public class MainGameScreen implements Screen {
                             }
 
 
+                        }
+                        else if ((hitActor.getName().equals("hero")  && cardSelected)) {
+                            cardSelected = false;
+                            selectedCard.remove();
+                            hero.gainArmor(5);
+                            hero.gainHp(5);
+                            cardNo -= 1;
+                            cards.remove(selectedCard);
+                            handSize = cardNo * 120;
+                            spaceAtEachSide = (800 - handSize) / 2;
+                            for (int i = 0; i < cards.size(); i ++) {
+                                final Actor tempActor = cards.get(i);
+                                tempActor.setPosition(spaceAtEachSide,0);
+                                spaceAtEachSide += 120;
+                            }
                         }
                     }
                 }

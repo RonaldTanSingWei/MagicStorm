@@ -52,7 +52,7 @@ public class Goblin extends Enemy {
         font.draw(hpBatch, currentHpString, hpBar.getX(), hpBar.getY());
         hpBatch.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(hpBar.x, hpBar.y, hpBar.width, hpBar.height);
+        shapeRenderer.rect(hpBar.x, hpBar.y, hpBar.width * currentHp / maxHp, hpBar.height);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.end();
         batch.begin();
