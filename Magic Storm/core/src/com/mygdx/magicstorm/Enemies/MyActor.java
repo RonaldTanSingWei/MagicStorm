@@ -12,17 +12,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
-import com.badlogic.gdx.utils.Timer;
 
-public class MyActor extends Actor {
-    Sprite sprite = new Sprite (new Texture(Gdx.files.internal("goblin.png")));
+public class MyActor extends Enemy {
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("goblin.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Rectangle hpBar;
     private int currentHp;
-    private int maxHP;
+    private int maxHp;
     private String currentHpString;
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
@@ -31,10 +28,10 @@ public class MyActor extends Actor {
     public MyActor() {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
-        hpBar = new Rectangle(600,110 - 50,184,10);
-        maxHP = 10;
-        currentHp = maxHP;
-        currentHpString = currentHp + "/" + maxHP;
+        hpBar = new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(),10);
+        maxHp = 10;
+        currentHp = maxHp;
+        currentHpString = currentHp + "/" + maxHp;
         /*addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -70,7 +67,7 @@ public class MyActor extends Actor {
     }
 
     @Override
-    protected void positionChanged() {
+    public void positionChanged() {
         sprite.setPosition(getX(),getY());
         super.positionChanged();
     }
@@ -78,29 +75,27 @@ public class MyActor extends Actor {
         if (currentHp > 0) {
             currentHp -= damage;
 
-            currentHpString = currentHp + "/" + maxHP;
+            currentHpString = currentHp + "/" + maxHp;
 
-            hpBar.setWidth(184 * currentHp / maxHP);
+            hpBar.setWidth(184 * currentHp / maxHp);
             if (currentHp <= 0) {
                 //fades to transparent
-                ColorAction colorAction = new ColorAction();
-                colorAction.setEndColor(Color.CLEAR);
-                colorAction.setDuration(2f);
-                MyActor.this.addAction(colorAction);
-                currentHpString = "";
+                this.die();
+                setCurrentHpString("");
             }
+
         }
     }
     public int getCurrentHp() {
         return this.currentHp;
     }
 
-    public void die() {
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                addAction(sequence(fadeOut(1f)));
-            }
-        }, 2);
+
+    public void setHpBarPos(int xPos, int yPos) {
+        hpBar.setPosition(xPos, yPos);
+    }
+
+    public void setCurrentHpString(String string) {
+        this.currentHpString = string;
     }
 }

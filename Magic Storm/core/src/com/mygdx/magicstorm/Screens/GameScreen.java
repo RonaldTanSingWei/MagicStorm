@@ -51,8 +51,8 @@ public class GameScreen implements Screen, GestureListener {
     public GameScreen(MagicStorm game) {
         stage = new Stage();
         this.game = game;
-        goblin = new Goblin(20,20, 1200, 300);
-        goblin2 = new Goblin(30,30, 600, 300);
+        goblin = new Goblin(20,20);
+        goblin2 = new Goblin(30,30);
         goblin2.setBounds(600,500,150,150);
         stage.addActor(goblin);
         stage.addActor(goblin2);

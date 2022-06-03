@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.mygdx.magicstorm.MagicStorm;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,57 +19,57 @@ import sun.jvm.hotspot.utilities.BitMap;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class Goblin extends Enemy {
-    private MagicStorm game;
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("goblin.png")));
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private Rectangle hpBar;
     private int currentHp;
     private int maxHp;
-    private Rectangle hpBar;
-    private Rectangle bounds;
-    private Texture texture = new Texture(Gdx.files.internal("Goblin.png"));
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private BitmapFont font = new BitmapFont();
     private String currentHpString;
+    private BitmapFont font = new BitmapFont();
+    private SpriteBatch hpBatch = new SpriteBatch();
     ;
 
-    public Goblin(int currentHp, int maxHp, int posX, int posY) {
+    public Goblin(int currentHp, int maxHp) {
+        setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        setTouchable(Touchable.enabled);
+        hpBar = new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(),10);
         this.currentHp = currentHp;
         this.maxHp = maxHp;
-         bounds = new Rectangle(posX,posY,150,150);
-         hpBar = new Rectangle(posX,posY - 50,184,10);
         this.currentHpString = currentHp + "/" + maxHp;
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        moveBy(100,100);
     }
 
     @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-
-        Color color = getColor();
-        this.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.begin();
-        batch.draw(texture, bounds.x, bounds.y);
-        font.draw(batch, currentHpString, hpBar.getX(), hpBar.getY());
+    public void draw(Batch batch, float parentAlpha) {
+        sprite.setColor(getColor());
+        sprite.draw(batch, parentAlpha);
         batch.end();
+        hpBatch.begin();
+        font.draw(hpBatch, currentHpString, hpBar.getX(), hpBar.getY());
+        hpBatch.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.rect(hpBar.x, hpBar.y, hpBar.width, hpBar.height);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.end();
-
+        batch.begin();
 
     }
 
     @Override
     public void takeDamage(int damage) {
         currentHp -= damage;
-        if (currentHp <=0) {
-            currentHp = 0;
-        }
         currentHpString = currentHp + "/" + maxHp;
 
         hpBar.setWidth(184 * currentHp / maxHp);
+        if (currentHp <=0) {
+            this.die();
+            setCurrentHpString("");
+        }
+
 
 
     }
@@ -87,22 +90,31 @@ public class Goblin extends Enemy {
         return this.currentHpString;
     }
 
-    public void dispose() {
+    public void setHpBarPos(int xPos, int yPos) {
+        hpBar.setPosition(xPos, yPos);
     }
-public boolean isDead() {
-    return currentHp <= 0;
-}
-    public void die() {
-        this.texture = new Texture(Gdx.files.internal("deadGoblin.png"));
-        currentHpString = "";
-        this.setVisible(false);
+    public void positionChanged() {
+        sprite.setPosition(getX(),getY());
+        super.positionChanged();
     }
 
-    public Rectangle getBounds() {
-        return this.bounds;
+    public void dispose() {
     }
+    public boolean isDead() {
+    return currentHp <= 0;
+}
+
+    public void die() {
+        this.sprite = new Sprite(new Texture(Gdx.files.internal("deadGoblin.png")));
+        sprite.setPosition(hpBar.x, hpBar.y + 30);
+        super.die();
+    }
+
 
     public void doDamage(int damage) {
 
+    }
+    public void setCurrentHpString(String string) {
+        this.currentHpString = string;
     }
 }

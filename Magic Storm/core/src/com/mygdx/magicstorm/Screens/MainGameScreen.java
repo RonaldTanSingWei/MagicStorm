@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -63,27 +64,25 @@ public class MainGameScreen implements Screen {
         Group group1 = new Group();
         group2 = new Group();
 
-        MyActor monster = new MyActor();
+        Goblin goblin = new Goblin(10, 10);
         card1 = new Image(new Texture(Gdx.files.internal("attack.png")));
         Image player = new Image(new Texture(Gdx.files.internal("Player.png")));
         card2 = new Image(new Texture(Gdx.files.internal("defend.png")));
         card3 = new Image(new Texture(Gdx.files.internal("defend.png")));
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
-        goblin = new Goblin(20,20, 1200, 800);
-background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         player.setName("player");
         card1.setName("card1");
         card2.setName("card2");
         card3.setName("card2");
         background.setName("background");
-        monster.setName("monster");
+        goblin.setName("goblin");
         // order actors are drawn in
         group1.addActor(background);
         group1.addActor(player);
         group1.addActor(card1);
         group1.addActor(card2);
         group1.addActor(card3);
-        group1.addActor(monster);
         group1.addActor(goblin);
 
 
@@ -92,7 +91,8 @@ background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         card1.setPosition(220,0);
         card2.setPosition(340,0);
         card3.setPosition(460,0);
-        monster.setPosition(600,110);
+        goblin.setPosition(600,110);
+        goblin.setHpBarPos(600,80);
 
         cards.add(card1);
         cards.add(card2);
@@ -113,7 +113,7 @@ background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         switch (state) {
             case RUN:
                 Group group = (Group) stage.getActors().first();
-                MyActor monster = (MyActor) group.findActor("monster");
+                Goblin goblin = (Goblin) group.findActor("goblin");
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 stage.act(Gdx.graphics.getDeltaTime());
                 stage.draw();
@@ -139,10 +139,10 @@ background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                             hitActor.addAction(ra);
 
                         }
-                        else if ((hitActor.getName().equals("monster")  && cardSelected)) {
+                        else if ((hitActor.getName().equals("goblin")  && cardSelected)) {
                             cardSelected = false;
                             selectedCard.remove();
-                            monster.takeDamage(5);
+                            goblin.takeDamage(5);
                             cardNo -= 1;
                             cards.remove(selectedCard);
                             handSize = cardNo * 120;
