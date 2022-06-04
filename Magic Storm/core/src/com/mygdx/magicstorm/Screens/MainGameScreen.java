@@ -48,8 +48,9 @@ public class MainGameScreen implements Screen {
     Group group2;
     Actor selectedCard;
     int cardNo = 3;
-    int handSize = cardNo * 120;
-    int spaceAtEachSide = (800 - handSize) / 2;
+    int handSize;
+    int spaceAtEachSide;
+    int cardWidth;
     int selectedCardX;
     int selectedCardY;
 
@@ -87,19 +88,24 @@ public class MainGameScreen implements Screen {
         group1.addActor(card3);
         group1.addActor(goblin);
 
-
-        stage.addActor(group1);
-        hero.setPosition(100,300);
-        hero.setHpBarPos(100, 270);
-        card1.setPosition(220,0);
-        card2.setPosition(340,0);
-        card3.setPosition(460,0);
-        goblin.setPosition(600,110);
-        goblin.setHpBarPos(600,80);
-
         cards.add(card1);
         cards.add(card2);
         cards.add(card3);
+
+        stage.addActor(group1);
+        hero.setPosition(0,stage.getHeight() / 3);
+        hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
+
+        cardWidth = (int)card1.getWidth();
+        handSize = (int) (cardNo * cardWidth);
+        spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
+        for (int i = 0; i < cards.size(); i ++) {
+            final Actor tempActor = cards.get(i);
+            tempActor.setPosition(spaceAtEachSide,0);
+            spaceAtEachSide += 120;
+        }
+        goblin.setPosition(stage.getWidth() - goblin.getWidth(),stage.getHeight() / 3);
+        goblin.setHpBarPos((int) (stage.getWidth() - goblin.getWidth()), (int) ((stage.getHeight() / 3) - 30));
 
         Gdx.input.setInputProcessor(this.game);
 
@@ -149,8 +155,8 @@ public class MainGameScreen implements Screen {
                             goblin.takeDamage(5);
                             cardNo -= 1;
                             cards.remove(selectedCard);
-                            handSize = cardNo * 120;
-                            spaceAtEachSide = (800 - handSize) / 2;
+                            handSize = (int) (cardNo * cardWidth);
+                            spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
                             for (int i = 0; i < cards.size(); i ++) {
                                 final Actor tempActor = cards.get(i);
                                 tempActor.setPosition(spaceAtEachSide,0);
@@ -166,8 +172,8 @@ public class MainGameScreen implements Screen {
                             hero.gainHp(5);
                             cardNo -= 1;
                             cards.remove(selectedCard);
-                            handSize = cardNo * 120;
-                            spaceAtEachSide = (800 - handSize) / 2;
+                            handSize = (int) (cardNo * cardWidth);
+                            spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
                             for (int i = 0; i < cards.size(); i ++) {
                                 final Actor tempActor = cards.get(i);
                                 tempActor.setPosition(spaceAtEachSide,0);

@@ -50,14 +50,16 @@ public class MainPauseScreen implements Screen {
         table.setPosition(0,Gdx.graphics.getHeight()); // table starts from top of screen
 
         resumeButton = new TextButton("Resume Game", skin);
-
+        resumeButton.setTransform(true);
+        resumeButton.setScale(2f);
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 resume();
             }
         });
-        table.padTop(30);
+        table.padTop(400);
+        table.padRight(175);
         table.add(resumeButton);
 
 

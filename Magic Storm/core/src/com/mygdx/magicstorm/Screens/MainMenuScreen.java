@@ -38,7 +38,7 @@ public class MainMenuScreen implements Screen {
         this.game = game;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, 1600, 900);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage(new ScreenViewport());
@@ -49,6 +49,9 @@ public class MainMenuScreen implements Screen {
         table.setPosition(0,Gdx.graphics.getHeight()); // table starts from top of screen
 
         startButton = new TextButton("Start Game", skin);
+        //set transform allows button size to be modified
+        startButton.setTransform(true);
+        startButton.setScale(2f);
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -56,7 +59,8 @@ public class MainMenuScreen implements Screen {
                 dispose();
             }
         });
-        table.padTop(385);
+        table.padTop(730);
+        table.padRight(100);
         table.add(startButton);
 
         stage.addActor(table);
