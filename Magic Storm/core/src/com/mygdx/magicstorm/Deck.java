@@ -1,0 +1,67 @@
+package com.mygdx.magicstorm;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Deck extends Actor {
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Cardback.png")));
+    private String currentDeckSizeString;
+    private int maxDeckSize;
+    private int currentDeckSize;
+    private BitmapFont font = new BitmapFont();
+    private SpriteBatch deckBatch = new SpriteBatch();
+    private ArrayList<Card> cards;
+    private Random rand = new Random();
+
+    public Deck(int currentDeckSize, int maxDeckSize) {
+        setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        setTouchable(Touchable.enabled);
+        this.currentDeckSize = currentDeckSize;
+        this.maxDeckSize = maxDeckSize;
+        this.currentDeckSizeString = String.valueOf(currentDeckSize);
+        cards = new ArrayList<Card>();
+        //this only works for even deck size, figure out randomisation of makeup if deck size is odd
+        for (int i = 0; i < maxDeckSize / 2; i++) {
+            Card tempactor1 = new Card("attack");
+            Card tempactor2 = new Card("defend");
+            cards.add(tempactor1);
+            cards.add(tempactor2);
+        }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        sprite.setColor(getColor());
+        sprite.draw(batch, parentAlpha);
+        batch.end();
+        deckBatch.begin();
+        font.draw(deckBatch, currentDeckSizeString, sprite.getX(), sprite.getY());
+        deckBatch.end();
+        batch.begin();
+
+    }
+
+    public void positionChanged() {
+        sprite.setPosition(getX(), getY());
+        super.positionChanged();
+    }
+
+    public Card drawCard() {
+        int random = rand.nextInt(currentDeckSize);
+        Card cardDrawn = cards.remove(random);
+        currentDeckSize -= 1;
+        System.out.println(currentDeckSize);
+        currentDeckSizeString = String.valueOf(currentDeckSize);
+        return cardDrawn;
+    }
+}

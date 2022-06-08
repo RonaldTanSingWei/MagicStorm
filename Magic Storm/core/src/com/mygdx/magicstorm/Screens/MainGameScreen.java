@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.magicstorm.Card;
+import com.mygdx.magicstorm.Deck;
 import com.mygdx.magicstorm.Enemies.Goblin;
 import com.mygdx.magicstorm.Enemies.MyActor;
 import com.mygdx.magicstorm.Hero;
@@ -30,7 +32,8 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 public class MainGameScreen implements Screen {
     final MagicStorm game;
     Stage stage;
-    private ArrayList<Actor> cards = new ArrayList<Actor>();
+    private ArrayList<Card> cards = new ArrayList<Card>();
+    private ArrayList<Actor> cardsDrawn;
     boolean touched = false;
     private Vector2 touchPos;
     MainPauseScreen pauseScreen;
@@ -42,17 +45,19 @@ public class MainGameScreen implements Screen {
 
     private Goblin goblin;
     private Hero player;
-    Actor card1;
-    Actor card2;
-    Actor card3;
-    Group group2;
-    Actor selectedCard;
-    int cardNo = 3;
+    Card card1;
+    Card card2;
+    Card card3;
+    Card selectedCard;
+    Card drawnCard;
+    int cardNo;
     int handSize;
     int spaceAtEachSide;
     int cardWidth;
+    int cardHeight;
     int selectedCardX;
     int selectedCardY;
+    Deck deck;
 
     public enum State {
         PAUSE,
@@ -65,13 +70,12 @@ public class MainGameScreen implements Screen {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Group group1 = new Group();
-        group2 = new Group();
 
         Goblin goblin = new Goblin(10, 10);
-        card1 = new Image(new Texture(Gdx.files.internal("attack.png")));
         Hero hero = new Hero();
-        card2 = new Image(new Texture(Gdx.files.internal("defend.png")));
-        card3 = new Image(new Texture(Gdx.files.internal("defend.png")));
+        card1 = new Card("attack");
+        card2 = new Card("attack");
+        card3 = new Card("defend");
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hero.setName("hero");
@@ -80,6 +84,8 @@ public class MainGameScreen implements Screen {
         card3.setName("card2");
         background.setName("background");
         goblin.setName("goblin");
+        deck = new Deck(10,10);
+        deck.setName("deck");
         // order actors are drawn in
         group1.addActor(background);
         group1.addActor(hero);
@@ -87,23 +93,22 @@ public class MainGameScreen implements Screen {
         group1.addActor(card2);
         group1.addActor(card3);
         group1.addActor(goblin);
+        group1.addActor(deck);
 
         cards.add(card1);
         cards.add(card2);
         cards.add(card3);
+        cardNo = cards.size();
 
         stage.addActor(group1);
         hero.setPosition(0,stage.getHeight() / 3);
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
+        deck.setPosition(50,50);
 
         cardWidth = (int)card1.getWidth();
-        handSize = (int) (cardNo * cardWidth);
-        spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
-        for (int i = 0; i < cards.size(); i ++) {
-            final Actor tempActor = cards.get(i);
-            tempActor.setPosition(spaceAtEachSide,0);
-            spaceAtEachSide += 120;
-        }
+        cardHeight = (int)card1.getHeight();
+
+
         goblin.setPosition(stage.getWidth() - goblin.getWidth(),stage.getHeight() / 3);
         goblin.setHpBarPos((int) (stage.getWidth() - goblin.getWidth()), (int) ((stage.getHeight() / 3) - 30));
 
@@ -124,6 +129,7 @@ public class MainGameScreen implements Screen {
                 Group group = (Group) stage.getActors().first();
                 Hero hero = group.findActor("hero");
                 Goblin goblin = group.findActor("goblin");
+                Deck deck = group.findActor("deck");
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 stage.act(Gdx.graphics.getDeltaTime());
                 stage.draw();
@@ -133,52 +139,58 @@ public class MainGameScreen implements Screen {
                     Vector2 coord = stage.screenToStageCoordinates(new Vector2((float) Gdx.input.getX(), (float) Gdx.input.getY()));
                     final Actor hitActor = stage.hit(coord.x, coord.y, true);
                     if (hitActor != null) {
-                        if ((hitActor.getName().equals("card1") || hitActor.getName().equals("card2")) && !cardSelected) {// set touchable in class initialisation instead
+                        if ((hitActor instanceof Card && !cardSelected)) {
                             cardSelected = true;
-                            selectedCard = hitActor;
+                            selectedCard = (Card) hitActor;
                             selectedCardX = (int) selectedCard.getX();
                             selectedCardY = (int) selectedCard.getY();
                             RunnableAction ra = new RunnableAction();
                             ra.setRunnable(new Runnable() {
                                 @Override
                                 public void run() {
-                                    hitActor.setPosition(310, 150);
+                                    hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
                                     hitActor.setScale(1.5f);
                                 }
                             });
                             hitActor.addAction(ra);
 
                         }
-                        else if ((hitActor.getName().equals("goblin")  && cardSelected)) {
+
+                        else if(hitActor instanceof Card && !hitActor.equals(selectedCard) && cardSelected) {
+                            selectedCard.setPosition(selectedCardX,selectedCardY);
+                            selectedCard.setScale(1f);
+                            selectedCard = (Card) hitActor;
+                            selectedCardX = (int) selectedCard.getX();
+                            selectedCardY = (int) selectedCard.getY();
+                            RunnableAction ra = new RunnableAction();
+                            ra.setRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                                    hitActor.setScale(1.5f);
+                                }
+                            });
+                            hitActor.addAction(ra);
+                        }
+
+                        else if ((hitActor instanceof Goblin  && cardSelected)) {
                             cardSelected = false;
                             selectedCard.remove();
                             goblin.takeDamage(5);
                             cardNo -= 1;
                             cards.remove(selectedCard);
-                            handSize = (int) (cardNo * cardWidth);
-                            spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
-                            for (int i = 0; i < cards.size(); i ++) {
-                                final Actor tempActor = cards.get(i);
-                                tempActor.setPosition(spaceAtEachSide,0);
-                                spaceAtEachSide += 120;
-                            }
+                            shuffle();
 
 
                         }
-                        else if ((hitActor.getName().equals("hero")  && cardSelected)) {
+                        else if ((hitActor instanceof Hero  && cardSelected)) {
                             cardSelected = false;
                             selectedCard.remove();
                             hero.gainArmor(5);
                             hero.gainHp(5);
                             cardNo -= 1;
                             cards.remove(selectedCard);
-                            handSize = (int) (cardNo * cardWidth);
-                            spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
-                            for (int i = 0; i < cards.size(); i ++) {
-                                final Actor tempActor = cards.get(i);
-                                tempActor.setPosition(spaceAtEachSide,0);
-                                spaceAtEachSide += 120;
-                            }
+                            shuffle();
                         }
                     }
                 }
@@ -234,5 +246,27 @@ public class MainGameScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    //aligns hand with centre of screen
+    public void shuffle() {
+        handSize = (int) (cardNo * cardWidth);
+        spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
+        for (int i = 0; i < cards.size(); i++) {
+            final Actor tempActor = cards.get(i);
+            tempActor.setPosition(spaceAtEachSide, 0);
+            spaceAtEachSide += 120;
+        }
+    }
+
+    public void drawCard(int numberDrawn) {
+        for (int i = 0; i < numberDrawn; i++) {
+            drawnCard = deck.drawCard();
+            cards.add(drawnCard);
+            stage.addActor(drawnCard);
+            cardNo += 1;
+
+        }
+        shuffle();
     }
 }
