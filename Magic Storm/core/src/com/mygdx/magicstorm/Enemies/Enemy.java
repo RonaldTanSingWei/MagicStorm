@@ -1,17 +1,16 @@
 package com.mygdx.magicstorm.Enemies;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.utils.Timer;
-import com.mygdx.magicstorm.MagicStorm;
+import com.mygdx.magicstorm.hero.Hero;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -57,6 +56,7 @@ public class Enemy extends Actor {
             hpBar.setWidth(sprite.getX() * currentHp / maxHp);
             if (currentHp <= 0) {
                 //fades to transparent
+                currentHp = 0;
                 this.die();
                 setCurrentHpString("");
             }
@@ -78,7 +78,12 @@ public class Enemy extends Actor {
             }
         }, 1);
     }
+    public void attack(Hero hero) {
+        this.addAction(Actions.moveBy(-100,0,0.2f));
+        this.addAction(Actions.moveBy(100,0,0.4f));
 
+
+    }
     public void setHpBarPos(int xPos, int yPos) {
         hpBar.setPosition(xPos, yPos);
     }

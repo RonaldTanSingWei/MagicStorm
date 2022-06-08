@@ -1,7 +1,6 @@
 package com.mygdx.magicstorm.Enemies;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,13 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.mygdx.magicstorm.MagicStorm;
+import com.mygdx.magicstorm.hero.Hero;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import sun.jvm.hotspot.utilities.BitMap;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class Goblin extends Enemy {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("goblin.png")));
@@ -27,12 +21,13 @@ public class Goblin extends Enemy {
     private String currentHpString;
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
-    ;
+
+    private float widthCheck = sprite.getWidth();
 
     public Goblin(int currentHp, int maxHp) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
-        hpBar = new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(),10);
+        hpBar = new Rectangle(sprite.getX(), sprite.getY(), widthCheck, 10);
         this.currentHp = currentHp;
         this.maxHp = maxHp;
         this.currentHpString = currentHp + "/" + maxHp;
@@ -52,7 +47,7 @@ public class Goblin extends Enemy {
         font.draw(hpBatch, currentHpString, hpBar.getX(), hpBar.getY());
         hpBatch.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(hpBar.x, hpBar.y, hpBar.width * currentHp / maxHp, hpBar.height);
+        shapeRenderer.rect(hpBar.x, hpBar.y, widthCheck * currentHp / maxHp, hpBar.height);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.end();
         batch.begin();
@@ -63,11 +58,11 @@ public class Goblin extends Enemy {
     public void takeDamage(int damage) {
         currentHp -= damage;
         currentHpString = currentHp + "/" + maxHp;
-
-        hpBar.setWidth(184 * currentHp / maxHp);
+        hpBar.setWidth(widthCheck * currentHp / maxHp);
         if (currentHp <=0) {
             this.die();
             setCurrentHpString("");
+            currentHp = 0;
         }
 
 
@@ -90,7 +85,7 @@ public class Goblin extends Enemy {
         return this.currentHpString;
     }
 
-    public void setHpBarPos(int xPos, int yPos) {
+    public void setHpBarPos(float xPos, float yPos) {
         hpBar.setPosition(xPos, yPos);
     }
     public void positionChanged() {
@@ -116,5 +111,12 @@ public class Goblin extends Enemy {
     }
     public void setCurrentHpString(String string) {
         this.currentHpString = string;
+    }
+
+    @Override
+    public void attack(Hero hero) {
+        super.attack(hero);
+        hero.takeDamage(5);
+
     }
 }

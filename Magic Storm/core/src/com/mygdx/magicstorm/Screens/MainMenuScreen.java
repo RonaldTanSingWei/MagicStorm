@@ -24,7 +24,7 @@ public class MainMenuScreen implements Screen {
 
     final MagicStorm game;
 
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
 
     private Stage stage;
     private Skin skin;
