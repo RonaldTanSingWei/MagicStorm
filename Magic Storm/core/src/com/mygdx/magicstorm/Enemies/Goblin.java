@@ -15,19 +15,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Goblin extends Enemy {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("goblin.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Rectangle hpBar;
+    private float widthCheck = sprite.getWidth();
+    private Rectangle hpBar = new Rectangle(sprite.getX(), sprite.getY(), widthCheck, 10);
     private int currentHp;
     private int maxHp;
     private String currentHpString;
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
 
-    private float widthCheck = sprite.getWidth();
+
 
     public Goblin(int currentHp, int maxHp) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
-        hpBar = new Rectangle(sprite.getX(), sprite.getY(), widthCheck, 10);
         this.currentHp = currentHp;
         this.maxHp = maxHp;
         this.currentHpString = currentHp + "/" + maxHp;

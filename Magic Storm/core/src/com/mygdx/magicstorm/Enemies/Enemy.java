@@ -84,9 +84,6 @@ public class Enemy extends Actor {
 
 
     }
-    public void setHpBarPos(int xPos, int yPos) {
-        hpBar.setPosition(xPos, yPos);
-    }
 
     public void setCurrentHpString(String string) {
         this.currentHpString = string;
