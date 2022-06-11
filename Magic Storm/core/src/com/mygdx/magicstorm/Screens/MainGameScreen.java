@@ -75,7 +75,7 @@ public class MainGameScreen implements Screen {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Group group1 = new Group();
-
+        startOfBattle = true;
         enemyTurn = false;
         startOfTurn = true;
         Goblin goblin = new Goblin(10, 10);
@@ -260,17 +260,19 @@ public class MainGameScreen implements Screen {
                 if (startOfBattle) {
                     //draw 5
                     startOfBattle = false;
+                    startTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
+                    startOfTurn = false;
+                } else {
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            startTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
+                            hero.setMana(5);
+                            drawCard(2);
+                            startOfTurn = false;
+                        }
+                    }, 4);
                 }
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        startTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
-                        hero.setMana(5);
-                        drawCard(2);
-                        startOfTurn = false;
-                    }
-                }, 4);
-
 
                 this.state = State.PLAYERTURN;
                 //draw 2
