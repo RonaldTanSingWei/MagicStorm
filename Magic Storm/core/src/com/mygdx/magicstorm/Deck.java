@@ -31,11 +31,11 @@ public class Deck extends Actor {
         this.currentDeckSizeString = String.valueOf(currentDeckSize);
         cards = new ArrayList<Card>();
         //this only works for even deck size, figure out randomisation of makeup if deck size is odd
-        for (int i = 0; i < maxDeckSize / 2; i++) {
-            Card tempactor1 = new Card("attack");
-            Card tempactor2 = new Card("defend");
-            cards.add(tempactor1);
-            cards.add(tempactor2);
+        for (int i = 0; i < maxDeckSize; i++) {
+            Card tempactor;
+            if (i % 2 == 0) tempactor = new Card("attack");
+            else tempactor = new Card("defend");
+            cards.add(tempactor);
         }
     }
 
@@ -60,8 +60,10 @@ public class Deck extends Actor {
         int random = rand.nextInt(currentDeckSize);
         Card cardDrawn = cards.remove(random);
         currentDeckSize -= 1;
-        System.out.println(currentDeckSize);
         currentDeckSizeString = String.valueOf(currentDeckSize);
         return cardDrawn;
+    }
+    public int getSize() {
+        return cards.size();
     }
 }
