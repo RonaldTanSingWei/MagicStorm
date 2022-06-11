@@ -11,8 +11,14 @@ public class Card extends Actor {
     private Sprite sprite;
 
     public Card(String type) {
-        if (type.equals("attack")) sprite = new Sprite(new Texture(Gdx.files.internal("attack.png")));
-        else sprite = new Sprite(new Texture(Gdx.files.internal("defend.png")));
+        if (type.equals("attack")) {
+            sprite = new Sprite(new Texture(Gdx.files.internal("attack.png")));
+            setName("attack");
+        }
+        else{
+            sprite = new Sprite(new Texture(Gdx.files.internal("defend.png")));
+            setName("defend");
+            }
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
     }

@@ -90,9 +90,6 @@ public class MainGameScreen implements Screen {
         Image startTurn = new Image(new Texture(Gdx.files.internal("startTurn.png")));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hero.setName("hero");
-        card1.setName("card1");
-        card2.setName("card2");
-        card3.setName("card2");
         background.setName("background");
         goblin.setName("goblin");
         endTurnButton.setName("endTurnButton");
@@ -125,14 +122,6 @@ public class MainGameScreen implements Screen {
         hero.setHpBarPos(hero.getX(), ((stage.getHeight() / 3) - 30));
         hero.setArmorBarPos(hero.getX(), ((stage.getHeight() / 3) - 60));
 
-        cardWidth = (int) card1.getWidth();
-        handSize = (int) (cardNo * cardWidth);
-        spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
-        for (int i = 0; i < cards.size(); i++) {
-            final Actor tempActor = cards.get(i);
-            tempActor.setPosition(spaceAtEachSide, 0);
-            spaceAtEachSide += 120;
-        }
         goblin.setPosition(stage.getWidth() * 4 / 5, stage.getHeight() / 3);
         goblin.setHpBarPos((stage.getWidth() * 4 / 5), ((stage.getHeight() / 3)));
 
@@ -147,7 +136,7 @@ public class MainGameScreen implements Screen {
 
         cardWidth = (int) card1.getWidth();
         cardHeight = (int) card1.getHeight();
-
+        shuffle();
 
         goblin.setPosition(stage.getWidth() - goblin.getWidth(), stage.getHeight() / 3);
         goblin.setHpBarPos((int) (stage.getWidth() - goblin.getWidth()), (int) ((stage.getHeight() / 3) - 30));
@@ -196,52 +185,52 @@ public class MainGameScreen implements Screen {
                             hitActor.addAction(ra);
 
                         } else if (hitActor instanceof Card && !hitActor.equals(selectedCard) && cardSelected) {
-                                selectedCard.setPosition(selectedCardX, selectedCardY);
-                                selectedCard.setScale(1f);
-                                selectedCard = (Card) hitActor;
-                                selectedCardX = (int) selectedCard.getX();
-                                selectedCardY = (int) selectedCard.getY();
-                                RunnableAction ra = new RunnableAction();
-                                ra.setRunnable(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
-                                        hitActor.setScale(1.5f);
-                                    }
-                                });
-                                hitActor.addAction(ra);
-                            } else if ((hitActor instanceof Goblin && cardSelected)) {
-                                cardSelected = false;
-                                selectedCard.remove();
-                                goblin.takeDamage(5);
-                                cardNo -= 1;
-                                cards.remove(selectedCard);
-                                shuffle();
+                            selectedCard.setPosition(selectedCardX, selectedCardY);
+                            selectedCard.setScale(1f);
+                            selectedCard = (Card) hitActor;
+                            selectedCardX = (int) selectedCard.getX();
+                            selectedCardY = (int) selectedCard.getY();
+                            RunnableAction ra = new RunnableAction();
+                            ra.setRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                                    hitActor.setScale(1.5f);
+                                }
+                            });
+                            hitActor.addAction(ra);
+                        } else if ((hitActor instanceof Goblin && cardSelected && selectedCard.getName().equals("attack"))) {
+                            cardSelected = false;
+                            selectedCard.remove();
+                            goblin.takeDamage(5);
+                            cardNo -= 1;
+                            cards.remove(selectedCard);
+                            shuffle();
 
 
-                            } else if ((hitActor instanceof Hero && cardSelected)) {
-                                cardSelected = false;
-                                selectedCard.remove();
-                                hero.gainArmor(5);
-                                hero.gainHp(5);
-                                cardNo -= 1;
-                                cards.remove(selectedCard);
-                                handSize = (int) (cardNo * cardWidth);
-                                shuffle();
-                            } else if (hitActor.getName().equals("endTurnButton")) {
-                                enemyTurn = true;
-                                this.state = State.ENEMYTURN;
+                        } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("defend"))) {
+                            cardSelected = false;
+                            selectedCard.remove();
+                            hero.gainArmor(5);
+                            hero.gainHp(5);
+                            cardNo -= 1;
+                            cards.remove(selectedCard);
+                            handSize = (int) (cardNo * cardWidth);
+                            shuffle();
+                        } else if (hitActor.getName().equals("endTurnButton")) {
+                            enemyTurn = true;
+                            this.state = State.ENEMYTURN;
 
-                            }
                         }
                     }
+                }
 
-                    if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-                        selectedCard.setPosition(selectedCardX, selectedCardY);
-                        selectedCard.setScale(1f);
-                        cardSelected = false;
-                    }
-                    break;
+                if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+                    selectedCard.setPosition(selectedCardX, selectedCardY);
+                    selectedCard.setScale(1f);
+                    cardSelected = false;
+                }
+                break;
             case ENEMYTURN:
                 endTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
                 Timer.schedule(new Timer.Task() {
@@ -299,52 +288,54 @@ public class MainGameScreen implements Screen {
     }
 
 
-        @Override
-        public void resize ( int width, int height){
-            stage.getViewport().update(width, height, true);
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+        this.state = State.PAUSE;
+        game.setScreen(pauseScreen);
+    }
+
+    @Override
+    public void resume() {
+        this.state = State.PLAYERTURN;
+        game.setScreen(game.getScreen());
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+
+    //aligns hand with centre of screen
+    public void shuffle() {
+        handSize = (int) (cardNo * cardWidth);
+        spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
+        for (int i = 0; i < cards.size(); i++) {
+            final Actor tempActor = cards.get(i);
+            tempActor.setPosition(spaceAtEachSide, 0);
+            spaceAtEachSide += 120;
         }
+    }
 
-        @Override
-        public void pause () {
-            this.state = State.PAUSE;
-            game.setScreen(pauseScreen);
-        }
-
-        @Override
-        public void resume () {
-            this.state = State.PLAYERTURN;
-            game.setScreen(game.getScreen());
-        }
-
-        @Override
-        public void hide () {
-
-        }
-
-        @Override
-        public void dispose () {
-
-        }
-
-        //aligns hand with centre of screen
-        public void shuffle () {
-            handSize = (int) (cardNo * cardWidth);
-            spaceAtEachSide = (int) ((stage.getWidth() - handSize) / 2);
-            for (int i = 0; i < cards.size(); i++) {
-                final Actor tempActor = cards.get(i);
-                tempActor.setPosition(spaceAtEachSide, 0);
-                spaceAtEachSide += 120;
-            }
-        }
-
-        public void drawCard ( int numberDrawn){
-            for (int i = 0; i < numberDrawn; i++) {
+    public void drawCard(int numberDrawn) {
+        for (int i = 0; i < numberDrawn; i++) {
+            if (deck.getSize() > 0) {
                 drawnCard = deck.drawCard();
                 cards.add(drawnCard);
                 stage.addActor(drawnCard);
                 cardNo += 1;
-
             }
-            shuffle();
+            else break;
         }
+        shuffle();
     }
+}
