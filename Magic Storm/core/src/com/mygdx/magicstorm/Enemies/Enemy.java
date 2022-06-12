@@ -88,4 +88,13 @@ public class Enemy extends Actor {
     public void setCurrentHpString(String string) {
         this.currentHpString = string;
     }
+    public boolean isDead() {
+        return currentHp <= 0;
+    }
+
+    public void setHpBarPos(float xPos, float yPos) {
+        hpBar.setPosition(xPos, yPos);
+    }
+
+
 }
