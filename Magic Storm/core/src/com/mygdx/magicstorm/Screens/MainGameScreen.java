@@ -23,6 +23,7 @@ import com.mygdx.magicstorm.hero.Hero;
 import com.mygdx.magicstorm.MagicStorm;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -35,6 +36,7 @@ public class MainGameScreen implements Screen {
     boolean touched = false;
     private Vector2 touchPos;
     MainPauseScreen pauseScreen;
+    VictoryScreen victoryScreen;
     SpriteBatch batch = new SpriteBatch();
     boolean cardSelected = false;
     private ScreenViewport viewport;
@@ -45,7 +47,6 @@ public class MainGameScreen implements Screen {
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private Enemy currentEnemy;
 
-    private int floor = 0;
 
     Group group2;
     Card selectedCard;
@@ -65,6 +66,7 @@ public class MainGameScreen implements Screen {
     boolean startOfBattle;
     boolean startOfTurn;
     Deck deck;
+    private Random rand = new Random();
 
     public enum State {
         PAUSE,
@@ -130,7 +132,6 @@ public class MainGameScreen implements Screen {
         cards.add(card3);
         cardNo = cards.size();
 
-        enemies.add(goblin);
         currentEnemy = goblin;
         enemies.add(goblin1);
         enemies.add(goblin2);
@@ -174,6 +175,7 @@ public class MainGameScreen implements Screen {
     public void render(float delta) {
 
         pauseScreen = new MainPauseScreen(this.game, this);
+        victoryScreen = new VictoryScreen(this.game, this);
         Group group = (Group) stage.getActors().first();
         final Hero hero = group.findActor("hero");
         final Goblin goblin = group.findActor("goblin");
@@ -190,6 +192,7 @@ public class MainGameScreen implements Screen {
                 if(currentEnemy.isDead()) {
                     nextStage.addAction(fadeIn(0f));
                     nextStage.setTouchable(Touchable.enabled);
+                    endTurn.setTouchable(Touchable.disabled); // doesnt work?
                 }
                 //mouse click
                 if (Gdx.input.isTouched() && !enemyTurn && !startOfTurn) {
@@ -249,18 +252,22 @@ public class MainGameScreen implements Screen {
                             this.state = State.ENEMYTURN;
 
                         } else if (hitActor.getName().equals("nextStage")) {
-                            floor++;
-                            if (floor > enemies.size()) {
-                                //victory screen
+
+                            if (enemies.size() <= 0) {
+                                this.state = State.VICTORY;
+                                game.setScreen(victoryScreen);
                             }
-                            currentEnemy = enemies.get(floor);
-                            stage.addActor(currentEnemy);
-                            currentEnemy.draw(batch, delta);
-                            currentEnemy.setPosition(stage.getWidth() - currentEnemy.getWidth(), stage.getHeight() / 3);
-                            currentEnemy.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth()), (int) ((stage.getHeight() / 3) - 30));
-                            nextStage.addAction(fadeOut(0f));
-                            startOfBattle = true;
-                            this.state = State.STARTTURN;
+                            else {
+                                int random = rand.nextInt(enemies.size());
+                                currentEnemy = enemies.remove(random);
+                                stage.addActor(currentEnemy);
+                                currentEnemy.draw(batch, delta);
+                                currentEnemy.setPosition(stage.getWidth() - currentEnemy.getWidth(), stage.getHeight() / 3);
+                                currentEnemy.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth()), (int) ((stage.getHeight() / 3) - 30));
+                                nextStage.addAction(fadeOut(0f));
+                                startOfBattle = true;
+                                this.state = State.STARTTURN;
+                            }
                         }
                     }
                 }
@@ -308,6 +315,8 @@ public class MainGameScreen implements Screen {
                 //draw 2
                 break;
             case PAUSE:
+                break;
+            case VICTORY:
                 break;
             case RESUME:
                 Gdx.graphics.setContinuousRendering(true);
