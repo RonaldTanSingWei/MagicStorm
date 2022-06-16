@@ -47,6 +47,8 @@ public class MainGameScreen implements Screen {
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private Enemy currentEnemy;
 
+    private boolean availableRewards;
+
 
     Group group2;
     Card selectedCard;
@@ -86,6 +88,7 @@ public class MainGameScreen implements Screen {
         startOfBattle = true;
         enemyTurn = false;
         startOfTurn = true;
+        availableRewards = true;
         Goblin goblin = new Goblin(10, 10);
         Hero hero = new Hero();
         card1 = new Card("attack");
@@ -97,6 +100,7 @@ public class MainGameScreen implements Screen {
         Image enemyTurn = new Image(new Texture(Gdx.files.internal("EnemyTurn.png")));
         Image startTurn = new Image(new Texture(Gdx.files.internal("startTurn.png")));
         Image nextStage = new Image(new Texture(Gdx.files.internal("nextStage.png")));
+        Image rewardsButton = new Image(new Texture(Gdx.files.internal("rewardsButton.png")));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hero.setName("hero");
         background.setName("background");
@@ -110,6 +114,7 @@ public class MainGameScreen implements Screen {
         enemyTurn.setName("enemyTurn");
         startTurn.setName("startTurn");
         nextStage.setName("nextStage");
+        rewardsButton.setName("rewardsButton");
         deck = new Deck(10, 10);
         deck.setName("deck");
         // order actors are drawn in
@@ -126,6 +131,7 @@ public class MainGameScreen implements Screen {
         group1.addActor(startTurn);
         group1.addActor(deck);
         group1.addActor(nextStage);
+        group1.addActor(rewardsButton);
 
         cards.add(card1);
         cards.add(card2);
@@ -149,8 +155,10 @@ public class MainGameScreen implements Screen {
         enemyTurn.addAction(sequence(fadeOut(0f)));
         startTurn.setPosition(stage.getWidth() * 1 / 4, stage.getHeight() * 3 / 4);
         startTurn.addAction(sequence(fadeOut(0f)));
-        nextStage.setPosition(stage.getWidth()* 7/10, stage.getHeight() / 2);
+        nextStage.setPosition(stage.getWidth()* 4/5, stage.getHeight() * 1/5);
         nextStage.addAction(sequence(fadeOut(0f)));
+        rewardsButton.setPosition(stage.getWidth()* 4/5, stage.getHeight() * 4/5);
+        rewardsButton.addAction(fadeOut(0f));
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
         deck.setPosition(50, 50);
 
@@ -182,17 +190,28 @@ public class MainGameScreen implements Screen {
         Actor endTurn = group.findActor("enemyTurn");
         final Actor startTurn = group.findActor("startTurn");
         final Actor nextStage = group.findActor("nextStage");
+        final Actor endTurnButton = group.findActor("endTurnButton");
         nextStage.setTouchable(Touchable.disabled);
         Deck deck = group.findActor("deck");
+        Actor rewardsButton = group.findActor("rewardsButton");
+        rewardsButton.setTouchable(Touchable.disabled);
         switch (state) {
             case PLAYERTURN:
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 stage.act(Gdx.graphics.getDeltaTime());
                 stage.draw();
                 if(currentEnemy.isDead()) {
-                    nextStage.addAction(fadeIn(0f));
-                    nextStage.setTouchable(Touchable.enabled);
-                    endTurn.setTouchable(Touchable.disabled); // doesnt work?
+
+                    if (availableRewards) {
+                        rewardsButton.addAction(fadeIn(0f));
+                        rewardsButton.setTouchable(Touchable.enabled);
+                    } else {
+                        nextStage.addAction(fadeIn(0f));
+                        nextStage.setTouchable(Touchable.enabled);
+                    }
+                    endTurnButton.setTouchable(Touchable.disabled);
+                    endTurnButton.addAction(fadeOut(0f));
+
                 }
                 //mouse click
                 if (Gdx.input.isTouched() && !enemyTurn && !startOfTurn) {
@@ -250,7 +269,10 @@ public class MainGameScreen implements Screen {
                         } else if (hitActor.getName().equals("endTurnButton")) {
                             enemyTurn = true;
                             this.state = State.ENEMYTURN;
-
+                        } else if (hitActor.getName().equals("rewardsButton")) {
+                            availableRewards = false;
+                            rewardsButton.setTouchable(Touchable.disabled);
+                            rewardsButton.addAction(fadeOut(0f));
                         } else if (hitActor.getName().equals("nextStage")) {
 
                             if (enemies.size() <= 0) {
@@ -296,9 +318,12 @@ public class MainGameScreen implements Screen {
                 startOfTurn = true;
                 if (startOfBattle) {
                     drawCard(2);
+                    availableRewards = true;
                     startOfBattle = false;
                     startTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
                     startOfTurn = false;
+                    endTurnButton.setTouchable(Touchable.enabled);
+                    endTurnButton.addAction(fadeIn(0f));
                 } else {
                     Timer.schedule(new Timer.Task() {
                         @Override
