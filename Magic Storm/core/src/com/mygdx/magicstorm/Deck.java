@@ -33,8 +33,8 @@ public class Deck extends Actor {
         //this only works for even deck size, figure out randomisation of makeup if deck size is odd
         for (int i = 0; i < maxDeckSize; i++) {
             Card tempactor;
-            if (i % 2 == 0) tempactor = new Card("attack");
-            else tempactor = new Card("defend");
+            if (i % 2 == 0) tempactor = new Card("attack", 10);
+            else tempactor = new Card("defend", 5);
             cards.add(tempactor);
         }
     }

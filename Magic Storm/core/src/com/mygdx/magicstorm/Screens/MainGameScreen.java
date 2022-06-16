@@ -88,9 +88,9 @@ public class MainGameScreen implements Screen {
         startOfTurn = true;
         Goblin goblin = new Goblin(10, 10);
         Hero hero = new Hero();
-        card1 = new Card("attack");
-        card2 = new Card("attack");
-        card3 = new Card("defend");
+        card1 = new Card("attack", 10);
+        card2 = new Card("attack", 10);
+        card3 = new Card("defend", 5);
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
         Image endTurnButton = new Image(new Texture(Gdx.files.internal("endTurn.png")));
         Image mana = new Image(new Texture(Gdx.files.internal("Mana.png")));
@@ -229,24 +229,23 @@ public class MainGameScreen implements Screen {
                                 }
                             });
                             hitActor.addAction(ra);
+
                         } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("attack"))) {
+                            selectedCard.dealDamage(currentEnemy);
                             cardSelected = false;
                             selectedCard.remove();
-                            currentEnemy.takeDamage(5);
                             cardNo -= 1;
                             cards.remove(selectedCard);
                             shuffle();
-
 
                         } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("defend"))) {
+                            selectedCard.addDefence(hero);
                             cardSelected = false;
                             selectedCard.remove();
-                            hero.gainArmor(5);
-                            hero.gainHp(5);
                             cardNo -= 1;
                             cards.remove(selectedCard);
-                            handSize = (int) (cardNo * cardWidth);
                             shuffle();
+
                         } else if (hitActor.getName().equals("endTurnButton")) {
                             enemyTurn = true;
                             this.state = State.ENEMYTURN;
