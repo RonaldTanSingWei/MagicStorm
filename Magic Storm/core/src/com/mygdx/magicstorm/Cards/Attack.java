@@ -15,7 +15,7 @@ public class Attack extends Card {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
         setName("attack");
-        attack = value;
+        this.attack = value;
     }
 
     public void changeAttack(int value) {

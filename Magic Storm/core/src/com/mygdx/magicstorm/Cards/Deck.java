@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -33,8 +34,8 @@ public class Deck extends Actor {
         //this only works for even deck size, figure out randomisation of makeup if deck size is odd
         for (int i = 0; i < maxDeckSize; i++) {
             Card tempactor;
-            if (i % 2 == 0) tempactor = new Attack(5);
-            else tempactor = new Defence(5);
+            if (i % 2 == 0) tempactor = new Attack(10);
+            else tempactor = new Defence(10);
             cards.add(tempactor);
         }
     }
@@ -65,5 +66,20 @@ public class Deck extends Actor {
     }
     public int getSize() {
         return cards.size();
+    }
+
+    @Override
+    public Object clone() {
+        Deck copyDeck = null;
+        try {
+            copyDeck = (Deck) super.clone();
+        } catch (CloneNotSupportedException e) {
+            copyDeck = new Deck(
+                    this.currentDeckSize, this.maxDeckSize
+            );
+        }
+        ArrayList<Card> newList = new ArrayList<>(cards);
+        copyDeck.cards = newList;
+        return copyDeck;
     }
 }

@@ -58,7 +58,6 @@ public class MainGameScreen implements Screen {
     private Hero player;
     Card card1;
     Card card2;
-    Card card3;
     Card drawnCard;
     int handSize;
     int spaceAtEachSide;
@@ -69,8 +68,9 @@ public class MainGameScreen implements Screen {
     boolean enemyTurn;
     boolean startOfBattle;
     boolean startOfTurn;
-    Deck deck;
     private Random rand = new Random();
+
+    private Deck deck;
 
     public enum State {
         PAUSE,
@@ -93,9 +93,8 @@ public class MainGameScreen implements Screen {
         availableRewards = true;
         Goblin goblin = new Goblin(10, 10);
         Hero hero = new Hero();
-        card1 = new Attack(5);
-        card2 = new Attack(5);
-        card3 = new Defence(5);
+        card1 = new Attack(10);
+        card2 = new Defence(5);
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
         Image endTurnButton = new Image(new Texture(Gdx.files.internal("endTurn.png")));
         Image mana = new Image(new Texture(Gdx.files.internal("Mana.png")));
@@ -117,7 +116,7 @@ public class MainGameScreen implements Screen {
         startTurn.setName("startTurn");
         nextStage.setName("nextStage");
         rewardsButton.setName("rewardsButton");
-        deck = new Deck(10, 10);
+        deck = hero.getDeck();
         deck.setName("deck");
         // order actors are drawn in
 
@@ -126,7 +125,6 @@ public class MainGameScreen implements Screen {
         group1.addActor(hero);
         group1.addActor(card1);
         group1.addActor(card2);
-        group1.addActor(card3);
         group1.addActor(goblin);
         group1.addActor(endTurnButton);
         group1.addActor(enemyTurn);
@@ -137,7 +135,6 @@ public class MainGameScreen implements Screen {
 
         cards.add(card1);
         cards.add(card2);
-        cards.add(card3);
         cardNo = cards.size();
 
         currentEnemy = goblin;
@@ -318,6 +315,7 @@ public class MainGameScreen implements Screen {
             case STARTTURN:
                 startOfTurn = true;
                 if (startOfBattle) {
+                    deck = hero.getDeck();
                     drawCard(2);
                     availableRewards = true;
                     startOfBattle = false;

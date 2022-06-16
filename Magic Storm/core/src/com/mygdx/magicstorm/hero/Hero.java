@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.mygdx.magicstorm.Cards.Deck;
 
 public class Hero extends Actor {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Player.png")));
@@ -29,6 +30,9 @@ public class Hero extends Actor {
     private Mana mana;
     private float widthCheck = sprite.getWidth();
 
+    private Deck deck = new Deck(4, 4);
+
+
     public Hero() {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
@@ -42,6 +46,7 @@ public class Hero extends Actor {
         currentArmorString = Integer.toString(currentArmor);
         mana = new Mana(5,5);
         mana.setCurrentManaString(mana.getCurrentMana() + "/" + mana.getMaxMana());
+
     }
     public boolean isDead() {
         return currentHp <= 0;
@@ -129,4 +134,11 @@ public class Hero extends Actor {
     public void setMana(int mana) {
         this.mana.setCurrentMana(mana);
     }
+
+    public Deck getDeck() {
+        Deck copyDeck = (Deck) deck.clone();
+        return copyDeck;
+    }
+
+
 }
