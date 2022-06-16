@@ -15,8 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.magicstorm.Card;
-import com.mygdx.magicstorm.Deck;
+import com.mygdx.magicstorm.Cards.Attack;
+import com.mygdx.magicstorm.Cards.Card;
+import com.mygdx.magicstorm.Cards.Deck;
+import com.mygdx.magicstorm.Cards.Defence;
 import com.mygdx.magicstorm.Enemies.Enemy;
 import com.mygdx.magicstorm.Enemies.Goblin;
 import com.mygdx.magicstorm.hero.Hero;
@@ -88,9 +90,9 @@ public class MainGameScreen implements Screen {
         startOfTurn = true;
         Goblin goblin = new Goblin(10, 10);
         Hero hero = new Hero();
-        card1 = new Card("attack", 10);
-        card2 = new Card("attack", 10);
-        card3 = new Card("defend", 5);
+        card1 = new Attack(5);
+        card2 = new Attack(5);
+        card3 = new Defence(5);
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
         Image endTurnButton = new Image(new Texture(Gdx.files.internal("endTurn.png")));
         Image mana = new Image(new Texture(Gdx.files.internal("Mana.png")));
@@ -238,7 +240,7 @@ public class MainGameScreen implements Screen {
                             cards.remove(selectedCard);
                             shuffle();
 
-                        } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("defend"))) {
+                        } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("defence"))) {
                             selectedCard.addDefence(hero);
                             cardSelected = false;
                             selectedCard.remove();
