@@ -1,4 +1,4 @@
-package com.mygdx.magicstorm;
+package com.mygdx.magicstorm.Cards;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,8 +33,8 @@ public class Deck extends Actor {
         //this only works for even deck size, figure out randomisation of makeup if deck size is odd
         for (int i = 0; i < maxDeckSize; i++) {
             Card tempactor;
-            if (i % 2 == 0) tempactor = new Card("attack", 10);
-            else tempactor = new Card("defend", 5);
+            if (i % 2 == 0) tempactor = new Attack(5);
+            else tempactor = new Defence(5);
             cards.add(tempactor);
         }
     }
