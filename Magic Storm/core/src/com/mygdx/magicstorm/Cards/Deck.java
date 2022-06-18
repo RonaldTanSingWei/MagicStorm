@@ -82,4 +82,24 @@ public class Deck extends Actor {
         copyDeck.cards = newList;
         return copyDeck;
     }
+
+    public int getCurrentDeckSize() {
+        return this.currentDeckSize;
+    }
+    public int getMaxDeckSize() {
+        return this.maxDeckSize;
+    }
+
+    public void setCards(ArrayList<Card> newDeck) {
+        this.cards = newDeck;
+    }
+
+    public ArrayList<Card> getCards() {
+        ArrayList<Card> newCards = new ArrayList<>(cards);
+        return newCards;
+    }
+
+    public void setCurrentDeckSizeString(String string) {
+        this.currentDeckSizeString = string;
+    }
 }

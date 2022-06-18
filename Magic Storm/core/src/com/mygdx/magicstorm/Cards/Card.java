@@ -33,4 +33,5 @@ public class Card extends Actor {
     public void changeDefence(int value) {
         defence += value;
     }
+
 }

@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.magicstorm.MagicStorm;
+import com.mygdx.magicstorm.hero.Hero;
 
 public class MainMenuScreen implements Screen {
 
@@ -33,6 +34,8 @@ public class MainMenuScreen implements Screen {
 
     private SpriteBatch batch;
     private Sprite sprite;
+
+    private Hero hero = new Hero();
 
     public MainMenuScreen(final MagicStorm game) {
         this.game = game;
@@ -55,7 +58,7 @@ public class MainMenuScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainGameScreen(game));
+                game.setScreen(new MainGameScreen(game, hero));
                 dispose();
             }
         });

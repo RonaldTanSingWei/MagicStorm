@@ -30,7 +30,7 @@ public class Hero extends Actor {
     private Mana mana;
     private float widthCheck = sprite.getWidth();
 
-    private Deck deck = new Deck(4, 4);
+    private Deck deck = new Deck(6, 6);
 
 
     public Hero() {
@@ -136,8 +136,7 @@ public class Hero extends Actor {
     }
 
     public Deck getDeck() {
-        Deck copyDeck = (Deck) deck.clone();
-        return copyDeck;
+        return this.deck;
     }
 
 

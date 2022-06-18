@@ -18,9 +18,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.magicstorm.MagicStorm;
+import com.mygdx.magicstorm.hero.Hero;
 
 public class MainPauseScreen implements Screen {
     final MagicStorm game;
+
+    private Hero hero;
 
     OrthographicCamera camera;
     MainGameScreen gameScreen;
@@ -104,7 +107,7 @@ public class MainPauseScreen implements Screen {
 
     @Override
     public void resume() {
-        game.setScreen(new MainGameScreen(game));
+        game.setScreen(new MainGameScreen(game, hero));
         dispose();
     }
 

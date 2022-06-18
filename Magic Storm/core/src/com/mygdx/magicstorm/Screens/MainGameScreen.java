@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.magicstorm.Cards.Attack;
@@ -56,13 +57,13 @@ public class MainGameScreen implements Screen {
     Card selectedCard;
     int cardNo = 3;
     private Hero player;
-    Card card1;
-    Card card2;
     Card drawnCard;
     int handSize;
     int spaceAtEachSide;
-    int cardWidth;
-    int cardHeight;
+
+    Card sampleCard = new Card();
+    float cardWidth = sampleCard.getWidth();
+    float cardHeight = sampleCard.getHeight();
     int selectedCardX;
     int selectedCardY;
     boolean enemyTurn;
@@ -83,7 +84,7 @@ public class MainGameScreen implements Screen {
 
     private State state = State.STARTTURN;
 
-    public MainGameScreen(MagicStorm game) {
+    public MainGameScreen(MagicStorm game, Hero hero) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Group group1 = new Group();
@@ -92,9 +93,7 @@ public class MainGameScreen implements Screen {
         startOfTurn = true;
         availableRewards = true;
         Goblin goblin = new Goblin(10, 10);
-        Hero hero = new Hero();
-        card1 = new Attack(10);
-        card2 = new Defence(5);
+        this.hero = hero;
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
         Image endTurnButton = new Image(new Texture(Gdx.files.internal("endTurn.png")));
         Image mana = new Image(new Texture(Gdx.files.internal("Mana.png")));
@@ -123,8 +122,6 @@ public class MainGameScreen implements Screen {
         group1.addActor(background);
         group1.addActor(mana);
         group1.addActor(hero);
-        group1.addActor(card1);
-        group1.addActor(card2);
         group1.addActor(goblin);
         group1.addActor(endTurnButton);
         group1.addActor(enemyTurn);
@@ -133,8 +130,7 @@ public class MainGameScreen implements Screen {
         group1.addActor(nextStage);
         group1.addActor(rewardsButton);
 
-        cards.add(card1);
-        cards.add(card2);
+
         cardNo = cards.size();
 
         currentEnemy = goblin;
@@ -161,8 +157,7 @@ public class MainGameScreen implements Screen {
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
         deck.setPosition(50, 50);
 
-        cardWidth = (int) card1.getWidth();
-        cardHeight = (int) card1.getHeight();
+
         shuffle();
 
         currentEnemy.setPosition(stage.getWidth() - currentEnemy.getWidth(), stage.getHeight() / 3);
@@ -191,7 +186,6 @@ public class MainGameScreen implements Screen {
         final Actor nextStage = group.findActor("nextStage");
         final Actor endTurnButton = group.findActor("endTurnButton");
         nextStage.setTouchable(Touchable.disabled);
-        Deck deck = group.findActor("deck");
         Actor rewardsButton = group.findActor("rewardsButton");
         rewardsButton.setTouchable(Touchable.disabled);
         switch (state) {
@@ -200,7 +194,11 @@ public class MainGameScreen implements Screen {
                 stage.act(Gdx.graphics.getDeltaTime());
                 stage.draw();
                 if(currentEnemy.isDead()) {
-
+                    for (int i = 0; i < cards.size(); i++) {
+                        removeActor(cards.get(i));
+                        cards.remove(cards.get(i));
+                        i--;
+                    }
                     if (availableRewards) {
                         rewardsButton.addAction(fadeIn(0f));
                         rewardsButton.setTouchable(Touchable.enabled);
@@ -210,6 +208,7 @@ public class MainGameScreen implements Screen {
                     }
                     endTurnButton.setTouchable(Touchable.disabled);
                     endTurnButton.addAction(fadeOut(0f));
+                    shuffle();
 
                 }
                 //mouse click
@@ -315,8 +314,10 @@ public class MainGameScreen implements Screen {
             case STARTTURN:
                 startOfTurn = true;
                 if (startOfBattle) {
-                    deck = hero.getDeck();
-                    drawCard(2);
+                    deck = copyDeck(hero.getDeck());
+                    drawCard(3);
+                    shuffle();
+                    deck.setCurrentDeckSizeString(String.valueOf(deck.getCurrentDeckSize()));
                     availableRewards = true;
                     startOfBattle = false;
                     startTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
@@ -329,7 +330,8 @@ public class MainGameScreen implements Screen {
                         public void run() {
                             startTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
                             hero.setMana(5);
-                            drawCard(2);
+                            drawCard(5);
+                            shuffle();
                             startOfTurn = false;
                         }
                     }, 4);
@@ -413,5 +415,12 @@ public class MainGameScreen implements Screen {
             else break;
         }
         shuffle();
+    }
+
+    public Deck copyDeck(Deck deck) {
+        Deck newDeck = new Deck(hero.getDeck().getCurrentDeckSize(), hero.getDeck().getMaxDeckSize());
+        ArrayList<Card> newCards = hero.getDeck().getCards();
+        newDeck.setCards(newCards);
+        return newDeck;
     }
 }
