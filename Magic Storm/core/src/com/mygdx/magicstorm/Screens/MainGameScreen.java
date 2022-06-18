@@ -51,17 +51,18 @@ public class MainGameScreen implements Screen {
     private Enemy currentEnemy;
 
     private boolean availableRewards;
+    private boolean selectingRewards;
 
 
     Group group2;
     Card selectedCard;
-    int cardNo = 3;
+    int cardNo;
     private Hero player;
     Card drawnCard;
     int handSize;
     int spaceAtEachSide;
 
-    Card sampleCard = new Card();
+    Card sampleCard = new Attack(10);
     float cardWidth = sampleCard.getWidth();
     float cardHeight = sampleCard.getHeight();
     int selectedCardX;
@@ -92,6 +93,7 @@ public class MainGameScreen implements Screen {
         enemyTurn = false;
         startOfTurn = true;
         availableRewards = true;
+        selectingRewards = false;
         Goblin goblin = new Goblin(10, 10);
         this.hero = hero;
         Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
@@ -101,6 +103,9 @@ public class MainGameScreen implements Screen {
         Image startTurn = new Image(new Texture(Gdx.files.internal("startTurn.png")));
         Image nextStage = new Image(new Texture(Gdx.files.internal("nextStage.png")));
         Image rewardsButton = new Image(new Texture(Gdx.files.internal("rewardsButton.png")));
+        Image attackReward = new Image(new Texture(Gdx.files.internal("attack.png")));
+        Image defenceReward = new Image(new Texture(Gdx.files.internal("defend.png")));
+        Image hpReward = new Image(new Texture(Gdx.files.internal("HP.png")));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hero.setName("hero");
         background.setName("background");
@@ -115,7 +120,10 @@ public class MainGameScreen implements Screen {
         startTurn.setName("startTurn");
         nextStage.setName("nextStage");
         rewardsButton.setName("rewardsButton");
-        deck = hero.getDeck();
+        attackReward.setName("attackReward");
+        defenceReward.setName("defenceReward");
+        hpReward.setName("hpReward");
+        deck = copyDeck(hero.getDeck());
         deck.setName("deck");
         // order actors are drawn in
 
@@ -129,6 +137,9 @@ public class MainGameScreen implements Screen {
         group1.addActor(deck);
         group1.addActor(nextStage);
         group1.addActor(rewardsButton);
+        group1.addActor(attackReward);
+        group1.addActor(defenceReward);
+        group1.addActor(hpReward);
 
 
         cardNo = cards.size();
@@ -154,6 +165,12 @@ public class MainGameScreen implements Screen {
         nextStage.addAction(sequence(fadeOut(0f)));
         rewardsButton.setPosition(stage.getWidth()* 4/5, stage.getHeight() * 4/5);
         rewardsButton.addAction(fadeOut(0f));
+        attackReward.setPosition(stage.getWidth()* 1/3, stage.getHeight() * 1/2);
+        attackReward.addAction(fadeOut(0f));
+        defenceReward.setPosition(attackReward.getX() + attackReward.getWidth() + 100, stage.getHeight() * 1/2);
+        defenceReward.addAction(fadeOut(0f));
+        hpReward.setPosition(defenceReward.getX() + defenceReward.getWidth() + 100, stage.getHeight() * 1/2);
+        hpReward.addAction(fadeOut(0f));
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
         deck.setPosition(50, 50);
 
@@ -175,7 +192,6 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         pauseScreen = new MainPauseScreen(this.game, this);
         victoryScreen = new VictoryScreen(this.game, this);
         Group group = (Group) stage.getActors().first();
@@ -185,6 +201,9 @@ public class MainGameScreen implements Screen {
         final Actor startTurn = group.findActor("startTurn");
         final Actor nextStage = group.findActor("nextStage");
         final Actor endTurnButton = group.findActor("endTurnButton");
+        Actor attackReward = group.findActor("attackReward");
+        Actor defenceReward = group.findActor("defenceReward");
+        Actor hpReward = group.findActor("hpReward");
         nextStage.setTouchable(Touchable.disabled);
         Actor rewardsButton = group.findActor("rewardsButton");
         rewardsButton.setTouchable(Touchable.disabled);
@@ -195,14 +214,14 @@ public class MainGameScreen implements Screen {
                 stage.draw();
                 if(currentEnemy.isDead()) {
                     for (int i = 0; i < cards.size(); i++) {
-                        removeActor(cards.get(i));
-                        cards.remove(cards.get(i));
-                        i--;
+                        (cards.get(i)).remove();
                     }
+                    cards.clear();
+                    cardNo = 0;
                     if (availableRewards) {
                         rewardsButton.addAction(fadeIn(0f));
                         rewardsButton.setTouchable(Touchable.enabled);
-                    } else {
+                    } else if (!selectingRewards) {
                         nextStage.addAction(fadeIn(0f));
                         nextStage.setTouchable(Touchable.enabled);
                     }
@@ -248,28 +267,65 @@ public class MainGameScreen implements Screen {
                             hitActor.addAction(ra);
 
                         } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("attack"))) {
+                            selectedCard.setScale(1f);
                             selectedCard.dealDamage(currentEnemy);
                             cardSelected = false;
+                            cards.remove(selectedCard);
                             selectedCard.remove();
                             cardNo -= 1;
-                            cards.remove(selectedCard);
                             shuffle();
 
                         } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("defence"))) {
+                            selectedCard.setScale(1f);
                             selectedCard.addDefence(hero);
                             cardSelected = false;
+                            cards.remove(selectedCard);
                             selectedCard.remove();
                             cardNo -= 1;
-                            cards.remove(selectedCard);
                             shuffle();
 
                         } else if (hitActor.getName().equals("endTurnButton")) {
                             enemyTurn = true;
                             this.state = State.ENEMYTURN;
+
                         } else if (hitActor.getName().equals("rewardsButton")) {
                             availableRewards = false;
                             rewardsButton.setTouchable(Touchable.disabled);
                             rewardsButton.addAction(fadeOut(0f));
+                            attackReward.setTouchable(Touchable.enabled);
+                            attackReward.addAction(fadeIn(0f));
+                            defenceReward.setTouchable(Touchable.enabled);
+                            defenceReward.addAction(fadeIn(0f));
+                            hpReward.setTouchable(Touchable.enabled);
+                            hpReward.addAction(fadeIn(0f));
+                            selectingRewards = true;
+                        } else if (hitActor.getName().equals("attackReward")){
+                            attackReward.setTouchable(Touchable.disabled);
+                            attackReward.addAction(fadeOut(0f));
+                            defenceReward.setTouchable(Touchable.disabled);
+                            defenceReward.addAction(fadeOut(0f));
+                            hpReward.setTouchable(Touchable.disabled);
+                            hpReward.addAction(fadeOut(0f));
+                            selectingRewards = false;
+                            //add reward effects here
+                        } else if (hitActor.getName().equals("defenceReward")){
+                            attackReward.setTouchable(Touchable.disabled);
+                            attackReward.addAction(fadeOut(0f));
+                            defenceReward.setTouchable(Touchable.disabled);
+                            defenceReward.addAction(fadeOut(0f));
+                            hpReward.setTouchable(Touchable.disabled);
+                            hpReward.addAction(fadeOut(0f));
+                            selectingRewards = false;
+                            //add reward effects here
+                        } else if (hitActor.getName().equals("hpReward")){
+                            attackReward.setTouchable(Touchable.disabled);
+                            attackReward.addAction(fadeOut(0f));
+                            defenceReward.setTouchable(Touchable.disabled);
+                            defenceReward.addAction(fadeOut(0f));
+                            hpReward.setTouchable(Touchable.disabled);
+                            hpReward.addAction(fadeOut(0f));
+                            selectingRewards = false;
+                            //add reward effects here
                         } else if (hitActor.getName().equals("nextStage")) {
 
                             if (enemies.size() <= 0) {
