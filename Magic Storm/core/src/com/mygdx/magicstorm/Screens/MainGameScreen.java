@@ -22,6 +22,10 @@ import com.mygdx.magicstorm.Cards.Deck;
 import com.mygdx.magicstorm.Cards.Defence;
 import com.mygdx.magicstorm.Enemies.Enemy;
 import com.mygdx.magicstorm.Enemies.Goblin;
+import com.mygdx.magicstorm.Rewards.AttackReward;
+import com.mygdx.magicstorm.Rewards.DefenceReward;
+import com.mygdx.magicstorm.Rewards.HpReward;
+import com.mygdx.magicstorm.Rewards.Reward;
 import com.mygdx.magicstorm.hero.Hero;
 import com.mygdx.magicstorm.MagicStorm;
 
@@ -74,6 +78,12 @@ public class MainGameScreen implements Screen {
 
     private Deck deck;
 
+    private AttackReward attackReward;
+
+    private DefenceReward defenceReward;
+
+    private HpReward hpReward;
+
     public enum State {
         PAUSE,
         PLAYERTURN,
@@ -103,9 +113,10 @@ public class MainGameScreen implements Screen {
         Image startTurn = new Image(new Texture(Gdx.files.internal("startTurn.png")));
         Image nextStage = new Image(new Texture(Gdx.files.internal("nextStage.png")));
         Image rewardsButton = new Image(new Texture(Gdx.files.internal("rewardsButton.png")));
-        Image attackReward = new Image(new Texture(Gdx.files.internal("attack.png")));
-        Image defenceReward = new Image(new Texture(Gdx.files.internal("defend.png")));
-        Image hpReward = new Image(new Texture(Gdx.files.internal("HP.png")));
+        attackReward = new AttackReward();
+        //Image attackReward = new Image(new Texture(Gdx.files.internal("defend.png")));
+        defenceReward = new DefenceReward();
+        hpReward = new HpReward();
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hero.setName("hero");
         background.setName("background");
@@ -201,9 +212,9 @@ public class MainGameScreen implements Screen {
         final Actor startTurn = group.findActor("startTurn");
         final Actor nextStage = group.findActor("nextStage");
         final Actor endTurnButton = group.findActor("endTurnButton");
-        Actor attackReward = group.findActor("attackReward");
-        Actor defenceReward = group.findActor("defenceReward");
-        Actor hpReward = group.findActor("hpReward");
+        AttackReward attackReward = group.findActor("attackReward");
+        DefenceReward defenceReward = group.findActor("defenceReward");
+        HpReward hpReward = group.findActor("hpReward");
         nextStage.setTouchable(Touchable.disabled);
         Actor rewardsButton = group.findActor("rewardsButton");
         rewardsButton.setTouchable(Touchable.disabled);
@@ -308,6 +319,7 @@ public class MainGameScreen implements Screen {
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
                             //add reward effects here
+                            attackReward.rewardEffect(hero);
                         } else if (hitActor.getName().equals("defenceReward")){
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
@@ -317,6 +329,7 @@ public class MainGameScreen implements Screen {
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
                             //add reward effects here
+                            defenceReward.rewardEffect(hero);
                         } else if (hitActor.getName().equals("hpReward")){
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
@@ -326,6 +339,7 @@ public class MainGameScreen implements Screen {
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
                             //add reward effects here
+                            hpReward.rewardEffect(hero);
                         } else if (hitActor.getName().equals("nextStage")) {
 
                             if (enemies.size() <= 0) {
@@ -380,6 +394,7 @@ public class MainGameScreen implements Screen {
                     startOfTurn = false;
                     endTurnButton.setTouchable(Touchable.enabled);
                     endTurnButton.addAction(fadeIn(0f));
+                    hero.setArmor(0);
                 } else {
                     Timer.schedule(new Timer.Task() {
                         @Override

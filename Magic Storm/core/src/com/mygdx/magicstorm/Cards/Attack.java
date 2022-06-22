@@ -18,7 +18,7 @@ public class Attack extends Card {
         this.attack = value;
     }
 
-    public void changeAttack(int value) {
+    public void increaseAttack(int value) {
         attack += value;
     }
 

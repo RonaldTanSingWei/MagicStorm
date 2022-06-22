@@ -72,6 +72,21 @@ public class Hero extends Actor {
         hpBar.setWidth(widthCheck * currentHp / maxHp);
     }
 
+    public int getMaxHp() {
+        return this.maxHp;
+    }
+
+    public void setMaxHp(int hp) {
+        this.maxHp = hp;
+        currentHpString = currentHp + "/" + maxHp;
+    }
+
+    public void setArmor(int armor) {
+        this.currentArmor = armor;
+        armorBar.setWidth(0);
+        currentArmorString = "";
+    }
+
     public void takeDamage(int damage) {
         if (damage <= currentArmor) {
             currentArmor -= damage;

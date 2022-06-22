@@ -26,11 +26,11 @@ public class Card extends Actor {
         hero.gainArmor(defence);
     }
 
-    public void changeAttack(int value) {
+    public void increaseAttack(int value) {
         attack += value;
     }
 
-    public void changeDefence(int value) {
+    public void increaseDefence(int value) {
         defence += value;
     }
 
