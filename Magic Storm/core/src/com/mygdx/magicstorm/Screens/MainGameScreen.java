@@ -44,6 +44,7 @@ public class MainGameScreen implements Screen {
     private Vector2 touchPos;
     MainPauseScreen pauseScreen;
     VictoryScreen victoryScreen;
+    DefeatScreen defeatScreen;
     SpriteBatch batch = new SpriteBatch();
     boolean cardSelected = false;
     private ScreenViewport viewport;
@@ -90,6 +91,7 @@ public class MainGameScreen implements Screen {
         STARTTURN,
         ENEMYTURN,
         VICTORY,
+        DEFEAT,
         RESUME
     }
 
@@ -205,6 +207,7 @@ public class MainGameScreen implements Screen {
     public void render(float delta) {
         pauseScreen = new MainPauseScreen(this.game, this);
         victoryScreen = new VictoryScreen(this.game, this);
+        defeatScreen = new DefeatScreen(this.game, this);
         Group group = (Group) stage.getActors().first();
         final Hero hero = group.findActor("hero");
         final Goblin goblin = group.findActor("goblin");
@@ -239,7 +242,11 @@ public class MainGameScreen implements Screen {
                     endTurnButton.setTouchable(Touchable.disabled);
                     endTurnButton.addAction(fadeOut(0f));
                     shuffle();
-
+                }
+                if (hero.isDead()) {
+                    hero.die();
+                    this.state = State.DEFEAT;
+                    game.setScreen(defeatScreen);
                 }
                 //mouse click
                 if (Gdx.input.isTouched() && !enemyTurn && !startOfTurn) {
@@ -414,6 +421,8 @@ public class MainGameScreen implements Screen {
             case PAUSE:
                 break;
             case VICTORY:
+                break;
+            case DEFEAT:
                 break;
             case RESUME:
                 Gdx.graphics.setContinuousRendering(true);

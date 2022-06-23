@@ -1,5 +1,8 @@
 package com.mygdx.magicstorm.hero;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +15,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.magicstorm.Cards.Deck;
 
 public class Hero extends Actor {
@@ -154,5 +159,16 @@ public class Hero extends Actor {
         return this.deck;
     }
 
-
+    public void die() {
+        ColorAction colorAction = new ColorAction();
+        colorAction.setEndColor(Color.CLEAR);
+        colorAction.setDuration(2f);
+        this.addAction(colorAction);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                addAction(sequence(fadeOut(1f)));
+            }
+        }, 1);
+    }
 }
