@@ -24,6 +24,8 @@ public class Enemy extends Actor {
     private String currentHpString;
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
+    private int attackValue;
+
 
     public void draw(SpriteBatch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -96,5 +98,7 @@ public class Enemy extends Actor {
         hpBar.setPosition(xPos, yPos);
     }
 
-
+    public String getAttackValue() {
+        return String.valueOf(this.attackValue);
+    }
 }

@@ -45,9 +45,9 @@ public class Deck extends Actor {
         sprite.setColor(getColor());
         sprite.draw(batch, parentAlpha);
         batch.end();
-        deckBatch.begin();
+        /*deckBatch.begin();
         font.draw(deckBatch, currentDeckSizeString, sprite.getX(), sprite.getY());
-        deckBatch.end();
+        deckBatch.end();*/
         batch.begin();
 
     }
@@ -85,6 +85,9 @@ public class Deck extends Actor {
 
     public int getCurrentDeckSize() {
         return this.currentDeckSize;
+    }
+    public String getCurrentDeckSizeString() {
+        return this.currentDeckSizeString;
     }
     public int getMaxDeckSize() {
         return this.maxDeckSize;

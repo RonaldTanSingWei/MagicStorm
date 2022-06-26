@@ -22,6 +22,8 @@ import com.mygdx.magicstorm.Cards.Deck;
 import com.mygdx.magicstorm.Cards.Defence;
 import com.mygdx.magicstorm.Enemies.Enemy;
 import com.mygdx.magicstorm.Enemies.Goblin;
+import com.mygdx.magicstorm.Enemies.MagicalConstruct;
+import com.mygdx.magicstorm.Enemies.RenegadeMage;
 import com.mygdx.magicstorm.Rewards.AttackReward;
 import com.mygdx.magicstorm.Rewards.DefenceReward;
 import com.mygdx.magicstorm.Rewards.HpReward;
@@ -48,6 +50,9 @@ public class MainGameScreen implements Screen {
     SpriteBatch batch = new SpriteBatch();
     boolean cardSelected = false;
     private ScreenViewport viewport;
+    int floor = 1;
+    int easyEnemies = 2;
+    int hardEnemies = 2;
 
     private Group group = new Group();
 
@@ -125,8 +130,12 @@ public class MainGameScreen implements Screen {
         goblin.setName("goblin");
         Goblin goblin1 = new Goblin(15,15);
         Goblin goblin2 = new Goblin(10,10);
+        RenegadeMage mage1 = new RenegadeMage(10,10);
+        MagicalConstruct construct1 = new MagicalConstruct(40,40);
         goblin1.setName("goblin1");
         goblin2.setName("goblin2");
+        mage1.setName("mage1");
+        construct1.setName("construct1");
         endTurnButton.setName("endTurnButton");
         mana.setName("mana");
         enemyTurn.setName("enemyTurn");
@@ -158,8 +167,11 @@ public class MainGameScreen implements Screen {
         cardNo = cards.size();
 
         currentEnemy = goblin;
+        // add enemies in order of difficulty, randomise different parts of enemy array depending on current floor -- need to remove enemies because death state is carried over
         enemies.add(goblin1);
         enemies.add(goblin2);
+        enemies.add(mage1);
+        enemies.add(construct1);
 
         stage.addActor(group1);
         hero.setPosition(0, stage.getHeight() / 3);
@@ -226,6 +238,10 @@ public class MainGameScreen implements Screen {
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 stage.act(Gdx.graphics.getDeltaTime());
                 stage.draw();
+                game.batch.begin();
+                game.font.draw(game.batch, deck.getCurrentDeckSizeString() , deck.getX() + (deck.getWidth() / 2) + 50,deck.getY() + deck.getHeight() + 75);
+                if (!currentEnemy.isDead()) game.font.draw(game.batch, "Attack Damage: " + currentEnemy.getAttackValue(), currentEnemy.getX(), currentEnemy.getY() - 50);
+                game.batch.end();
                 if(currentEnemy.isDead()) {
                     for (int i = 0; i < cards.size(); i++) {
                         (cards.get(i)).remove();
@@ -348,13 +364,21 @@ public class MainGameScreen implements Screen {
                             //add reward effects here
                             hpReward.rewardEffect(hero);
                         } else if (hitActor.getName().equals("nextStage")) {
-
-                            if (enemies.size() <= 0) {
+                            floor += 1;
+                            if (floor > 5) {
                                 this.state = State.VICTORY;
                                 game.setScreen(victoryScreen);
                             }
                             else {
-                                int random = rand.nextInt(enemies.size());
+                                int random;
+                                if (floor <= 3) {
+                                    random = rand.nextInt(easyEnemies);
+                                    easyEnemies -= 1;
+                                }
+                                else {
+                                    random = rand.nextInt(hardEnemies);
+                                    hardEnemies -= 1;
+                                }
                                 currentEnemy = enemies.remove(random);
                                 stage.addActor(currentEnemy);
                                 currentEnemy.draw(batch, delta);

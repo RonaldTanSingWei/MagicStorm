@@ -22,6 +22,7 @@ public class Goblin extends Enemy {
     private String currentHpString;
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
+    private int attackValue = 5;
 
 
 
@@ -116,7 +117,10 @@ public class Goblin extends Enemy {
     @Override
     public void attack(Hero hero) {
         super.attack(hero);
-        hero.takeDamage(5);
+        hero.takeDamage(attackValue);
 
+    }
+    public String getAttackValue() {
+        return String.valueOf(this.attackValue);
     }
 }
