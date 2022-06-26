@@ -51,14 +51,13 @@ public class MainGameScreen implements Screen {
 
     private Group group = new Group();
 
-    private Hero hero;
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private Enemy currentEnemy;
 
     private boolean availableRewards;
     private boolean selectingRewards;
 
-
+    private Hero hero;
     Group group2;
     Card selectedCard;
     int cardNo;
@@ -98,6 +97,7 @@ public class MainGameScreen implements Screen {
     private State state = State.STARTTURN;
 
     public MainGameScreen(MagicStorm game, Hero hero) {
+        this.hero = hero;
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Group group1 = new Group();
@@ -165,6 +165,7 @@ public class MainGameScreen implements Screen {
         hero.setPosition(0, stage.getHeight() / 3);
         hero.setHpBarPos(hero.getX(), ((stage.getHeight() / 3) - 30));
         hero.setArmorBarPos(hero.getX(), ((stage.getHeight() / 3) - 60));
+        hero.setUltimateBarPos(stage.getWidth() * 1/10, stage.getHeight() * 9/10);
 
 
 
@@ -402,6 +403,7 @@ public class MainGameScreen implements Screen {
                     endTurnButton.setTouchable(Touchable.enabled);
                     endTurnButton.addAction(fadeIn(0f));
                     hero.setArmor(0);
+                    hero.progressUltimate(10);
                 } else {
                     Timer.schedule(new Timer.Task() {
                         @Override

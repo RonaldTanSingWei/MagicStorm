@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.magicstorm.Cards.Deck;
+import com.mygdx.magicstorm.UltimateSkills.UltimateSkill;
 
 public class Hero extends Actor {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Player.png")));
@@ -26,6 +27,7 @@ public class Hero extends Actor {
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Rectangle hpBar;
     private Rectangle armorBar;
+    private Rectangle ultimateBar;
     private int currentHp;
     private int maxHp;
     private String currentHpString;
@@ -35,6 +37,8 @@ public class Hero extends Actor {
     private Mana mana;
     private float widthCheck = sprite.getWidth();
 
+    private UltimateSkill ultimateSkill;
+
     private Deck deck = new Deck(6, 6);
 
 
@@ -42,7 +46,7 @@ public class Hero extends Actor {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
         maxHp = 100;
-        currentHp = 90;
+        currentHp = 5;
         hpBar = new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth() * currentHp / maxHp,10);
         currentHpString = currentHp + "/" + maxHp;
         currentArmor = 5;
@@ -51,6 +55,8 @@ public class Hero extends Actor {
         currentArmorString = Integer.toString(currentArmor);
         mana = new Mana(5,5);
         mana.setCurrentManaString(mana.getCurrentMana() + "/" + mana.getMaxMana());
+        ultimateBar = new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), 20);
+
 
     }
     public boolean isDead() {
@@ -79,6 +85,14 @@ public class Hero extends Actor {
 
     public int getMaxHp() {
         return this.maxHp;
+    }
+
+    public void setUltimateSkill(UltimateSkill ultimateSkill) {
+        this.ultimateSkill = ultimateSkill;
+    }
+
+    public UltimateSkill getUltimateSkill() {
+        return this.ultimateSkill;
     }
 
     public void setMaxHp(int hp) {
@@ -127,6 +141,8 @@ public class Hero extends Actor {
         shapeRenderer.rect(hpBar.x, hpBar.y, hpBar.width, hpBar.height);
         shapeRenderer.setColor(Color.GRAY);
         shapeRenderer.rect(armorBar.x, armorBar.y, armorBar.width, armorBar.height);
+        shapeRenderer.setColor(Color.PINK);
+        shapeRenderer.rect(ultimateBar.x, ultimateBar.y, ultimateBar.width, ultimateBar.height);
         shapeRenderer.end();
         batch.begin();
 
@@ -142,6 +158,8 @@ public class Hero extends Actor {
     public void setArmorBarPos(float xPos, float yPos) {
         armorBar.setPosition(xPos, yPos);
     }
+
+    public void setUltimateBarPos(float xPos, float yPos) {ultimateBar.setPosition(xPos, yPos);}
     public void positionChanged() {
         sprite.setPosition(getX(),getY());
         super.positionChanged();
@@ -170,5 +188,11 @@ public class Hero extends Actor {
                 addAction(sequence(fadeOut(1f)));
             }
         }, 1);
+    }
+
+    public void progressUltimate(int progress) {
+        ultimateSkill.setProgress(progress);
+        ultimateSkill.setProgressString(progress + "/" + ultimateSkill.getMaxCounter());
+        ultimateBar.setWidth(widthCheck * ultimateSkill.getProgress() / ultimateSkill.getMaxCounter());
     }
 }

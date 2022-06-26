@@ -35,7 +35,6 @@ public class MainMenuScreen implements Screen {
     private SpriteBatch batch;
     private Sprite sprite;
 
-    private Hero hero = new Hero();
 
     public MainMenuScreen(final MagicStorm game) {
         this.game = game;
@@ -58,7 +57,7 @@ public class MainMenuScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainGameScreen(game, hero));
+                game.setScreen(new UltimateSelectScreen(game));
                 dispose();
             }
         });
