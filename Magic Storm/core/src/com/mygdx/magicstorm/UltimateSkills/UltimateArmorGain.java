@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.mygdx.magicstorm.Enemies.Enemy;
+import com.mygdx.magicstorm.hero.Hero;
 
 public class UltimateArmorGain  extends UltimateSkill{
     private int progress = 10;
@@ -33,6 +35,9 @@ public class UltimateArmorGain  extends UltimateSkill{
         sprite.draw(batch, parentAlpha);
     }
 
-
+    @Override
+    public void effect(Hero hero, Enemy enemy) {
+        hero.gainArmor(50);
+    };
 }
 

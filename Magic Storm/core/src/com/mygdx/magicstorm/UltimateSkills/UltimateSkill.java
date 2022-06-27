@@ -2,6 +2,8 @@ package com.mygdx.magicstorm.UltimateSkills;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.magicstorm.Enemies.Enemy;
+import com.mygdx.magicstorm.hero.Hero;
 
 public class UltimateSkill extends Actor {
 
@@ -37,5 +39,13 @@ public class UltimateSkill extends Actor {
         return this.maxCounter;
     }
 
+    public void increaseProgress(int progress) {
+        this.progress += progress;
+    }
 
+    public boolean isReady() {
+        return progress >= maxCounter;
+    }
+
+    public void effect(Hero hero, Enemy enemy) {};
 }

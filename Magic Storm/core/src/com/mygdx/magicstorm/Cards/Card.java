@@ -6,8 +6,8 @@ import com.mygdx.magicstorm.Enemies.Enemy;
 import com.mygdx.magicstorm.hero.Hero;
 
 public class Card extends Actor {
-    int attack;
-    int defence;
+    private int attack;
+    private int defence;
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -34,4 +34,19 @@ public class Card extends Actor {
         defence += value;
     }
 
+    public int getAttack() {
+        return this.attack;
+    }
+
+    public int getDefence() {
+        return this.defence;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public void setDefence(int defence) {
+        this.defence = defence;
+    }
 }

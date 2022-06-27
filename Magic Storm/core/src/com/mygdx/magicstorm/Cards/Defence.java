@@ -7,22 +7,22 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
-public class Defence extends Card{
+public class Defence extends Card {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("defend.png")));
 
     public Defence(int value) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
         setName("defence");
-        defence = value;
+        setDefence(value);
     }
 
     public void increaseDefence(int value) {
-        defence += value;
+        setDefence(getDefence() + value);
     }
 
     public void addDefence(Hero hero) {
-        hero.gainArmor(defence);
+        hero.gainArmor(getDefence());
     }
 
     @Override

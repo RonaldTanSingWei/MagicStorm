@@ -28,6 +28,8 @@ import com.mygdx.magicstorm.Rewards.AttackReward;
 import com.mygdx.magicstorm.Rewards.DefenceReward;
 import com.mygdx.magicstorm.Rewards.HpReward;
 import com.mygdx.magicstorm.Rewards.Reward;
+import com.mygdx.magicstorm.UltimateSkills.UltimateArmorGain;
+import com.mygdx.magicstorm.UltimateSkills.UltimateDamageDone;
 import com.mygdx.magicstorm.hero.Hero;
 import com.mygdx.magicstorm.MagicStorm;
 
@@ -120,6 +122,7 @@ public class MainGameScreen implements Screen {
         Image startTurn = new Image(new Texture(Gdx.files.internal("startTurn.png")));
         Image nextStage = new Image(new Texture(Gdx.files.internal("nextStage.png")));
         Image rewardsButton = new Image(new Texture(Gdx.files.internal("rewardsButton.png")));
+        Image ultimateSkill = new Image(new Texture(Gdx.files.internal("ultimateSkill.png")));
         attackReward = new AttackReward();
         //Image attackReward = new Image(new Texture(Gdx.files.internal("defend.png")));
         defenceReward = new DefenceReward();
@@ -147,6 +150,7 @@ public class MainGameScreen implements Screen {
         hpReward.setName("hpReward");
         deck = copyDeck(hero.getDeck());
         deck.setName("deck");
+        ultimateSkill.setName("ultimateSkill");
         // order actors are drawn in
 
         group1.addActor(background);
@@ -162,6 +166,7 @@ public class MainGameScreen implements Screen {
         group1.addActor(attackReward);
         group1.addActor(defenceReward);
         group1.addActor(hpReward);
+        group1.addActor(ultimateSkill);
 
 
         cardNo = cards.size();
@@ -199,6 +204,8 @@ public class MainGameScreen implements Screen {
         hpReward.addAction(fadeOut(0f));
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
         deck.setPosition(50, 50);
+        ultimateSkill.setPosition(stage.getWidth() * 1/10, stage.getHeight() * 9/10);
+        ultimateSkill.addAction(fadeOut(0f));
 
 
         shuffle();
@@ -234,6 +241,8 @@ public class MainGameScreen implements Screen {
         nextStage.setTouchable(Touchable.disabled);
         Actor rewardsButton = group.findActor("rewardsButton");
         rewardsButton.setTouchable(Touchable.disabled);
+        Actor ultimateSkill = group.findActor("ultimateSkill");
+        ultimateSkill.setTouchable(Touchable.disabled);
         switch (state) {
             case PLAYERTURN:
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -258,12 +267,23 @@ public class MainGameScreen implements Screen {
                     }
                     endTurnButton.setTouchable(Touchable.disabled);
                     endTurnButton.addAction(fadeOut(0f));
+                    ultimateSkill.setTouchable(Touchable.disabled);
+                    ultimateSkill.addAction(fadeOut(0f));
+                    hero.setUltimateProgress(0);
                     shuffle();
                 }
                 if (hero.isDead()) {
                     hero.die();
                     this.state = State.DEFEAT;
                     game.setScreen(defeatScreen);
+                }
+
+                if (hero.getUltimateSkill().isReady()) {
+                    ultimateSkill.addAction(fadeIn(0f));
+                    ultimateSkill.setTouchable(Touchable.enabled);
+                    hero.setUltimateProgress(hero.getUltimateMaxCounter());
+                    hero.resetUltimate();
+
                 }
                 //mouse click
                 if (Gdx.input.isTouched() && !enemyTurn && !startOfTurn) {
@@ -302,8 +322,17 @@ public class MainGameScreen implements Screen {
                             hitActor.addAction(ra);
 
                         } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("attack"))) {
+                            int damage = selectedCard.getAttack();
+                            int armor = selectedCard.getDefence();
                             selectedCard.setScale(1f);
                             selectedCard.dealDamage(currentEnemy);
+                            if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
+                                hero.progressUltimate(damage);
+                            }
+                            if (hero.getUltimateSkill() instanceof UltimateArmorGain) {
+                                hero.progressUltimate(armor);
+                            }
+
                             cardSelected = false;
                             cards.remove(selectedCard);
                             selectedCard.remove();
@@ -311,14 +340,28 @@ public class MainGameScreen implements Screen {
                             shuffle();
 
                         } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("defence"))) {
+                            int damage = selectedCard.getAttack();
+                            int armor = selectedCard.getDefence();
                             selectedCard.setScale(1f);
                             selectedCard.addDefence(hero);
+                            if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
+                                hero.progressUltimate(damage);
+                            }
+                            if (hero.getUltimateSkill() instanceof UltimateArmorGain) {
+                                hero.progressUltimate(armor);
+                            }
+
                             cardSelected = false;
                             cards.remove(selectedCard);
                             selectedCard.remove();
                             cardNo -= 1;
                             shuffle();
 
+                        } else if (hitActor.getName().equals("ultimateSkill")) {
+                            ultimateSkill.addAction(fadeOut(0f));
+                            ultimateSkill.setTouchable(Touchable.disabled);
+                            hero.getUltimateSkill().effect(hero, currentEnemy);
+                            hero.setUltimateProgress(0);
                         } else if (hitActor.getName().equals("endTurnButton")) {
                             enemyTurn = true;
                             this.state = State.ENEMYTURN;
@@ -427,7 +470,7 @@ public class MainGameScreen implements Screen {
                     endTurnButton.setTouchable(Touchable.enabled);
                     endTurnButton.addAction(fadeIn(0f));
                     hero.setArmor(0);
-                    hero.progressUltimate(10);
+                    hero.setUltimateProgress(0);
                 } else {
                     Timer.schedule(new Timer.Task() {
                         @Override

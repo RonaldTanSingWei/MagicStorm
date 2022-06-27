@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.mygdx.magicstorm.Enemies.Enemy;
+import com.mygdx.magicstorm.hero.Hero;
 
 public class UltimateDamageDone extends UltimateSkill {
     private int progress = 5;
@@ -33,4 +35,8 @@ public class UltimateDamageDone extends UltimateSkill {
         sprite.setPosition(getX(),getY());
         super.positionChanged();
     }
+    @Override
+    public void effect(Hero hero, Enemy enemy) {
+        enemy.takeDamage(50);
+    };
 }

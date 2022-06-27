@@ -39,7 +39,7 @@ public class Hero extends Actor {
 
     private UltimateSkill ultimateSkill;
 
-    private Deck deck = new Deck(6, 6);
+    private Deck deck = new Deck(10, 10);
 
 
     public Hero() {
@@ -191,8 +191,22 @@ public class Hero extends Actor {
     }
 
     public void progressUltimate(int progress) {
+        ultimateSkill.increaseProgress(progress);
+        ultimateSkill.setProgressString(progress + "/" + ultimateSkill.getMaxCounter());
+        ultimateBar.setWidth(widthCheck * ultimateSkill.getProgress() / ultimateSkill.getMaxCounter());
+    }
+
+    public void setUltimateProgress(int progress) {
         ultimateSkill.setProgress(progress);
         ultimateSkill.setProgressString(progress + "/" + ultimateSkill.getMaxCounter());
         ultimateBar.setWidth(widthCheck * ultimateSkill.getProgress() / ultimateSkill.getMaxCounter());
+    }
+
+    public int getUltimateMaxCounter() {
+        return this.getUltimateSkill().getMaxCounter();
+    }
+
+    public void resetUltimate() {
+        ultimateBar.setWidth(0);
     }
 }

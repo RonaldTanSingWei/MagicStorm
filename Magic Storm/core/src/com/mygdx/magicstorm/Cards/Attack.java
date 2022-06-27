@@ -15,15 +15,15 @@ public class Attack extends Card {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
         setName("attack");
-        this.attack = value;
+        setAttack(value);
     }
 
     public void increaseAttack(int value) {
-        attack += value;
+        setAttack(getAttack() + value);
     }
 
     public void dealDamage(Enemy enemy) {
-        enemy.takeDamage(attack);
+        enemy.takeDamage(getAttack());
     }
 
     @Override
@@ -43,4 +43,6 @@ public class Attack extends Card {
         sprite.setScale(getScaleX(),getScaleY());
         super.scaleChanged();
     }
+
+
 }
