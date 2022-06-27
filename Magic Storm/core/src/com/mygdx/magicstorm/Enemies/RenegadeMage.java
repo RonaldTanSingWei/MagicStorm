@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.magicstorm.hero.Hero;
 
 public class RenegadeMage extends Enemy {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Mage.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Mage.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private float widthCheck = sprite.getWidth();
     private Rectangle hpBar = new Rectangle(sprite.getX(), sprite.getY(), widthCheck, 10);
@@ -68,7 +68,7 @@ public class RenegadeMage extends Enemy {
             currentHp = maxHp;
             attackValue = 10;
             currentHpString = currentHp + "/" + maxHp;
-            sprite = new Sprite(new Texture(Gdx.files.internal("MagePhase2.jpg")));
+            sprite = new Sprite(new Texture(Gdx.files.internal("MagePhase2.png")));
             sprite.setPosition(hpBar.x, hpBar.y + 30);
             phase = 2;
         }
@@ -113,7 +113,7 @@ public class RenegadeMage extends Enemy {
     }
 
     public void die() {
-        this.sprite = new Sprite(new Texture(Gdx.files.internal("deadMage.jpg")));
+        this.sprite = new Sprite(new Texture(Gdx.files.internal("deadMage.png")));
         sprite.setPosition(hpBar.x, hpBar.y + 30);
         super.die();
     }

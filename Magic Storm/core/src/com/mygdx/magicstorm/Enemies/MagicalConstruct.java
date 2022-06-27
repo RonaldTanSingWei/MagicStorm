@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.magicstorm.hero.Hero;
 
 public class MagicalConstruct extends Enemy {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Construct.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Construct.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private float widthCheck = sprite.getWidth();
     private Rectangle hpBar = new Rectangle(sprite.getX(), sprite.getY(), widthCheck, 10);
@@ -64,13 +64,13 @@ public class MagicalConstruct extends Enemy {
         currentHpString = currentHp + "/" + maxHp;
         hpBar.setWidth(widthCheck * currentHp / maxHp);
         if (currentHp < maxHp && currentHp > 0 && currentPhase == 1) {
-            sprite = new Sprite(new Texture(Gdx.files.internal("ConstructPhase2.jpg")));
+            sprite = new Sprite(new Texture(Gdx.files.internal("ConstructPhase2.png")));
             sprite.setPosition(hpBar.x, hpBar.y + 30);
             attackValue = 30;
             currentPhase = 2;
         }
         else if (currentHp < (maxHp / 2) && currentHp > 0 && currentPhase == 2) {
-            sprite = new Sprite(new Texture(Gdx.files.internal("ConstructPhase3.jpg")));
+            sprite = new Sprite(new Texture(Gdx.files.internal("ConstructPhase3.png")));
             sprite.setPosition(hpBar.x, hpBar.y + 30);
             attackValue = 40;
             currentPhase = 3;
@@ -113,7 +113,7 @@ public class MagicalConstruct extends Enemy {
     }
 
     public void die() {
-        this.sprite = new Sprite(new Texture(Gdx.files.internal("deadConstruct.jpg")));
+        this.sprite = new Sprite(new Texture(Gdx.files.internal("deadConstruct.png")));
         sprite.setPosition(hpBar.x, hpBar.y + 30);
         super.die();
     }
