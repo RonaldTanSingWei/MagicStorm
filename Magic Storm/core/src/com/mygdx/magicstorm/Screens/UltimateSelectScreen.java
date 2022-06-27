@@ -52,20 +52,6 @@ public class UltimateSelectScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
 
-        startButton = new TextButton("Start Game", skin);
-        //set transform allows button size to be modified
-        startButton.setTransform(true);
-        startButton.setScale(2f);
-        startButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainGameScreen(game, hero));
-                dispose();
-            }
-        });
-
-        stage.addActor(startButton);
-
         batch = new SpriteBatch();
         sprite = new Sprite(new Texture(Gdx.files.internal("menu.png")));
         sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()); // sets to screen dimensions
