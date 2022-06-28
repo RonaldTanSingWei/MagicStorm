@@ -9,7 +9,7 @@ import com.mygdx.magicstorm.Cards.Card;
 import com.mygdx.magicstorm.Enemies.Enemy;
 
 public class Attack extends Card {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("attack.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Attack.png")));
 
     public Attack(int value) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());

@@ -115,16 +115,15 @@ public class MainGameScreen implements Screen {
         selectingRewards = false;
         Goblin goblin = new Goblin(10, 10);
         this.hero = hero;
-        Image background = new Image(new Texture(Gdx.files.internal("background.jpg")));
+        Image background = new Image(new Texture(Gdx.files.internal("Background.jpg")));
         Image endTurnButton = new Image(new Texture(Gdx.files.internal("endTurn.png")));
-        Image mana = new Image(new Texture(Gdx.files.internal("Mana.png")));
+        Image mana = new Image(new Texture(Gdx.files.internal("mana.png")));
         Image enemyTurn = new Image(new Texture(Gdx.files.internal("EnemyTurn.png")));
         Image startTurn = new Image(new Texture(Gdx.files.internal("startTurn.png")));
         Image nextStage = new Image(new Texture(Gdx.files.internal("nextStage.png")));
         Image rewardsButton = new Image(new Texture(Gdx.files.internal("rewardsButton.png")));
         Image ultimateSkill = new Image(new Texture(Gdx.files.internal("ultimateSkill.png")));
         attackReward = new AttackReward();
-        //Image attackReward = new Image(new Texture(Gdx.files.internal("defend.png")));
         defenceReward = new DefenceReward();
         hpReward = new HpReward();
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

@@ -9,7 +9,6 @@ public class UltimateSkill extends Actor {
 
     private int progress;
 
-    private Sprite sprite;
 
     private int maxCounter;
 
@@ -48,4 +47,8 @@ public class UltimateSkill extends Actor {
     }
 
     public void effect(Hero hero, Enemy enemy) {};
+
+    public String getProgressString() {
+        return this.progressString;
+    }
 }

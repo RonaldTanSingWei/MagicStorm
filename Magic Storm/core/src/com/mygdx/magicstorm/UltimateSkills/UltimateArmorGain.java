@@ -11,7 +11,7 @@ import com.mygdx.magicstorm.hero.Hero;
 public class UltimateArmorGain  extends UltimateSkill{
     private int progress = 10;
 
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("UltimateArmorGain.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("ultArmorGain.png")));
 
     private int maxCounter = 50;
 

@@ -13,6 +13,9 @@ public class MagicStorm extends Game implements InputProcessor {
     public BitmapFont font;
     private MainMenuScreen mainMenuScreen;
 
+    public MagicStorm() {
+
+    }
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont(); // use libGDX's default Arial font

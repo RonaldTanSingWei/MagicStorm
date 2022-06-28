@@ -11,7 +11,7 @@ import com.mygdx.magicstorm.hero.Hero;
 public class UltimateDamageDone extends UltimateSkill {
     private int progress = 5;
 
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("UltimateDamageDone.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("ultDamageDone.png")));
 
     private int maxCounter = 30;
 

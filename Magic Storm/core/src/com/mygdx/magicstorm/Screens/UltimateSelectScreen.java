@@ -53,7 +53,7 @@ public class UltimateSelectScreen implements Screen {
 
 
         batch = new SpriteBatch();
-        sprite = new Sprite(new Texture(Gdx.files.internal("menu.png")));
+        sprite = new Sprite(new Texture(Gdx.files.internal("Menu.png")));
         sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()); // sets to screen dimensions
 
         Gdx.input.setInputProcessor(stage);
@@ -91,13 +91,13 @@ public class UltimateSelectScreen implements Screen {
                 final Actor hitActor = stage.hit(coord.x, coord.y, true);
                     if (hitActor instanceof UltimateDamageDone) {
                         UltimateDamageDone chosenSkill = (UltimateDamageDone) hitActor;
-                        chosenSkill.setMaxCounter(10);
+                        chosenSkill.setMaxCounter(30);
                         hero.setUltimateSkill(chosenSkill);
                         hero.getUltimateSkill().setProgressString(hero.getUltimateSkill().getProgress() + "/" + hero.getUltimateSkill().getMaxCounter());
                         game.setScreen(new MainGameScreen(game, hero));
                     } else if (hitActor instanceof UltimateArmorGain) {
                         UltimateArmorGain chosenSkill = (UltimateArmorGain) hitActor;
-                        chosenSkill.setMaxCounter(10);
+                        chosenSkill.setMaxCounter(30);
                         hero.setUltimateSkill(chosenSkill);
                         hero.getUltimateSkill().setProgressString(hero.getUltimateSkill().getProgress() + "/" + hero.getUltimateSkill().getMaxCounter());
                         game.setScreen(new MainGameScreen(game, hero));

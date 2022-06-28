@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
 public class Defence extends Card {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("defend.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
 
     public Defence(int value) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());

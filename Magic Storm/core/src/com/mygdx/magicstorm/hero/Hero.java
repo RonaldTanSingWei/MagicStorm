@@ -21,7 +21,7 @@ import com.mygdx.magicstorm.Cards.Deck;
 import com.mygdx.magicstorm.UltimateSkills.UltimateSkill;
 
 public class Hero extends Actor {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Player.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("hero.png")));
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -135,6 +135,7 @@ public class Hero extends Actor {
         font.draw(hpBatch, currentHpString, hpBar.getX(), hpBar.getY());
         font.draw(hpBatch, currentArmorString, armorBar.getX(),armorBar.getY());
         font.draw(hpBatch, mana.getCurrentManaString(), getStage().getWidth()  * 51/200, getStage().getHeight() * 1/4);
+        font.draw(hpBatch, ultimateSkill.getProgressString(), ultimateBar.getX(), ultimateBar.getY());
         hpBatch.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
@@ -200,6 +201,9 @@ public class Hero extends Actor {
         ultimateSkill.setProgress(progress);
         ultimateSkill.setProgressString(progress + "/" + ultimateSkill.getMaxCounter());
         ultimateBar.setWidth(widthCheck * ultimateSkill.getProgress() / ultimateSkill.getMaxCounter());
+        if (progress == 0) {
+            ultimateSkill.setProgressString("");
+        }
     }
 
     public int getUltimateMaxCounter() {

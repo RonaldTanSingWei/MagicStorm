@@ -35,6 +35,7 @@ public class MainMenuScreen implements Screen {
     private SpriteBatch batch;
     private Sprite sprite;
 
+    private Hero hero;
 
     public MainMenuScreen(final MagicStorm game) {
         this.game = game;
@@ -68,7 +69,7 @@ public class MainMenuScreen implements Screen {
         stage.addActor(table);
 
         batch = new SpriteBatch();
-        sprite = new Sprite(new Texture(Gdx.files.internal("menu.png")));
+        sprite = new Sprite(new Texture(Gdx.files.internal("Menu.png")));
         sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()); // sets to screen dimensions
 
         Gdx.input.setInputProcessor(stage);

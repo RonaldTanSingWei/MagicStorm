@@ -13,7 +13,7 @@ import com.mygdx.magicstorm.hero.Hero;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Goblin extends Enemy {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("goblin.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Goblin.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private float widthCheck = sprite.getWidth();
     private Rectangle hpBar = new Rectangle(sprite.getX(), sprite.getY(), widthCheck, 10);
