@@ -8,6 +8,8 @@ public class Mana {
         this.currentMana = currentMana;
         this.maxMana = maxMana;
     }
+
+
     public String getCurrentManaString() {
         return this.currentManaString;
     }

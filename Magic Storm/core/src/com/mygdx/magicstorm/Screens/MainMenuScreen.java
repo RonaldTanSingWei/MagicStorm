@@ -1,6 +1,8 @@
 package com.mygdx.magicstorm.Screens;
 
 
+import com.mygdx.magicstorm.Enemies.MagicalConstruct;
+import com.mygdx.magicstorm.Enemies.RenegadeMage;
 import com.mygdx.magicstorm.Screens.MainGameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -36,6 +38,7 @@ public class MainMenuScreen implements Screen {
     private Sprite sprite;
 
     private Hero hero;
+
 
     public MainMenuScreen(final MagicStorm game) {
         this.game = game;

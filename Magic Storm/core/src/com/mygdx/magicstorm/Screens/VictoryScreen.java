@@ -26,9 +26,8 @@ public class VictoryScreen implements Screen {
     private Table table;
     private TextButton restartButton;
 
-    public VictoryScreen(final MagicStorm game, final MainGameScreen gameScreen) {
+    public VictoryScreen(final MagicStorm game) {
         this.game = game;
-        this.gameScreen = gameScreen;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1600, 900);
 

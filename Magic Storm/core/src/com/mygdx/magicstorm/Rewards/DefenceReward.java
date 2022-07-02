@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class DefenceReward extends Reward {
 
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("defend.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
 
     public DefenceReward() {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());

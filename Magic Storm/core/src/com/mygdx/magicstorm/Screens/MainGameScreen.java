@@ -39,24 +39,22 @@ import java.util.Random;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class MainGameScreen implements Screen {
-    final MagicStorm game;
-    Stage stage;
-    private final MainGameScreen mainGameScreen = this;
+    private final MagicStorm game;
+    private Stage stage;
     private ArrayList<Card> cards = new ArrayList<Card>();
     private ArrayList<Actor> cardsDrawn;
-    boolean touched = false;
+    private boolean touched = false;
     private Vector2 touchPos;
-    MainPauseScreen pauseScreen;
-    VictoryScreen victoryScreen;
-    DefeatScreen defeatScreen;
-    SpriteBatch batch = new SpriteBatch();
-    boolean cardSelected = false;
+    private MainPauseScreen pauseScreen;
+    private VictoryScreen victoryScreen;
+    private DefeatScreen defeatScreen;
+    private SpriteBatch batch = new SpriteBatch();
+    private boolean cardSelected = false;
     private ScreenViewport viewport;
-    int floor = 1;
-    int easyEnemies = 2;
-    int hardEnemies = 2;
+    private int floor = 1;
+    private int easyEnemies = 2;
+    private int hardEnemies = 2;
 
-    private Group group = new Group();
 
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private Enemy currentEnemy;
@@ -65,31 +63,31 @@ public class MainGameScreen implements Screen {
     private boolean selectingRewards;
 
     private Hero hero;
-    Group group2;
-    Card selectedCard;
-    int cardNo;
-    private Hero player;
-    Card drawnCard;
-    int handSize;
-    int spaceAtEachSide;
+    private Group group = new Group();
+    private Card selectedCard;
+    private int cardNo;
 
-    Card sampleCard = new Attack(10);
-    float cardWidth = sampleCard.getWidth();
-    float cardHeight = sampleCard.getHeight();
-    int selectedCardX;
-    int selectedCardY;
-    boolean enemyTurn;
-    boolean startOfBattle;
-    boolean startOfTurn;
+    private Card drawnCard;
+    private int handSize;
+    private int spaceAtEachSide;
+
+    private Card sampleCard = new Attack(10);
+    private float cardWidth = sampleCard.getWidth();
+    private float cardHeight = sampleCard.getHeight();
+    private int selectedCardX;
+    private int selectedCardY;
+    private boolean enemyTurn;
+    private boolean startOfBattle;
+    private boolean startOfTurn;
     private Random rand = new Random();
 
     private Deck deck;
 
-    private AttackReward attackReward;
+    private AttackReward attackReward = new AttackReward();
 
-    private DefenceReward defenceReward;
+    private DefenceReward defenceReward = new DefenceReward();
 
-    private HpReward hpReward;
+    private HpReward hpReward = new HpReward();
 
     public enum State {
         PAUSE,
@@ -107,14 +105,12 @@ public class MainGameScreen implements Screen {
         this.hero = hero;
         this.game = game;
         stage = new Stage(new ScreenViewport());
-        Group group1 = new Group();
         startOfBattle = true;
         enemyTurn = false;
         startOfTurn = true;
         availableRewards = true;
         selectingRewards = false;
         Goblin goblin = new Goblin(10, 10);
-        this.hero = hero;
         Image background = new Image(new Texture(Gdx.files.internal("Background.jpg")));
         Image endTurnButton = new Image(new Texture(Gdx.files.internal("endTurn.png")));
         Image mana = new Image(new Texture(Gdx.files.internal("mana.png")));
@@ -123,9 +119,7 @@ public class MainGameScreen implements Screen {
         Image nextStage = new Image(new Texture(Gdx.files.internal("nextStage.png")));
         Image rewardsButton = new Image(new Texture(Gdx.files.internal("rewardsButton.png")));
         Image ultimateSkill = new Image(new Texture(Gdx.files.internal("ultimateSkill.png")));
-        attackReward = new AttackReward();
-        defenceReward = new DefenceReward();
-        hpReward = new HpReward();
+        Image cardback = new Image(new Texture(Gdx.files.internal("cardback.png")));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hero.setName("hero");
         background.setName("background");
@@ -148,36 +142,36 @@ public class MainGameScreen implements Screen {
         defenceReward.setName("defenceReward");
         hpReward.setName("hpReward");
         deck = copyDeck(hero.getDeck());
-        deck.setName("deck");
         ultimateSkill.setName("ultimateSkill");
+        cardback.setName("cardback");
         // order actors are drawn in
 
-        group1.addActor(background);
-        group1.addActor(mana);
-        group1.addActor(hero);
-        group1.addActor(goblin);
-        group1.addActor(endTurnButton);
-        group1.addActor(enemyTurn);
-        group1.addActor(startTurn);
-        group1.addActor(deck);
-        group1.addActor(nextStage);
-        group1.addActor(rewardsButton);
-        group1.addActor(attackReward);
-        group1.addActor(defenceReward);
-        group1.addActor(hpReward);
-        group1.addActor(ultimateSkill);
+        group.addActor(background);
+        group.addActor(mana);
+        group.addActor(hero);
+        group.addActor(endTurnButton);
+        group.addActor(enemyTurn);
+        group.addActor(startTurn);
+        group.addActor(nextStage);
+        group.addActor(rewardsButton);
+        group.addActor(attackReward);
+        group.addActor(defenceReward);
+        group.addActor(hpReward);
+        group.addActor(ultimateSkill);
+        group.addActor(cardback);
 
 
         cardNo = cards.size();
 
         currentEnemy = goblin;
+        group.addActor(currentEnemy);
         // add enemies in order of difficulty, randomise different parts of enemy array depending on current floor -- need to remove enemies because death state is carried over
         enemies.add(goblin1);
         enemies.add(goblin2);
         enemies.add(mage1);
         enemies.add(construct1);
 
-        stage.addActor(group1);
+        stage.addActor(group);
         hero.setPosition(0, stage.getHeight() / 3);
         hero.setHpBarPos(hero.getX(), ((stage.getHeight() / 3) - 30));
         hero.setArmorBarPos(hero.getX(), ((stage.getHeight() / 3) - 60));
@@ -203,6 +197,7 @@ public class MainGameScreen implements Screen {
         hpReward.addAction(fadeOut(0f));
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
         deck.setPosition(50, 50);
+        cardback.setPosition(50, 50);
         ultimateSkill.setPosition(stage.getWidth() * 1/10, stage.getHeight() * 9/10);
         ultimateSkill.addAction(fadeOut(0f));
 
@@ -224,12 +219,11 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        pauseScreen = new MainPauseScreen(this.game, this);
-        victoryScreen = new VictoryScreen(this.game, this);
-        defeatScreen = new DefeatScreen(this.game, this);
-        Group group = (Group) stage.getActors().first();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
         final Hero hero = group.findActor("hero");
-        final Goblin goblin = group.findActor("goblin");
         Actor endTurn = group.findActor("enemyTurn");
         final Actor startTurn = group.findActor("startTurn");
         final Actor nextStage = group.findActor("nextStage");
@@ -242,11 +236,10 @@ public class MainGameScreen implements Screen {
         rewardsButton.setTouchable(Touchable.disabled);
         Actor ultimateSkill = group.findActor("ultimateSkill");
         ultimateSkill.setTouchable(Touchable.disabled);
+
         switch (state) {
             case PLAYERTURN:
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                stage.act(Gdx.graphics.getDeltaTime());
-                stage.draw();
+
                 game.batch.begin();
                 game.font.draw(game.batch, deck.getCurrentDeckSizeString() , deck.getX() + (deck.getWidth() / 2) + 50,deck.getY() + deck.getHeight() + 75);
                 if (!currentEnemy.isDead()) game.font.draw(game.batch, "Attack Damage: " + currentEnemy.getAttackValue(), currentEnemy.getX(), currentEnemy.getY() - 50);
@@ -269,6 +262,7 @@ public class MainGameScreen implements Screen {
                     ultimateSkill.setTouchable(Touchable.disabled);
                     ultimateSkill.addAction(fadeOut(0f));
                     hero.setUltimateProgress(0);
+                    hero.setArmor(0);
                     shuffle();
                 }
                 if (hero.isDead()) {
@@ -511,6 +505,8 @@ public class MainGameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
             pause();
         }
+
+
     }
 
 
@@ -552,7 +548,7 @@ public class MainGameScreen implements Screen {
         }
     }
 
-    public void drawCard(int numberDrawn) {
+   public void drawCard(int numberDrawn) {
         for (int i = 0; i < numberDrawn; i++) {
             if (deck.getSize() > 0) {
                 drawnCard = deck.drawCard();
@@ -571,4 +567,6 @@ public class MainGameScreen implements Screen {
         newDeck.setCards(newCards);
         return newDeck;
     }
+
+
 }

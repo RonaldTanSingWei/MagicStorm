@@ -64,13 +64,13 @@ public class MagicalConstruct extends Enemy {
         currentHpString = currentHp + "/" + maxHp;
         hpBar.setWidth(widthCheck * currentHp / maxHp);
         if (currentHp < maxHp && currentHp > 0 && currentPhase == 1) {
-            sprite = new Sprite(new Texture(Gdx.files.internal("ConstructPhase2.png")));
+            sprite = new Sprite(new Texture(Gdx.files.internal("ConstructPhaseTwo.png")));
             sprite.setPosition(hpBar.x, hpBar.y + 30);
             attackValue = 30;
             currentPhase = 2;
         }
         else if (currentHp < (maxHp / 2) && currentHp > 0 && currentPhase == 2) {
-            sprite = new Sprite(new Texture(Gdx.files.internal("ConstructPhase3.png")));
+            sprite = new Sprite(new Texture(Gdx.files.internal("ConstructPhaseThree.png")));
             sprite.setPosition(hpBar.x, hpBar.y + 30);
             attackValue = 40;
             currentPhase = 3;

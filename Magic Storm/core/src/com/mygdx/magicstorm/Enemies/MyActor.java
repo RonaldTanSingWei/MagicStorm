@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 public class MyActor extends Enemy {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("goblin.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Goblin.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Rectangle hpBar;
     private int currentHp;

@@ -193,13 +193,13 @@ public class Hero extends Actor {
 
     public void progressUltimate(int progress) {
         ultimateSkill.increaseProgress(progress);
-        ultimateSkill.setProgressString(progress + "/" + ultimateSkill.getMaxCounter());
+        ultimateSkill.setProgressString(ultimateSkill.getProgress() + "/" + ultimateSkill.getMaxCounter());
         ultimateBar.setWidth(widthCheck * ultimateSkill.getProgress() / ultimateSkill.getMaxCounter());
     }
 
     public void setUltimateProgress(int progress) {
         ultimateSkill.setProgress(progress);
-        ultimateSkill.setProgressString(progress + "/" + ultimateSkill.getMaxCounter());
+        ultimateSkill.setProgressString(ultimateSkill.getProgress() + "/" + ultimateSkill.getMaxCounter());
         ultimateBar.setWidth(widthCheck * ultimateSkill.getProgress() / ultimateSkill.getMaxCounter());
         if (progress == 0) {
             ultimateSkill.setProgressString("");

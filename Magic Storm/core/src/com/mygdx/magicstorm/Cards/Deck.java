@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Deck extends Actor {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Cardback.png")));
     private String currentDeckSizeString;
     private int maxDeckSize;
     private int currentDeckSize;
@@ -25,8 +24,6 @@ public class Deck extends Actor {
     private Random rand = new Random();
 
     public Deck(int currentDeckSize, int maxDeckSize) {
-        setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-        setTouchable(Touchable.enabled);
         this.currentDeckSize = currentDeckSize;
         this.maxDeckSize = maxDeckSize;
         this.currentDeckSizeString = String.valueOf(currentDeckSize);
@@ -40,22 +37,11 @@ public class Deck extends Actor {
         }
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        sprite.setColor(getColor());
-        sprite.draw(batch, parentAlpha);
-        batch.end();
-        /*deckBatch.begin();
-        font.draw(deckBatch, currentDeckSizeString, sprite.getX(), sprite.getY());
-        deckBatch.end();*/
-        batch.begin();
 
+    public void draw(SpriteBatch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
     }
 
-    public void positionChanged() {
-        sprite.setPosition(getX(), getY());
-        super.positionChanged();
-    }
 
     public Card drawCard() {
         int random = rand.nextInt(currentDeckSize);
@@ -68,7 +54,7 @@ public class Deck extends Actor {
         return cards.size();
     }
 
-    @Override
+   /* @Override
     public Object clone() {
         Deck copyDeck = null;
         try {
@@ -81,7 +67,7 @@ public class Deck extends Actor {
         ArrayList<Card> newList = new ArrayList<>(cards);
         copyDeck.cards = newList;
         return copyDeck;
-    }
+    }*/
 
     public int getCurrentDeckSize() {
         return this.currentDeckSize;

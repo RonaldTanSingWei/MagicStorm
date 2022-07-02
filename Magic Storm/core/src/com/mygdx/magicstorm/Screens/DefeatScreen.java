@@ -32,9 +32,8 @@ public class DefeatScreen implements Screen {
     private Table table;
     private TextButton restartButton;
 
-    public DefeatScreen(final MagicStorm game, final MainGameScreen gameScreen) {
+    public DefeatScreen(final MagicStorm game) {
         this.game = game;
-        this.gameScreen = gameScreen;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1600, 900);
 

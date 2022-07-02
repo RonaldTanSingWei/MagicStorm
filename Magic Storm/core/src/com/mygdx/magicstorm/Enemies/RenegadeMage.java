@@ -68,7 +68,7 @@ public class RenegadeMage extends Enemy {
             currentHp = maxHp;
             attackValue = 10;
             currentHpString = currentHp + "/" + maxHp;
-            sprite = new Sprite(new Texture(Gdx.files.internal("MagePhase2.png")));
+            sprite = new Sprite(new Texture(Gdx.files.internal("MagePhaseTwo.png")));
             sprite.setPosition(hpBar.x, hpBar.y + 30);
             phase = 2;
         }
