@@ -223,6 +223,9 @@ public class MainGameScreen implements Screen {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+
+        victoryScreen = new VictoryScreen(game);
+        defeatScreen = new DefeatScreen(game);
         final Hero hero = group.findActor("hero");
         Actor endTurn = group.findActor("enemyTurn");
         final Actor startTurn = group.findActor("startTurn");
