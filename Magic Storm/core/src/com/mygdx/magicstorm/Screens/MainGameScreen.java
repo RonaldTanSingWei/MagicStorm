@@ -223,7 +223,7 @@ public class MainGameScreen implements Screen {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
+        pauseScreen = new MainPauseScreen(game, this);
         victoryScreen = new VictoryScreen(game);
         defeatScreen = new DefeatScreen(game);
         final Hero hero = group.findActor("hero");
@@ -484,6 +484,7 @@ public class MainGameScreen implements Screen {
                 //draw 2
                 break;
             case PAUSE:
+                this.state = State.PLAYERTURN;
                 break;
             case VICTORY:
                 break;

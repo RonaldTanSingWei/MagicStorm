@@ -25,8 +25,8 @@ public class MainPauseScreen implements Screen {
 
     private Hero hero;
 
-    OrthographicCamera camera;
-    MainGameScreen gameScreen;
+    private OrthographicCamera camera;
+    private MainGameScreen gameScreen;
     private Stage stage;
     private Skin skin;
 
@@ -52,25 +52,24 @@ public class MainPauseScreen implements Screen {
         table.align(Align.center | Align.top);
         table.setPosition(0,Gdx.graphics.getHeight()); // table starts from top of screen
 
-        resumeButton = new TextButton("Resume Game", skin);
+        resumeButton = new TextButton("Press Enter to resume", skin);
         resumeButton.setTransform(true);
         resumeButton.setScale(2f);
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                resume();
+                game.setScreen(gameScreen);
+                dispose();
             }
         });
         table.padTop(400);
         table.padRight(175);
         table.add(resumeButton);
 
-
-
         stage.addActor(table);
 
         batch = new SpriteBatch();
-        sprite = new Sprite(new Texture(Gdx.files.internal("background.jpg")));
+        sprite = new Sprite(new Texture(Gdx.files.internal("Background.jpg")));
         sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()); // sets to screen dimensions
 
 
@@ -93,6 +92,11 @@ public class MainPauseScreen implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            game.setScreen(gameScreen);
+            dispose();
+        }
+
     }
 
     @Override
@@ -107,7 +111,7 @@ public class MainPauseScreen implements Screen {
 
     @Override
     public void resume() {
-        game.setScreen(new MainGameScreen(game, hero));
+        game.setScreen(gameScreen);
         dispose();
     }
 
