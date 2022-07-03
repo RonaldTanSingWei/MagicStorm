@@ -10,7 +10,7 @@ import com.mygdx.magicstorm.Enemies.Enemy;
 
 public class Attack extends Card {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Attack.png")));
-
+    private int manaCost = 1;
     public Attack(int value) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
@@ -44,5 +44,6 @@ public class Attack extends Card {
         super.scaleChanged();
     }
 
+    public int getManaCost() {return manaCost;}
 
 }

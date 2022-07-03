@@ -9,6 +9,7 @@ import com.mygdx.magicstorm.hero.Hero;
 
 public class Defence extends Card {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
+    private int manaCost = 1;
 
     public Defence(int value) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
@@ -42,4 +43,6 @@ public class Defence extends Card {
         sprite.setScale(getScaleX(),getScaleY());
         super.scaleChanged();
     }
+
+    public int getManaCost() {return manaCost;}
 }

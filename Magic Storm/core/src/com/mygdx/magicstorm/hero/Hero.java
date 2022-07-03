@@ -46,7 +46,7 @@ public class Hero extends Actor {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
         maxHp = 100;
-        currentHp = 5;
+        currentHp = 90;
         hpBar = new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth() * currentHp / maxHp,10);
         currentHpString = currentHp + "/" + maxHp;
         currentArmor = 5;
@@ -134,7 +134,7 @@ public class Hero extends Actor {
         hpBatch.begin();
         font.draw(hpBatch, currentHpString, hpBar.getX(), hpBar.getY());
         font.draw(hpBatch, currentArmorString, armorBar.getX(),armorBar.getY());
-        font.draw(hpBatch, mana.getCurrentManaString(), getStage().getWidth()  * 51/200, getStage().getHeight() * 1/4);
+        //font.draw(hpBatch, mana.getCurrentManaString(), getStage().getWidth()  * 51/200, getStage().getHeight() * 1/4);
         font.draw(hpBatch, ultimateSkill.getProgressString(), ultimateBar.getX(), ultimateBar.getY());
         hpBatch.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -172,8 +172,23 @@ public class Hero extends Actor {
 
     public void setMana(int mana) {
         this.mana.setCurrentMana(mana);
+        this.mana.setCurrentManaString(this.mana.getCurrentMana() + "/" + this.mana.getMaxMana());
     }
 
+    public void changeMana (int mana) {
+        this.mana.setCurrentMana(this.mana.getCurrentMana() + mana);
+        this.mana.setCurrentManaString(this.mana.getCurrentMana() + "/" + this.mana.getMaxMana());
+    }
+
+    public String getManaString () {
+        return this.mana.getCurrentManaString();
+    }
+    public int getMana () {
+        return this.mana.getCurrentMana();
+    }
+    public int getMaxMana () {
+        return this.mana.getMaxMana();
+    }
     public Deck getDeck() {
         return this.deck;
     }
