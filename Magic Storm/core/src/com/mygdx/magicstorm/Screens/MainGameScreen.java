@@ -20,10 +20,7 @@ import com.mygdx.magicstorm.Cards.Attack;
 import com.mygdx.magicstorm.Cards.Card;
 import com.mygdx.magicstorm.Cards.Deck;
 import com.mygdx.magicstorm.Cards.Defence;
-import com.mygdx.magicstorm.Enemies.Enemy;
-import com.mygdx.magicstorm.Enemies.Goblin;
-import com.mygdx.magicstorm.Enemies.MagicalConstruct;
-import com.mygdx.magicstorm.Enemies.RenegadeMage;
+import com.mygdx.magicstorm.Enemies.*;
 import com.mygdx.magicstorm.Rewards.AttackReward;
 import com.mygdx.magicstorm.Rewards.DefenceReward;
 import com.mygdx.magicstorm.Rewards.HpReward;
@@ -58,6 +55,7 @@ public class MainGameScreen implements Screen {
 
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private Enemy currentEnemy;
+    private Enemy currentEnemy2;
 
     private boolean availableRewards;
     private boolean selectingRewards;
@@ -126,10 +124,12 @@ public class MainGameScreen implements Screen {
         goblin.setName("goblin");
         Goblin goblin1 = new Goblin(15,15);
         Goblin goblin2 = new Goblin(10,10);
+        Goblin goblin3 = new Goblin(10,10);
         RenegadeMage mage1 = new RenegadeMage(10,10);
         MagicalConstruct construct1 = new MagicalConstruct(40,40);
         goblin1.setName("goblin1");
         goblin2.setName("goblin2");
+        goblin3.setName("goblin3");
         mage1.setName("mage1");
         construct1.setName("construct1");
         endTurnButton.setName("endTurnButton");
@@ -144,6 +144,7 @@ public class MainGameScreen implements Screen {
         deck = copyDeck(hero.getDeck());
         ultimateSkill.setName("ultimateSkill");
         cardback.setName("cardback");
+
         // order actors are drawn in
 
         group.addActor(background);
@@ -164,7 +165,9 @@ public class MainGameScreen implements Screen {
         cardNo = cards.size();
 
         currentEnemy = goblin;
+        currentEnemy2 = new Placeholder(0,5);
         group.addActor(currentEnemy);
+        group.addActor(currentEnemy2);
         // add enemies in order of difficulty, randomise different parts of enemy array depending on current floor -- need to remove enemies because death state is carried over
         enemies.add(goblin1);
         enemies.add(goblin2);
@@ -207,6 +210,8 @@ public class MainGameScreen implements Screen {
         currentEnemy.setPosition(stage.getWidth() - currentEnemy.getWidth(), stage.getHeight() / 3);
         currentEnemy.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth()), (int) ((stage.getHeight() / 3) - 30));
 
+        currentEnemy2.setPosition(stage.getWidth() - currentEnemy.getWidth() - 300, stage.getHeight() / 3);
+        currentEnemy2.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth() - 300), (int) ((stage.getHeight() / 3) - 30));
 
         Gdx.input.setInputProcessor(this.game);
 
@@ -246,8 +251,9 @@ public class MainGameScreen implements Screen {
                 game.batch.begin();
                 game.font.draw(game.batch, deck.getCurrentDeckSizeString() , deck.getX() + (deck.getWidth() / 2) + 50,deck.getY() + deck.getHeight() + 75);
                 if (!currentEnemy.isDead()) game.font.draw(game.batch, "Attack Damage: " + currentEnemy.getAttackValue(), currentEnemy.getX(), currentEnemy.getY() - 50);
+                if (!currentEnemy2.isDead()) game.font.draw(game.batch, "Attack Damage: " + currentEnemy2.getAttackValue(), currentEnemy2.getX(), currentEnemy2.getY() - 50);
                 game.batch.end();
-                if(currentEnemy.isDead()) {
+                if(currentEnemy.isDead() && currentEnemy2.isDead()) {
                     for (int i = 0; i < cards.size(); i++) {
                         (cards.get(i)).remove();
                     }
@@ -321,7 +327,8 @@ public class MainGameScreen implements Screen {
                             int damage = selectedCard.getAttack();
                             int armor = selectedCard.getDefence();
                             selectedCard.setScale(1f);
-                            selectedCard.dealDamage(currentEnemy);
+                            Enemy enemy = (Enemy) hitActor;
+                            selectedCard.dealDamage((Enemy) hitActor);
                             if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
                                 hero.progressUltimate(damage);
                             }
@@ -424,6 +431,15 @@ public class MainGameScreen implements Screen {
                                 currentEnemy.draw(batch, delta);
                                 currentEnemy.setPosition(stage.getWidth() - currentEnemy.getWidth(), stage.getHeight() / 3);
                                 currentEnemy.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth()), (int) ((stage.getHeight() / 3) - 30));
+                                if (currentEnemy.getName().equals("goblin2")) {
+                                    currentEnemy2 = new Goblin(15,15);
+                                    currentEnemy2.setName("goblin3");
+                                    stage.addActor(currentEnemy2);
+                                    currentEnemy2.draw(batch,delta);
+                                    currentEnemy2.setPosition(stage.getWidth() - currentEnemy.getWidth() - 300, stage.getHeight() / 3);
+                                    currentEnemy2.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth() - 300), (int) ((stage.getHeight() / 3) - 30));
+
+                                }
                                 nextStage.addAction(fadeOut(0f));
                                 startOfBattle = true;
                                 this.state = State.STARTTURN;
@@ -441,6 +457,15 @@ public class MainGameScreen implements Screen {
             case ENEMYTURN:
                 startTurn.addAction(fadeOut(0f));
                 endTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        if (!currentEnemy2.isDead()) {
+                            currentEnemy2.attack(hero);
+                        }
+                        enemyTurn = false;
+                    }
+                }, 3.5f);
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
