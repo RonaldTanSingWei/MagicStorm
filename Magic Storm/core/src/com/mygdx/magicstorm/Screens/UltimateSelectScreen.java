@@ -91,8 +91,8 @@ public class UltimateSelectScreen implements Screen {
                 final Actor hitActor = stage.hit(coord.x, coord.y, true);
                     if (hitActor instanceof UltimateDamageDone) {
                         UltimateDamageDone chosenSkill = (UltimateDamageDone) hitActor;
-                        chosenSkill.setMaxCounter(30);
-                        chosenSkill.setProgressString("0/30");
+                        chosenSkill.setMaxCounter(10);
+                        chosenSkill.setProgressString("0/10");
                         hero.setUltimateSkill(chosenSkill);
                         game.setScreen(new MainGameScreen(game, hero));
                     } else if (hitActor instanceof UltimateArmorGain) {

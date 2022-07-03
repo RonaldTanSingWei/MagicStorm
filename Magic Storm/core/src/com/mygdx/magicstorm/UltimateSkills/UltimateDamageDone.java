@@ -35,8 +35,9 @@ public class UltimateDamageDone extends UltimateSkill {
         sprite.setPosition(getX(),getY());
         super.positionChanged();
     }
+    public void heroEffect(Hero hero) { };
     @Override
-    public void effect(Hero hero, Enemy enemy) {
+    public void enemyEffect(Enemy enemy) {
         enemy.takeDamage(50);
     };
 }

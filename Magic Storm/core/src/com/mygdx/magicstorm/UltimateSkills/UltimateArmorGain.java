@@ -36,8 +36,10 @@ public class UltimateArmorGain  extends UltimateSkill{
     }
 
     @Override
-    public void effect(Hero hero, Enemy enemy) {
+    public void heroEffect(Hero hero) {
         hero.gainArmor(50);
     };
+
+    public void enemyEffect(Enemy enemy){};
 }
 

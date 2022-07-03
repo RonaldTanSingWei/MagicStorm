@@ -365,7 +365,11 @@ public class MainGameScreen implements Screen {
                         } else if (hitActor.getName().equals("ultimateSkill")) {
                             ultimateSkill.addAction(fadeOut(0f));
                             ultimateSkill.setTouchable(Touchable.disabled);
-                            hero.getUltimateSkill().effect(hero, currentEnemy);
+                            hero.getUltimateSkill().enemyEffect(currentEnemy);
+                            if(!currentEnemy2.isDead()) {
+                                hero.getUltimateSkill().enemyEffect(currentEnemy2);
+                            }
+                            hero.getUltimateSkill().heroEffect(hero);
                             hero.setUltimateProgress(0);
                         } else if (hitActor.getName().equals("endTurnButton")) {
                             enemyTurn = true;

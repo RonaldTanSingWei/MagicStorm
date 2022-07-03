@@ -51,4 +51,10 @@ public class UltimateSkill extends Actor {
     public String getProgressString() {
         return this.progressString;
     }
+
+    public void enemyEffect(Enemy enemy) {
+
+    }
+
+    public void heroEffect(Hero hero){}
 }
