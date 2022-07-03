@@ -247,9 +247,9 @@ public class MainGameScreen implements Screen {
 
         switch (state) {
             case PLAYERTURN:
-
                 game.batch.begin();
                 game.font.draw(game.batch, deck.getCurrentDeckSizeString() , deck.getX() + (deck.getWidth() / 2) + 50,deck.getY() + deck.getHeight() + 75);
+                game.font.draw(game.batch, hero.getManaString() , stage.getWidth()  * 51/200,stage.getHeight() * 1/4);
                 if (!currentEnemy.isDead()) game.font.draw(game.batch, "Attack Damage: " + currentEnemy.getAttackValue(), currentEnemy.getX(), currentEnemy.getY() - 50);
                 if (!currentEnemy2.isDead()) game.font.draw(game.batch, "Attack Damage: " + currentEnemy2.getAttackValue(), currentEnemy2.getX(), currentEnemy2.getY() - 50);
                 game.batch.end();
@@ -329,6 +329,7 @@ public class MainGameScreen implements Screen {
                             selectedCard.setScale(1f);
                             Enemy enemy = (Enemy) hitActor;
                             selectedCard.dealDamage((Enemy) hitActor);
+                            hero.changeMana(-selectedCard.getManaCost());
                             if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
                                 hero.progressUltimate(damage);
                             }
@@ -347,6 +348,7 @@ public class MainGameScreen implements Screen {
                             int armor = selectedCard.getDefence();
                             selectedCard.setScale(1f);
                             selectedCard.addDefence(hero);
+                            hero.changeMana(-selectedCard.getManaCost());
                             if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
                                 hero.progressUltimate(damage);
                             }
@@ -492,12 +494,13 @@ public class MainGameScreen implements Screen {
                     endTurnButton.addAction(fadeIn(0f));
                     hero.setArmor(0);
                     hero.setUltimateProgress(0);
+                    hero.setMana(hero.getMaxMana());
                 } else {
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
                             startTurn.addAction(sequence(fadeIn(1f), fadeOut(1f)));
-                            hero.setMana(5);
+                            hero.setMana(hero.getMaxMana());
                             drawCard(5);
                             shuffle();
                             startOfTurn = false;
