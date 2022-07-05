@@ -25,6 +25,7 @@ public class Enemy extends Actor {
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
     private int attackValue;
+    private boolean boss;
 
 
     public void draw(SpriteBatch batch, float parentAlpha) {
@@ -100,5 +101,13 @@ public class Enemy extends Actor {
 
     public String getAttackValue() {
         return String.valueOf(this.attackValue);
+    }
+
+    public void setAttackValue(int value) {
+        this.attackValue = value;
+    }
+
+    public boolean isBoss() {
+        return boss;
     }
 }

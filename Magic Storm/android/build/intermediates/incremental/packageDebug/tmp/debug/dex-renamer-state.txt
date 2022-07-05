@@ -1,0 +1,4 @@
+#Fri Jul 01 12:15:04 GMT+08:00 2022
+base.0=C\:\\Users\\ronal\\OneDrive\\Desktop\\MagicStorm\\Magic Storm\\android\\build\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

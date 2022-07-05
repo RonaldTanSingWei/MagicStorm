@@ -22,7 +22,9 @@ public class Goblin extends Enemy {
     private String currentHpString;
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
-    private int attackValue = 5;
+    private int attackValue = 10;
+
+    private boolean boss = false;
 
 
 

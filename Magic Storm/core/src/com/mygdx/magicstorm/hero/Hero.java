@@ -113,12 +113,14 @@ public class Hero extends Actor {
             currentArmorString = Integer.toString(currentArmor);
             if (currentArmor == 0) {
                 currentArmorString = "";
+                armorBar.setWidth(0);
             }
         } else {
             int damageTaken = damage - currentArmor;
             currentArmor = 0;
             currentHp -= damageTaken;
             currentArmorString = "";
+            armorBar.setWidth(0);
             currentHpString = currentHp + "/" + maxHp;
             hpBar.setWidth(widthCheck * currentHp / maxHp);
 
@@ -218,6 +220,7 @@ public class Hero extends Actor {
         ultimateBar.setWidth(widthCheck * ultimateSkill.getProgress() / ultimateSkill.getMaxCounter());
         if (progress == 0) {
             ultimateSkill.setProgressString("");
+            ultimateBar.setWidth(0);
         }
     }
 

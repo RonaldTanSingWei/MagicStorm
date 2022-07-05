@@ -23,6 +23,7 @@ public class Placeholder extends Enemy {
     private BitmapFont font = new BitmapFont();
     private SpriteBatch hpBatch = new SpriteBatch();
     private int attackValue = 5;
+    private boolean boss = false;
 
 
 

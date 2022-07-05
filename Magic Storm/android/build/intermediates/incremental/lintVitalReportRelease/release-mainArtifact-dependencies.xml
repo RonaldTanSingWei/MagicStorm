@@ -1,0 +1,32 @@
+<dependencies>
+  <compile
+      roots="com.badlogicgames.gdx:gdx-backend-android:1.11.0@jar,C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm@@:core,com.badlogicgames.gdx:gdx:1.11.0@jar,com.badlogicgames.gdx:gdx-jnigen-loader:2.3.1@jar">
+    <dependency
+        name="com.badlogicgames.gdx:gdx-backend-android:1.11.0@jar"
+        simpleName="com.badlogicgames.gdx:gdx-backend-android"/>
+    <dependency
+        name="C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm@@:core"
+        simpleName=":"/>
+    <dependency
+        name="com.badlogicgames.gdx:gdx:1.11.0@jar"
+        simpleName="com.badlogicgames.gdx:gdx"/>
+    <dependency
+        name="com.badlogicgames.gdx:gdx-jnigen-loader:2.3.1@jar"
+        simpleName="com.badlogicgames.gdx:gdx-jnigen-loader"/>
+  </compile>
+  <package
+      roots="com.badlogicgames.gdx:gdx-backend-android:1.11.0@jar,C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm@@:core,com.badlogicgames.gdx:gdx:1.11.0@jar,com.badlogicgames.gdx:gdx-jnigen-loader:2.3.1@jar">
+    <dependency
+        name="com.badlogicgames.gdx:gdx-backend-android:1.11.0@jar"
+        simpleName="com.badlogicgames.gdx:gdx-backend-android"/>
+    <dependency
+        name="C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm@@:core"
+        simpleName=":"/>
+    <dependency
+        name="com.badlogicgames.gdx:gdx:1.11.0@jar"
+        simpleName="com.badlogicgames.gdx:gdx"/>
+    <dependency
+        name="com.badlogicgames.gdx:gdx-jnigen-loader:2.3.1@jar"
+        simpleName="com.badlogicgames.gdx:gdx-jnigen-loader"/>
+  </package>
+</dependencies>

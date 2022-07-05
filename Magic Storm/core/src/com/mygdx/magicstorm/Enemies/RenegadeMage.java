@@ -25,7 +25,7 @@ public class RenegadeMage extends Enemy {
     private SpriteBatch hpBatch = new SpriteBatch();
     private int attackValue = 30;
     private int phase = 1;
-
+    private boolean boss = false;
 
 
     public RenegadeMage(int currentHp, int maxHp) {

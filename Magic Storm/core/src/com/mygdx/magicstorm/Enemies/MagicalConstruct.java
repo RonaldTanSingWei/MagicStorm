@@ -26,6 +26,8 @@ public class MagicalConstruct extends Enemy {
     private int attackValue = 20;
     private int currentPhase = 1;
 
+    private boolean boss = false;
+
 
 
     public MagicalConstruct(int currentHp, int maxHp) {

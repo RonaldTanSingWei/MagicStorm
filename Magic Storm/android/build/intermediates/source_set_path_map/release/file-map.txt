@@ -1,0 +1,8 @@
+com.mygdx.magicstorm.android-pngs-0 C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm\android\build\generated\res\pngs\release
+com.mygdx.magicstorm.android-resValues-1 C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm\android\build\generated\res\resValues\release
+com.mygdx.magicstorm.android-rs-2 C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm\android\build\generated\res\rs\release
+com.mygdx.magicstorm.android-mergeReleaseResources-3 C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm\android\build\intermediates\incremental\release\mergeReleaseResources\merged.dir
+com.mygdx.magicstorm.android-mergeReleaseResources-4 C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm\android\build\intermediates\incremental\release\mergeReleaseResources\stripped.dir
+com.mygdx.magicstorm.android-merged_res-5 C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm\android\build\intermediates\merged_res\release
+com.mygdx.magicstorm.android-android-6 C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm\android\res
+com.mygdx.magicstorm.android-release-7 C:\Users\ronal\OneDrive\Desktop\MagicStorm\Magic Storm\android\src\release\res
