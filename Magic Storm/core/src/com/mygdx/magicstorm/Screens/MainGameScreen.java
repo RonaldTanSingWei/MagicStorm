@@ -509,9 +509,11 @@ public class MainGameScreen implements Screen {
                 }
 
                 if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-                    selectedCard.setPosition(selectedCardX, selectedCardY);
-                    selectedCard.setScale(1f);
-                    cardSelected = false;
+                    if (cardSelected == true) {
+                        selectedCard.setPosition(selectedCardX, selectedCardY);
+                        selectedCard.setScale(1f);
+                        cardSelected = false;
+                    }
                 }
                 break;
             case ENEMYTURN:
