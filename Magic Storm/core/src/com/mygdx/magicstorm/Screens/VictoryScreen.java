@@ -1,6 +1,8 @@
 package com.mygdx.magicstorm.Screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -39,15 +41,15 @@ public class VictoryScreen implements Screen {
         table.align(Align.center | Align.top);
         table.setPosition(0,Gdx.graphics.getHeight()); // table starts from top of screen
 
-        restartButton = new TextButton("Victory comes and victory goes...", skin);
+        restartButton = new TextButton("Press Enter To Start New Game", skin);
         restartButton.setTransform(true);
         restartButton.setScale(2f);
-        restartButton.addListener(new ClickListener() {
+        /*restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 resume();
             }
-        });
+        });*/
         table.padTop(400);
         table.padRight(175);
         table.add(restartButton);
@@ -71,6 +73,10 @@ public class VictoryScreen implements Screen {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            resume();
+        }
     }
 
     @Override
@@ -86,7 +92,6 @@ public class VictoryScreen implements Screen {
     @Override
     public void resume() {
         game.setScreen(new MainMenuScreen(game));
-        dispose();
     }
 
     @Override

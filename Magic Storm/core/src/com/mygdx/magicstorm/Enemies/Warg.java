@@ -125,4 +125,10 @@ public class Warg extends Enemy {
     public void setAttackValue(int value) {
         this.attackValue = value;
     }
+
+    public int getIntAttackValue() {
+        return this.attackValue;
+    }
+
+
 }

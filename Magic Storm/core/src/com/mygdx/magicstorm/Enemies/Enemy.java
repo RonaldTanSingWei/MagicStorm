@@ -103,6 +103,10 @@ public class Enemy extends Actor {
         return String.valueOf(this.attackValue);
     }
 
+    public int getIntAttackValue() {
+        return this.attackValue;
+    }
+
     public void setAttackValue(int value) {
         this.attackValue = value;
     }

@@ -122,7 +122,16 @@ public class Goblin extends Enemy {
         hero.takeDamage(attackValue);
 
     }
+
+    public int getIntAttackValue() {
+        return this.attackValue;
+    }
+
     public String getAttackValue() {
         return String.valueOf(this.attackValue);
+    }
+
+    public void setAttackValue(int value) {
+        this.attackValue = value;
     }
 }

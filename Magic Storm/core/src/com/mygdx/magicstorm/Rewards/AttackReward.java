@@ -22,7 +22,7 @@ public class AttackReward extends Reward {
     public void rewardEffect(Hero hero) {
         ArrayList<Card> cards = hero.getDeck().getCards();
         for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i).getName() == "attack") {
+            if (cards.get(i).getName().equals("attack") || cards.get(i).getName().equals("MementoMori")) {
                 cards.get(i).increaseAttack(3);
             }
         }

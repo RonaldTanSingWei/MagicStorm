@@ -126,6 +126,10 @@ public class Bash extends Enemy {
         return String.valueOf(this.attackValue);
     }
 
+    public int getIntAttackValue() {
+        return this.attackValue;
+    }
+
     public void setAttackValue(int value) {
         this.attackValue = value;
     }

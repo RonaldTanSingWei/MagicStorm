@@ -146,4 +146,8 @@ public class Smash extends Enemy {
         this.attackValue = value;
     }
 
+    public int getIntAttackValue() {
+        return this.attackValue;
+    }
+
 }
