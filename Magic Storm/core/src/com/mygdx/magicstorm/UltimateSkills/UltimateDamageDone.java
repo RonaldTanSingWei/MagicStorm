@@ -13,17 +13,25 @@ public class UltimateDamageDone extends UltimateSkill {
 
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("ultDamageDone.png")));
 
-    private int maxCounter = 30;
+    private int maxCounter;
+    private int ultValue;
 
-    private boolean ultimateCondition;
+
 
     private String progressString = progress + "/" + maxCounter;
 
-    private String ultimateDescription;
+    private String ultimateDescription = "Effect: Deal " + ultValue + " damage to all enemies.";
 
-    public UltimateDamageDone() {
+    private String ultimateCondition = "Condition: Deal " + maxCounter + " damage.";
+
+    public UltimateDamageDone(int maxCounter, int ultValue) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
+        this.maxCounter = maxCounter;
+        this.ultValue = ultValue;
+        ultimateCondition = "Condition: Deal " + maxCounter + " damage.";
+        ultimateDescription = "Effect: Deal " + ultValue + " damage to all enemies.";
+
     }
 
     public void draw(Batch batch, float parentAlpha) {
@@ -38,6 +46,13 @@ public class UltimateDamageDone extends UltimateSkill {
     public void heroEffect(Hero hero) { };
     @Override
     public void enemyEffect(Enemy enemy) {
-        enemy.takeDamage(50);
+        enemy.takeDamage(ultValue);
     };
+    public String getUltimateDescription() {
+        return this.ultimateDescription;
+    }
+
+    public String getUltimateCondition() {
+        return this.ultimateCondition;
+    }
 }

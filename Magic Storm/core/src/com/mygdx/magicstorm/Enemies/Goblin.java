@@ -121,6 +121,7 @@ public class Goblin extends Enemy {
         super.attack(hero);
         hero.takeDamage(attackValue);
 
+
     }
 
     public int getIntAttackValue() {

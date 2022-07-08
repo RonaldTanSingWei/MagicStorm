@@ -12,11 +12,12 @@ public class UltimateSkill extends Actor {
 
     private int maxCounter;
 
-    private boolean ultimateCondition;
 
     private String progressString = progress + "/" + maxCounter;
 
     private String ultimateDescription;
+
+    private String ultimateCondition;
 
     public void setProgressString(String string) {
         this.progressString = string;

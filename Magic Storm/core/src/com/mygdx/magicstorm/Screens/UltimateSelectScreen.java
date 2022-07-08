@@ -3,6 +3,7 @@ package com.mygdx.magicstorm.Screens;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.mygdx.magicstorm.Screens.MainGameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -33,11 +34,12 @@ public class UltimateSelectScreen implements Screen {
     private OrthographicCamera camera;
 
     private Stage stage;
+    private Group group = new Group();
     private Skin skin;
     private Table table;
     private TextButton startButton;
 
-    private SpriteBatch batch;
+    private SpriteBatch batch = new SpriteBatch();
     private Sprite sprite;
 
     private Hero hero = new Hero();
@@ -52,19 +54,24 @@ public class UltimateSelectScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
 
-        batch = new SpriteBatch();
         sprite = new Sprite(new Texture(Gdx.files.internal("Menu.png")));
         sprite.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()); // sets to screen dimensions
 
         Gdx.input.setInputProcessor(stage);
 
-        UltimateDamageDone ultimateSkillOne = new UltimateDamageDone();
-        UltimateArmorGain ultimateSkillTwo = new UltimateArmorGain();
-        stage.addActor(ultimateSkillOne);
-        stage.addActor(ultimateSkillTwo);
+        UltimateDamageDone ultimateSkillOne = new UltimateDamageDone(10, 50);
+        UltimateArmorGain ultimateSkillTwo = new UltimateArmorGain(30, 30);
 
+        ultimateSkillOne.setName("ult1");
+        ultimateSkillTwo.setName("ult2");
+        group.addActor(ultimateSkillOne);
+        group.addActor(ultimateSkillTwo);
+        stage.addActor(group);
         ultimateSkillOne.setPosition(stage.getWidth() * 1/5, stage.getHeight()* 2/5);
-        ultimateSkillTwo.setPosition(stage.getWidth()*3/5, stage.getHeight()*2/5);
+        ultimateSkillTwo.setPosition(stage.getWidth() * 3/5, stage.getHeight()*2/5);
+
+
+
     }
 
     @Override
@@ -81,6 +88,13 @@ public class UltimateSelectScreen implements Screen {
 
         batch.begin();
         sprite.draw(batch);
+        UltimateDamageDone ultimateSkillOne = group.findActor("ult1");
+        UltimateArmorGain ultimateSkillTwo = group.findActor("ult2");
+
+        game.font.draw(batch, ultimateSkillOne.getUltimateCondition() ,ultimateSkillOne.getX(), ultimateSkillOne.getY());
+        game.font.draw(batch, ultimateSkillOne.getUltimateDescription(), ultimateSkillOne.getX(), ultimateSkillOne.getY() - 10);
+        game.font.draw(batch, ultimateSkillTwo.getUltimateCondition(), ultimateSkillTwo.getX(), ultimateSkillTwo.getY());
+        game.font.draw(batch, ultimateSkillTwo.getUltimateDescription(), ultimateSkillTwo.getX(), ultimateSkillTwo.getY() - 10);
         batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
