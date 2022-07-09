@@ -28,23 +28,19 @@ public class Deck extends Actor {
         this.maxDeckSize = maxDeckSize;
         this.currentDeckSizeString = String.valueOf(currentDeckSize);
         cards = new ArrayList<Card>();
-        //this only works for even deck size, figure out randomisation of makeup if deck size is odd
+
         for (int i = 0; i < maxDeckSize; i++) {
             Card tempactor;
             if (i == 0) tempactor = new MementoMori(1);
-            else if (i == 1) tempactor = new Elucidate();
-            else if (i == 2) tempactor = new Ataxia();
-            else if (i % 2 == 0) tempactor = new Attack(10);
-            else tempactor = new Defence(10);
+            else if (i % 2 == 0) tempactor = new Elucidate();
+            else tempactor = new Ataxia();
             cards.add(tempactor);
         }
     }
 
-
     public void draw(SpriteBatch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
-
 
     public Card drawCard() {
         int random = rand.nextInt(currentDeckSize);

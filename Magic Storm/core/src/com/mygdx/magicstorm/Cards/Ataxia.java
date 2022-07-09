@@ -37,4 +37,5 @@ public class Ataxia extends Card {
 
     public int getManaCost() {return manaCost;}
 
+    public String getDescription() {return "Halve attack damage of targeted enemy";}
 }
