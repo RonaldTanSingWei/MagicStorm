@@ -10,6 +10,8 @@ public class Card extends Actor {
     private int defence;
     private int manaCost;
 
+    private boolean aoe;
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -54,4 +56,8 @@ public class Card extends Actor {
     public int getManaCost() {return manaCost;}
 
     public String getDescription() {return "Default";}
+
+    public boolean isAoe() {
+        return aoe;
+    }
 }

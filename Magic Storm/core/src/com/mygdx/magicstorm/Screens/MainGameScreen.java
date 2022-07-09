@@ -454,7 +454,13 @@ public class MainGameScreen implements Screen {
                             selectedCard.remove();
                             cardNo -= 1;
                             shuffle();
-
+                        } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.isAoe())) {
+                                if (multipleEnemies) {
+                                    selectedCard.dealDamage(currentEnemy);
+                                    selectedCard.dealDamage(currentEnemy2);
+                                } else {
+                                    selectedCard.dealDamage(currentEnemy);
+                                }
                         } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("Ataxia"))) {
                             Enemy enemy = (Enemy) hitActor;
                             enemy.setAttackValue((int) enemy.getIntAttackValue() / 2);
