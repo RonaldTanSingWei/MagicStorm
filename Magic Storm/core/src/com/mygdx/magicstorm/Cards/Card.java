@@ -52,4 +52,6 @@ public class Card extends Actor {
     }
 
     public int getManaCost() {return manaCost;}
+
+    public String getDescription() {return "Default";}
 }

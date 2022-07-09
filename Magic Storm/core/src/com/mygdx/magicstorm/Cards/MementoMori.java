@@ -10,16 +10,15 @@ import com.mygdx.magicstorm.Enemies.Enemy;
 import java.util.Random;
 
 //Effect: Random (Atk, Atk + 10) x 5 dmg to enemies (works with multiple enemies)
-public class MementoMori extends Card {
+public class MementoMori extends Attack {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MementoMori.jpg")));
     private int manaCost = 3;
     private Random rand = new Random();
 
     public MementoMori(int value) {
+        super(value);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-        setTouchable(Touchable.enabled);
         setName("MementoMori");
-        setAttack(value);
     }
 
     public void increaseAttack(int value) {
@@ -51,4 +50,5 @@ public class MementoMori extends Card {
 
     public int getManaCost() {return manaCost;}
 
+    public String getDescription() {return "Deal randomised 0 - " + (getAttack() + 10)+ " to random enemy target";}
 }

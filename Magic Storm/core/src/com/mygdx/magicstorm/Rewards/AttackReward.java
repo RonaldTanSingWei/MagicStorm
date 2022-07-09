@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.mygdx.magicstorm.Cards.Attack;
 import com.mygdx.magicstorm.Cards.Card;
 import com.mygdx.magicstorm.Cards.Deck;
 import com.mygdx.magicstorm.hero.Hero;
@@ -19,14 +22,15 @@ public class AttackReward extends Reward {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
     }
-    public void rewardEffect(Hero hero) {
+    public void rewardEffect(Hero hero, Group group) {
         ArrayList<Card> cards = hero.getDeck().getCards();
         for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i).getName().equals("attack") || cards.get(i).getName().equals("MementoMori")) {
+            if (cards.get(i) instanceof Attack) {
                 cards.get(i).increaseAttack(3);
             }
         }
-
+        Card attack = group.findActor("attack");
+        attack.increaseAttack(3);
     }
 
     public void draw(Batch batch, float parentAlpha) {

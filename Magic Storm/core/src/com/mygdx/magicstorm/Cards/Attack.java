@@ -46,4 +46,5 @@ public class Attack extends Card {
 
     public int getManaCost() {return manaCost;}
 
+    public String getDescription() {return "Deal " + getAttack() + " damage";}
 }

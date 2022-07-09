@@ -89,7 +89,8 @@ public class MainGameScreen implements Screen {
     private DefenceReward defenceReward = new DefenceReward();
 
     private HpReward hpReward = new HpReward();
-    String effectsApplied = "None";
+
+
     public enum State {
         PAUSE,
         PLAYERTURN,
@@ -121,19 +122,21 @@ public class MainGameScreen implements Screen {
         Image rewardsButton = new Image(new Texture(Gdx.files.internal("rewardsButton.png")));
         Image ultimateSkill = new Image(new Texture(Gdx.files.internal("ultimateSkill.png")));
         Image cardback = new Image(new Texture(Gdx.files.internal("cardback.png")));
+        Attack attack = new Attack(5);
+        Defence defend = new Defence(5);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hero.setName("hero");
         background.setName("background");
         goblin.setName("Goblin");
-        Bloodhound bloodhound = new Bloodhound(26,26);
-        Creeper creeper = new Creeper(32,37);
-        RenegadeMage mage1 = new RenegadeMage(10,10);
-        MagicalConstruct construct1 = new MagicalConstruct(40,40);
-        Smash smash = new Smash (50,50);
-        Warg warg = new Warg(40,40);
-        Golem golem = new Golem(56,56);
-        Drake drake = new Drake(65,65);
-        UndeadKnight undeadKnight = new UndeadKnight(80,80);
+        Bloodhound bloodhound = new Bloodhound(26, 26);
+        Creeper creeper = new Creeper(32, 37);
+        RenegadeMage mage1 = new RenegadeMage(10, 10);
+        MagicalConstruct construct1 = new MagicalConstruct(40, 40);
+        Smash smash = new Smash(50, 50);
+        Warg warg = new Warg(40, 40);
+        Golem golem = new Golem(56, 56);
+        Drake drake = new Drake(65, 65);
+        UndeadKnight undeadKnight = new UndeadKnight(80, 80);
         creeper.setName("Creeper");
         bloodhound.setName("Bloodhound");
         mage1.setName("Renegade Mage");
@@ -155,6 +158,8 @@ public class MainGameScreen implements Screen {
         deck = copyDeck(hero.getDeck());
         ultimateSkill.setName("ultimateSkill");
         cardback.setName("cardback");
+        attack.setName("attack");
+        defend.setName("defence");
 
         // order actors are drawn in
 
@@ -171,12 +176,14 @@ public class MainGameScreen implements Screen {
         group.addActor(hpReward);
         group.addActor(ultimateSkill);
         group.addActor(cardback);
+        group.addActor(attack);
+        group.addActor(defend);
 
 
         cardNo = cards.size();
 
         currentEnemy = goblin;
-        currentEnemy2 = new Placeholder(0,5);
+        currentEnemy2 = new Placeholder(0, 5);
         group.addActor(currentEnemy);
         group.addActor(currentEnemy2);
         // add enemies in order of difficulty, randomise different parts of enemy array depending on current floor -- need to remove enemies because death state is carried over
@@ -196,8 +203,7 @@ public class MainGameScreen implements Screen {
         hero.setPosition(0, stage.getHeight() / 3);
         hero.setHpBarPos(hero.getX(), ((stage.getHeight() / 3) - 30));
         hero.setArmorBarPos(hero.getX(), ((stage.getHeight() / 3) - 60));
-        hero.setUltimateBarPos(stage.getWidth() * 1/10, stage.getHeight() * 9/10);
-
+        hero.setUltimateBarPos(stage.getWidth() * 1 / 10, stage.getHeight() * 9 / 10);
 
 
         endTurnButton.setPosition((stage.getWidth() * 4 / 5), stage.getHeight() * 1 / 10);
@@ -206,21 +212,23 @@ public class MainGameScreen implements Screen {
         enemyTurn.addAction(sequence(fadeOut(0f)));
         startTurn.setPosition(stage.getWidth() * 1 / 4, stage.getHeight() * 3 / 4);
         startTurn.addAction(sequence(fadeOut(0f)));
-        nextStage.setPosition(stage.getWidth()* 4/5, stage.getHeight() * 1/5);
+        nextStage.setPosition(stage.getWidth() * 4 / 5, stage.getHeight() * 1 / 5);
         nextStage.addAction(sequence(fadeOut(0f)));
-        rewardsButton.setPosition(stage.getWidth()* 4/5, stage.getHeight() * 4/5);
+        rewardsButton.setPosition(stage.getWidth() * 4 / 5, stage.getHeight() * 4 / 5);
         rewardsButton.addAction(fadeOut(0f));
-        attackReward.setPosition(stage.getWidth()* 1/3, stage.getHeight() * 1/2);
+        attackReward.setPosition(stage.getWidth() * 1 / 3, stage.getHeight() * 1 / 2);
         attackReward.addAction(fadeOut(0f));
-        defenceReward.setPosition(attackReward.getX() + attackReward.getWidth() + 100, stage.getHeight() * 1/2);
+        defenceReward.setPosition(attackReward.getX() + attackReward.getWidth() + 100, stage.getHeight() * 1 / 2);
         defenceReward.addAction(fadeOut(0f));
-        hpReward.setPosition(defenceReward.getX() + defenceReward.getWidth() + 100, stage.getHeight() * 1/2);
+        hpReward.setPosition(defenceReward.getX() + defenceReward.getWidth() + 100, stage.getHeight() * 1 / 2);
         hpReward.addAction(fadeOut(0f));
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
         deck.setPosition(50, 50);
         cardback.setPosition(50, 50);
-        ultimateSkill.setPosition(stage.getWidth() * 1/10, stage.getHeight() * 9/10);
+        ultimateSkill.setPosition(stage.getWidth() * 1 / 10, stage.getHeight() * 9 / 10);
         ultimateSkill.addAction(fadeOut(0f));
+        attack.setPosition(stage.getWidth() * 1 / 7, stage.getHeight() * 7 / 10);
+        defend.setPosition(stage.getWidth() * 1 / 19, stage.getHeight() * 7 / 10);
 
 
         shuffle();
@@ -267,8 +275,8 @@ public class MainGameScreen implements Screen {
         switch (state) {
             case PLAYERTURN:
                 game.batch.begin();
-                game.font.draw(game.batch, deck.getCurrentDeckSizeString() , deck.getX() + (deck.getWidth() / 2) + 50,deck.getY() + deck.getHeight() + 75);
-                game.font.draw(game.batch, hero.getManaString() , stage.getWidth()  * 51/200,stage.getHeight() * 1/4);
+                game.font.draw(game.batch, deck.getCurrentDeckSizeString(), deck.getX() + (deck.getWidth() / 2) + 50, deck.getY() + deck.getHeight() + 75);
+                game.font.draw(game.batch, hero.getManaString(), stage.getWidth() * 51 / 200, stage.getHeight() * 1 / 4);
                 if (!currentEnemy.isDead()) {
                     game.font.draw(game.batch, "Attack Damage: " + currentEnemy.getAttackValue(), currentEnemy.getX(), currentEnemy.getY() - 50);
                     game.font.draw(game.batch, currentEnemy.getName(), currentEnemy.getX(), currentEnemy.getY() + currentEnemy.getHeight() + 10);
@@ -277,12 +285,16 @@ public class MainGameScreen implements Screen {
                     game.font.draw(game.batch, "Attack Damage: " + currentEnemy2.getAttackValue(), currentEnemy2.getX(), currentEnemy2.getY() - 50);
                     game.font.draw(game.batch, currentEnemy2.getName(), currentEnemy2.getX(), currentEnemy2.getY() + currentEnemy2.getHeight() + 10);
                 }
+                if (cardSelected) {
+                    game.font.draw(game.batch, "Mana cost: " + selectedCard.getManaCost(), (float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2) - 25), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)) - 50);
+                    game.font.draw(game.batch, selectedCard.getDescription(), (float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2) - 25), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)) - 70);
+                }
                 if (currentEnemy2.isDead()) {
                     currentEnemy2.setTouchable(Touchable.disabled);
                     multipleEnemies = false;
                 }
                 game.batch.end();
-                if(currentEnemy.isDead() && currentEnemy2.isDead()) {
+                if (currentEnemy.isDead() && currentEnemy2.isDead()) {
                     if (currentEnemy.isBoss()) {
                         hero.gainHp(hero.getMaxHp());
                     }
@@ -359,6 +371,7 @@ public class MainGameScreen implements Screen {
                             int damage = selectedCard.getAttack();
                             int armor = selectedCard.getDefence();
                             selectedCard.setScale(1f);
+                            selectedCard.setPosition(selectedCardX, selectedCardY);
                             Enemy enemy = (Enemy) hitActor;
                             selectedCard.dealDamage((Enemy) hitActor);
                             hero.changeMana(-selectedCard.getManaCost());
@@ -372,15 +385,16 @@ public class MainGameScreen implements Screen {
                             }
 
                             cardSelected = false;
-                            cards.remove(selectedCard);
+                            /*cards.remove(selectedCard);
                             selectedCard.remove();
                             cardNo -= 1;
-                            shuffle();
+                            shuffle();*/
 
                         } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("defence"))) {
                             int damage = selectedCard.getAttack();
                             int armor = selectedCard.getDefence();
                             selectedCard.setScale(1f);
+                            selectedCard.setPosition(selectedCardX, selectedCardY);
                             selectedCard.addDefence(hero);
                             hero.changeMana(-selectedCard.getManaCost());
                             if (!hero.getUltimateSkill().isReady()) {
@@ -393,10 +407,10 @@ public class MainGameScreen implements Screen {
                             }
 
                             cardSelected = false;
-                            cards.remove(selectedCard);
+                            /*cards.remove(selectedCard);
                             selectedCard.remove();
                             cardNo -= 1;
-                            shuffle();
+                            shuffle();*/
 
                         } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("MementoMori"))) {
                             int damage = 0;
@@ -410,8 +424,7 @@ public class MainGameScreen implements Screen {
                                     selectedCard.dealDamage((Enemy) hitActor);
                                 }
                                 damage = startingHP - currentEnemy.getCurrentHp();
-                            }
-                            else{
+                            } else {
                                 startingHP = currentEnemy.getCurrentHp() + currentEnemy2.getCurrentHp();
                                 for (int i = 0; i < 5; i++) {
                                     int random = rand.nextInt(2);
@@ -421,7 +434,7 @@ public class MainGameScreen implements Screen {
                                         selectedCard.dealDamage(currentEnemy2);
                                     }
                                 }
-                                damage = startingHP - currentEnemy.getCurrentHp()- currentEnemy2.getCurrentHp();
+                                damage = startingHP - currentEnemy.getCurrentHp() - currentEnemy2.getCurrentHp();
                             }
                             if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
                                 hero.progressUltimate(damage);
@@ -443,8 +456,8 @@ public class MainGameScreen implements Screen {
                             shuffle();
 
                         } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("Ataxia"))) {
-                            effectsApplied = "Ataxia";
-                            System.out.println("player turn is" + effectsApplied);
+                            Enemy enemy = (Enemy) hitActor;
+                            enemy.setAttackValue((int) enemy.getIntAttackValue() / 2);
                             selectedCard.setScale(1f);
                             hero.changeMana(-selectedCard.getManaCost());
                             cardSelected = false;
@@ -457,7 +470,7 @@ public class MainGameScreen implements Screen {
                             ultimateSkill.addAction(fadeOut(0f));
                             ultimateSkill.setTouchable(Touchable.disabled);
                             hero.getUltimateSkill().enemyEffect(currentEnemy);
-                            if(!currentEnemy2.isDead()) {
+                            if (!currentEnemy2.isDead()) {
                                 hero.getUltimateSkill().enemyEffect(currentEnemy2);
                             }
                             hero.getUltimateSkill().heroEffect(hero);
@@ -477,7 +490,7 @@ public class MainGameScreen implements Screen {
                             hpReward.setTouchable(Touchable.enabled);
                             hpReward.addAction(fadeIn(0f));
                             selectingRewards = true;
-                        } else if (hitActor.getName().equals("attackReward")){
+                        } else if (hitActor.getName().equals("attackReward")) {
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
                             defenceReward.setTouchable(Touchable.disabled);
@@ -486,8 +499,8 @@ public class MainGameScreen implements Screen {
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
                             //add reward effects here
-                            attackReward.rewardEffect(hero);
-                        } else if (hitActor.getName().equals("defenceReward")){
+                            attackReward.rewardEffect(hero, group);
+                        } else if (hitActor.getName().equals("defenceReward")) {
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
                             defenceReward.setTouchable(Touchable.disabled);
@@ -496,8 +509,8 @@ public class MainGameScreen implements Screen {
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
                             //add reward effects here
-                            defenceReward.rewardEffect(hero);
-                        } else if (hitActor.getName().equals("hpReward")){
+                            defenceReward.rewardEffect(hero, group);
+                        } else if (hitActor.getName().equals("hpReward")) {
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
                             defenceReward.setTouchable(Touchable.disabled);
@@ -512,20 +525,17 @@ public class MainGameScreen implements Screen {
                             if (floor > 10) {
                                 this.state = State.VICTORY;
                                 game.setScreen(victoryScreen);
-                            }
-                            else {
+                            } else {
                                 int random;
                                 if (floor <= 3) {
                                     random = rand.nextInt(easyEnemies);
                                     easyEnemies -= 1;
                                     currentEnemy = enemies.remove(random);
-                                }
-                                else if (floor <= 6) {
+                                } else if (floor <= 6) {
                                     random = rand.nextInt(mediumEnemies);
                                     mediumEnemies -= 1;
                                     currentEnemy = enemies.remove(random);
-                                }
-                                else if (floor <= 9){
+                                } else if (floor <= 9) {
                                     random = rand.nextInt(hardEnemies);
                                     hardEnemies -= 1;
                                     currentEnemy = enemies.remove(random);
@@ -539,10 +549,10 @@ public class MainGameScreen implements Screen {
                                 currentEnemy.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth()), (int) ((stage.getHeight() / 3) - 30));
                                 if (currentEnemy.getName().equals("Bloodhound")) {
                                     multipleEnemies = true;
-                                    currentEnemy2 = new Bloodhound(28,28);
+                                    currentEnemy2 = new Bloodhound(28, 28);
                                     currentEnemy2.setName("Bloodhound");
                                     stage.addActor(currentEnemy2);
-                                    currentEnemy2.draw(batch,delta);
+                                    currentEnemy2.draw(batch, delta);
                                     currentEnemy2.setPosition(stage.getWidth() - currentEnemy.getWidth() - 300, stage.getHeight() / 3);
                                     currentEnemy2.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth() - 300), (int) ((stage.getHeight() / 3) - 30));
                                     currentEnemy2.setAttackValue(15);
@@ -550,12 +560,12 @@ public class MainGameScreen implements Screen {
                                 }
                                 if (currentEnemy.getName().equals("Smash")) {
                                     multipleEnemies = true;
-                                    Bash bash = new Bash(50,50);
+                                    Bash bash = new Bash(50, 50);
                                     currentEnemy2 = bash;
-                                    bash.setSmash( (Smash) currentEnemy);
+                                    bash.setSmash((Smash) currentEnemy);
                                     currentEnemy2.setName("Bash");
                                     stage.addActor(currentEnemy2);
-                                    currentEnemy2.draw(batch,delta);
+                                    currentEnemy2.draw(batch, delta);
                                     currentEnemy2.setPosition(stage.getWidth() - currentEnemy.getWidth() - 300, stage.getHeight() / 3);
                                     currentEnemy2.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth() - 300), (int) ((stage.getHeight() / 3) - 30));
                                     currentEnemy2.setTouchable(Touchable.enabled);
@@ -583,15 +593,7 @@ public class MainGameScreen implements Screen {
                     @Override
                     public void run() {
                         if (!currentEnemy2.isDead()) {
-                            if (effectsApplied.equals("None")) {
-                                currentEnemy2.attack(hero);
-                            }
-                            else if (effectsApplied.equals("Ataxia")) {
-                                int intialAttack = currentEnemy2.getIntAttackValue();
-                                currentEnemy2.setAttackValue(rand.nextInt(intialAttack / 3));
-                                currentEnemy2.attack(hero);
-                                currentEnemy2.setAttackValue(intialAttack);
-                            }
+                            currentEnemy2.attack(hero);
                         }
                         enemyTurn = false;
                     }
@@ -600,20 +602,11 @@ public class MainGameScreen implements Screen {
                     @Override
                     public void run() {
                         if (!currentEnemy.isDead()) {
-                            if (effectsApplied.equals("None")) {
-                                currentEnemy.attack(hero);
-                            }
-                            else if (effectsApplied.equals("Ataxia")) {
-                                int intialAttack = currentEnemy.getIntAttackValue();
-                                currentEnemy.setAttackValue(rand.nextInt((int)intialAttack / 3));
-                                currentEnemy.attack(hero);
-                                currentEnemy.setAttackValue(intialAttack);
-                            }
+                            currentEnemy.attack(hero);
                         }
                         enemyTurn = false;
                     }
                 }, 3);
-                if (!effectsApplied.equals("None")) effectsApplied = "None";
                 this.state = State.STARTTURN;
                 break;
             case STARTTURN:
@@ -717,15 +710,14 @@ public class MainGameScreen implements Screen {
         }
     }
 
-   public void drawCard(int numberDrawn) {
+    public void drawCard(int numberDrawn) {
         for (int i = 0; i < numberDrawn; i++) {
             if (deck.getSize() > 0) {
                 drawnCard = deck.drawCard();
                 cards.add(drawnCard);
                 stage.addActor(drawnCard);
                 cardNo += 1;
-            }
-            else break;
+            } else break;
         }
         shuffle();
     }

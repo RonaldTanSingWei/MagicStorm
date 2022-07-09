@@ -37,4 +37,5 @@ public class Elucidate extends Card {
 
     public int getManaCost() {return manaCost;}
 
+    public String getDescription() {return "Draw 2 cards";}
 }

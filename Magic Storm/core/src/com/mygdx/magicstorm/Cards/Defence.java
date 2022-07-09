@@ -45,4 +45,6 @@ public class Defence extends Card {
     }
 
     public int getManaCost() {return manaCost;}
+
+    public String getDescription() {return "Add " + getDefence() + " armor";}
 }
