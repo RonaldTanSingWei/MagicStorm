@@ -42,4 +42,8 @@ public class AttackReward extends Reward {
         sprite.setPosition(getX(),getY());
         super.positionChanged();
     }
+
+    public String getDescription() {
+        return "Increase attack value of cards by 3";
+    }
 }

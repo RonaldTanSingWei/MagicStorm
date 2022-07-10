@@ -14,4 +14,8 @@ public class Reward extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
+
+    public String getDescription() {
+        return "Default";
+    }
 }

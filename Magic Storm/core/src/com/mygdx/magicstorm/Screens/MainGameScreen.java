@@ -62,6 +62,9 @@ public class MainGameScreen implements Screen {
 
     private boolean availableRewards;
     private boolean selectingRewards;
+    private boolean rewardSelected;
+    private Reward selectedReward;
+    private int rewardHitCount = 0;
 
     private Hero hero;
     private Group group = new Group();
@@ -112,6 +115,7 @@ public class MainGameScreen implements Screen {
         startOfTurn = true;
         availableRewards = true;
         selectingRewards = false;
+        rewardSelected = false;
         Goblin goblin = new Goblin(10, 10);
         Image background = new Image(new Texture(Gdx.files.internal("Background.jpg")));
         Image endTurnButton = new Image(new Texture(Gdx.files.internal("endTurn.png")));
@@ -289,6 +293,9 @@ public class MainGameScreen implements Screen {
                     game.font.draw(game.batch, "Mana cost: " + selectedCard.getManaCost(), (float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2) - 25), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)) - 50);
                     game.font.draw(game.batch, selectedCard.getDescription(), (float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2) - 25), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)) - 70);
                 }
+                if (rewardSelected) {
+                    game.font.draw(game.batch, selectedReward.getDescription(), selectedReward.getX(), selectedReward.getY() - 70);
+                }
                 if (currentEnemy2.isDead()) {
                     currentEnemy2.setTouchable(Touchable.disabled);
                     multipleEnemies = false;
@@ -336,6 +343,7 @@ public class MainGameScreen implements Screen {
                     Vector2 coord = stage.screenToStageCoordinates(new Vector2((float) Gdx.input.getX(), (float) Gdx.input.getY()));
                     final Actor hitActor = stage.hit(coord.x, coord.y, true);
                     if (hitActor != null) {
+                        System.out.println(hitActor.getName());
                         if (hitActor instanceof Card && !cardSelected && hero.getMana() - ((Card) hitActor).getManaCost() >= 0) {
                             cardSelected = true;
                             selectedCard = (Card) hitActor;
@@ -496,7 +504,14 @@ public class MainGameScreen implements Screen {
                             hpReward.setTouchable(Touchable.enabled);
                             hpReward.addAction(fadeIn(0f));
                             selectingRewards = true;
-                        } else if (hitActor.getName().equals("attackReward")) {
+                        } else if (hitActor.getName().equals("attackReward") && !rewardSelected && rewardHitCount <= 2) {
+                            rewardHitCount += 1;
+                        } else if (hitActor.getName().equals("attackReward") && !rewardSelected&& rewardHitCount > 2)  {
+                            rewardSelected = true;
+                            selectedReward = attackReward;
+                            rewardHitCount = 0;
+                        } else if (hitActor.getName().equals("attackReward") && rewardSelected) {
+                            rewardSelected = false;
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
                             defenceReward.setTouchable(Touchable.disabled);
@@ -504,9 +519,15 @@ public class MainGameScreen implements Screen {
                             hpReward.setTouchable(Touchable.disabled);
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
-                            //add reward effects here
                             attackReward.rewardEffect(hero, group);
-                        } else if (hitActor.getName().equals("defenceReward")) {
+                        } else if (hitActor.getName().equals("defenceReward") && !rewardSelected && rewardHitCount <= 2) {
+                            rewardHitCount += 1;
+                        } else if (hitActor.getName().equals("defenceReward") && !rewardSelected && rewardHitCount > 2)  {
+                            rewardSelected = true;
+                            selectedReward = defenceReward;
+                            rewardHitCount = 0;
+                        } else if (hitActor.getName().equals("defenceReward") && rewardSelected) {
+                            rewardSelected = false;
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
                             defenceReward.setTouchable(Touchable.disabled);
@@ -514,9 +535,15 @@ public class MainGameScreen implements Screen {
                             hpReward.setTouchable(Touchable.disabled);
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
-                            //add reward effects here
                             defenceReward.rewardEffect(hero, group);
-                        } else if (hitActor.getName().equals("hpReward")) {
+                        } else if (hitActor.getName().equals("hpReward") && !rewardSelected && rewardHitCount <= 2) {
+                            rewardHitCount += 1;
+                        } else if (hitActor.getName().equals("hpReward") && !rewardSelected && rewardHitCount > 2)  {
+                            rewardSelected = true;
+                            selectedReward = hpReward;
+                            rewardHitCount = 0;
+                        } else if (hitActor.getName().equals("hpReward") && rewardSelected) {
+                            rewardSelected = false;
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
                             defenceReward.setTouchable(Touchable.disabled);
@@ -524,7 +551,6 @@ public class MainGameScreen implements Screen {
                             hpReward.setTouchable(Touchable.disabled);
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
-                            //add reward effects here
                             hpReward.rewardEffect(hero);
                         } else if (hitActor.getName().equals("nextStage")) {
                             floor += 1;
