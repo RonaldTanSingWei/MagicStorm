@@ -7,15 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
-public class Defence extends Card {
+public class Overcharge extends Defence {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
-    private int manaCost = 1;
-    private int originalValue;
+    private int manaCost = 0;
 
-    public Defence(int value) {
+    public Overcharge(int value) {
+        super(value);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
-        setName("defence");
+        setName("Overcharge");
         setDefence(value);
     }
 
@@ -24,7 +24,7 @@ public class Defence extends Card {
     }
 
     public void addDefence(Hero hero) {
-        hero.gainArmor(getDefence());
+        hero.takeDamage(getDefence());
     }
 
     @Override
@@ -47,14 +47,6 @@ public class Defence extends Card {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Add " + getDefence() + " armor";}
-
-    public void resetCard() {
-        setDefence(originalValue);
-    }
-
-    public void increaseOriginalValue(int value) {
-        this.originalValue += value;
-    }
+    public String getDescription() {return "Draw 3 cards. Gain 3 mana. Take " + getDefence() + "damage.";}
 
 }

@@ -31,6 +31,7 @@ public class DefenceReward extends Reward {
         }
         Card defence = group.findActor("defence");
         defence.increaseDefence(5);
+        defence.increaseOriginalValue(5);
     }
 
     public void draw(Batch batch, float parentAlpha) {

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.magicstorm.Enemies.Enemy;
 
+
+//deal 13 dmg to all enemies
 public class BlueLightning extends Attack {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MementoMori.jpg")));
     private int manaCost = 2;

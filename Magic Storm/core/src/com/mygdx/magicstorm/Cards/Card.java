@@ -9,6 +9,7 @@ public class Card extends Actor {
     private int attack;
     private int defence;
     private int manaCost;
+    private int originalValue;
 
     private boolean aoe;
 
@@ -59,5 +60,9 @@ public class Card extends Actor {
 
     public boolean isAoe() {
         return aoe;
+    }
+
+    public void increaseOriginalValue(int value) {
+        originalValue += value;
     }
 }

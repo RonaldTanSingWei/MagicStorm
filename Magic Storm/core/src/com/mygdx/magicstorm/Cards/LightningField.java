@@ -6,17 +6,17 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.magicstorm.Enemies.Enemy;
 
-import java.util.Random;
-
-//deal 12 dmg
-public class MagicBolt extends Attack {
+//deal 10 dmg, reduce dmg dealt by 5
+public class LightningField extends Attack {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MementoMori.jpg")));
-    private int manaCost = 1;
+    private int manaCost = 2;
 
-    public MagicBolt(int value) {
+    private boolean aoe = true;
+
+    public LightningField(int value) {
         super(value);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-        setName("Magic Bolt");
+        setName("Lightning Field");
     }
 
     public void increaseAttack(int value) {
@@ -25,6 +25,7 @@ public class MagicBolt extends Attack {
 
     public void dealDamage(Enemy enemy) {
         enemy.takeDamage(getAttack());
+        enemy.setAttackValue(enemy.getIntAttackValue() - getAttack()/2);
     }
 
     @Override
@@ -47,5 +48,6 @@ public class MagicBolt extends Attack {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Deal " + getAttack() + " damage to an enemy";}
+    public String getDescription() {return "Deal " + getAttack() + " damage to an enemy and reduce its attack damage by half the damage dealt";}
 }
+

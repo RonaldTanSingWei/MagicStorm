@@ -11,11 +11,13 @@ import com.mygdx.magicstorm.Enemies.Enemy;
 public class Attack extends Card {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Attack.png")));
     private int manaCost = 1;
+    private int originalValue;
     public Attack(int value) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
         setName("attack");
         setAttack(value);
+        this.originalValue = value;
     }
 
     public void increaseAttack(int value) {
@@ -47,4 +49,12 @@ public class Attack extends Card {
     public int getManaCost() {return manaCost;}
 
     public String getDescription() {return "Deal " + getAttack() + " damage";}
+
+    public void resetCard() {
+        setAttack(originalValue);
+    }
+
+    public void increaseOriginalValue(int value) {
+        this.originalValue += value;
+    }
 }
