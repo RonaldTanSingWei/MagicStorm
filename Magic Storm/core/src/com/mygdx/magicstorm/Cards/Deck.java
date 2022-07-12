@@ -1,16 +1,9 @@
 package com.mygdx.magicstorm.Cards;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -31,8 +24,8 @@ public class Deck extends Actor {
 
         for (int i = 0; i < maxDeckSize; i++) {
             Card tempactor;
-            if (i == 0) tempactor = new MementoMori(1);
-            else if (i % 2 == 0) tempactor = new Elucidate();
+            if (i == 0) tempactor = new WildLightning(1);
+            else if (i % 2 == 0) tempactor = new SpellScour();
             else tempactor = new Ataxia();
             cards.add(tempactor);
         }

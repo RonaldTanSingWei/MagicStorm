@@ -4,21 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.Enemies.Enemy;
 
-import java.util.Random;
-
-//Effect: Random (Atk, Atk + 10) x 5 dmg to enemies (works with multiple enemies)
-public class MementoMori extends Attack {
+public class DeepPlasma extends Attack {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MementoMori.jpg")));
     private int manaCost = 3;
-    private Random rand = new Random();
 
-    public MementoMori(int value) {
+    public DeepPlasma(int value) {
         super(value);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-        setName("MementoMori");
+        setName("Deep Plasma");
     }
 
     public void increaseAttack(int value) {
@@ -26,8 +21,7 @@ public class MementoMori extends Attack {
     }
 
     public void dealDamage(Enemy enemy) {
-        int random = rand.nextInt(getAttack() + 10);
-        enemy.takeDamage(random);
+        enemy.takeDamage(getAttack());
     }
 
     @Override
@@ -50,5 +44,5 @@ public class MementoMori extends Attack {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Deal randomised 0 - " + (getAttack() + 10)+ " to random enemy target";}
+    public String getDescription() {return "Deal " + getAttack() + " damage to an enemy";}
 }

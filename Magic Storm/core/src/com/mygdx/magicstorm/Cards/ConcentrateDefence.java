@@ -5,16 +5,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.mygdx.magicstorm.hero.Hero;
 
+public class ConcentrateDefence extends Defence {
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
+    private int manaCost = 1;
 
-//Effect: Draws 2 cards
-public class Elucidate extends Card {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Elucidate.jpg")));
-    private int manaCost = 2;
-    public Elucidate() {
+    public ConcentrateDefence(int value) {
+        super(value);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
-        setName("Elucidate");
+        setName("Concentrate Defence");
+        setDefence(value);
+    }
+
+    public void increaseDefence(int value) {
+        setDefence(getDefence() + value);
+    }
+
+    public void addDefence(Hero hero) {
+        hero.gainArmor(getDefence());
     }
 
     @Override
@@ -37,5 +47,5 @@ public class Elucidate extends Card {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Draw 2 cards";}
+    public String getDescription() {return "Add " + getDefence() + " armor";}
 }
