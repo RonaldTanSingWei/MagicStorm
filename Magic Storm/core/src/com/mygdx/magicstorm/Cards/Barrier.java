@@ -9,7 +9,7 @@ import com.mygdx.magicstorm.hero.Hero;
 
 //gain 12 block
 public class Barrier extends Defence {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Barrier.png")));
     private int manaCost = 1;
 
     public Barrier(int value) {

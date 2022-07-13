@@ -7,8 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
+//Buff attacks
 public class GatherPower extends Defence {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("GatherPower.png")));
     private int manaCost = 1;
 
     public GatherPower(int value) {
@@ -47,5 +48,5 @@ public class GatherPower extends Defence {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Add " + getDefence() + " armor";}
+    public String getDescription() {return "Increase the damage of attacks this combat by " + getDefence() + ".";}
 }

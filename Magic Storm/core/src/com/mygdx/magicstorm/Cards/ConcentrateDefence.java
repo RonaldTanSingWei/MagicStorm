@@ -7,8 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
+//Buff defends
 public class ConcentrateDefence extends Defence {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("ConcentrateDefence.png")));
     private int manaCost = 1;
 
     public ConcentrateDefence(int value) {

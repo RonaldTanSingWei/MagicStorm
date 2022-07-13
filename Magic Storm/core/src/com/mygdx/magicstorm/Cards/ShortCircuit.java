@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 //Effect: Enemies deal random (0, Atk/3) damage next turn
 public class ShortCircuit extends Attack {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Ataxia.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("ShortCircuit.jpg")));
     private int manaCost = 2;
     public ShortCircuit(int value) {
         super(value);

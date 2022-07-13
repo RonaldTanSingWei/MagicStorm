@@ -9,7 +9,7 @@ import com.mygdx.magicstorm.Enemies.Enemy;
 
 //deal 13 dmg to all enemies
 public class BlueLightning extends Attack {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MementoMori.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("BlueLightning.jpg")));
     private int manaCost = 2;
 
     private boolean aoe = true;
