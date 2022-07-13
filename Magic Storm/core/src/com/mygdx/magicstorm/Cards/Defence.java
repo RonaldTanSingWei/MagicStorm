@@ -17,13 +17,14 @@ public class Defence extends Card {
         setTouchable(Touchable.enabled);
         setName("defence");
         setDefence(value);
+        this.originalValue = value;
     }
 
     public void increaseDefence(int value) {
         setDefence(getDefence() + value);
     }
 
-    public void addDefence(Hero hero) {
+    public void addDefence(Hero hero, Defence defence, Attack attack) {
         hero.gainArmor(getDefence());
     }
 

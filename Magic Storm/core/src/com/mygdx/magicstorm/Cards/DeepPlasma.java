@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.magicstorm.Enemies.Enemy;
 
 public class DeepPlasma extends Attack {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("DeepPlasma.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("DeepPlasma.png")));
     private int manaCost = 3;
 
     public DeepPlasma(int value) {

@@ -48,12 +48,11 @@ public class MainGameScreen implements Screen {
     private SpriteBatch batch = new SpriteBatch();
     private boolean cardSelected = false;
     private ScreenViewport viewport;
+
     private int floor = 1;
     private int easyEnemies = 2;
-
     private int mediumEnemies = 3;
     private int hardEnemies = 3;
-
 
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private Enemy currentEnemy;
@@ -127,7 +126,7 @@ public class MainGameScreen implements Screen {
         Image ultimateSkill = new Image(new Texture(Gdx.files.internal("ultimateSkill.png")));
         Image cardback = new Image(new Texture(Gdx.files.internal("cardback.png")));
         Attack attack = new Attack(5);
-        Defence defend = new Defence(5);
+        Defence defence = new Defence(5);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hero.setName("hero");
         background.setName("background");
@@ -163,7 +162,7 @@ public class MainGameScreen implements Screen {
         ultimateSkill.setName("ultimateSkill");
         cardback.setName("cardback");
         attack.setName("attack");
-        defend.setName("defence");
+        defence.setName("defence");
 
         // order actors are drawn in
 
@@ -181,7 +180,7 @@ public class MainGameScreen implements Screen {
         group.addActor(ultimateSkill);
         group.addActor(cardback);
         group.addActor(attack);
-        group.addActor(defend);
+        group.addActor(defence);
 
 
         cardNo = cards.size();
@@ -232,7 +231,7 @@ public class MainGameScreen implements Screen {
         ultimateSkill.setPosition(stage.getWidth() * 1 / 10, stage.getHeight() * 9 / 10);
         ultimateSkill.addAction(fadeOut(0f));
         attack.setPosition(stage.getWidth() * 1 / 7, stage.getHeight() * 7 / 10);
-        defend.setPosition(stage.getWidth() * 1 / 19, stage.getHeight() * 7 / 10);
+        defence.setPosition(stage.getWidth() * 1 / 19, stage.getHeight() * 7 / 10);
 
 
         shuffle();
@@ -274,6 +273,8 @@ public class MainGameScreen implements Screen {
         rewardsButton.setTouchable(Touchable.disabled);
         Actor ultimateSkill = group.findActor("ultimateSkill");
         ultimateSkill.setTouchable(Touchable.disabled);
+        Defence defence = group.findActor("defence");
+        Attack attack = group.findActor("attack");
 
 
         switch (state) {
@@ -302,6 +303,8 @@ public class MainGameScreen implements Screen {
                 }
                 game.batch.end();
                 if (currentEnemy.isDead() && currentEnemy2.isDead()) {
+                    defence.resetCard();
+                    attack.resetCard();
                     if (currentEnemy.isBoss()) {
                         hero.gainHp(hero.getMaxHp());
                     }
@@ -375,83 +378,75 @@ public class MainGameScreen implements Screen {
                             });
                             hitActor.addAction(ra);
 
-                        } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("attack"))) {
-                            int damage = selectedCard.getAttack();
+                        } else if ((hitActor instanceof Enemy && cardSelected && selectedCard instanceof Attack)) {
                             int armor = selectedCard.getDefence();
-                            selectedCard.setScale(1f);
-                            selectedCard.setPosition(selectedCardX, selectedCardY);
-                            Enemy enemy = (Enemy) hitActor;
-                            selectedCard.dealDamage((Enemy) hitActor);
-                            hero.changeMana(-selectedCard.getManaCost());
-                            if (!hero.getUltimateSkill().isReady()) {
-                                if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
-                                    hero.progressUltimate(damage);
-                                }
-                                if (hero.getUltimateSkill() instanceof UltimateArmorGain) {
-                                    hero.progressUltimate(armor);
-                                }
-                            }
-
-                            cardSelected = false;
-                            /*cards.remove(selectedCard);
-                            selectedCard.remove();
-                            cardNo -= 1;
-                            shuffle();*/
-
-                        } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("defence"))) {
-                            int damage = selectedCard.getAttack();
-                            int armor = selectedCard.getDefence();
-                            selectedCard.setScale(1f);
-                            selectedCard.setPosition(selectedCardX, selectedCardY);
-                            selectedCard.addDefence(hero);
-                            hero.changeMana(-selectedCard.getManaCost());
-                            if (!hero.getUltimateSkill().isReady()) {
-                                if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
-                                    hero.progressUltimate(damage);
-                                }
-                                if (hero.getUltimateSkill() instanceof UltimateArmorGain) {
-                                    hero.progressUltimate(armor);
-                                }
-                            }
-
-                            cardSelected = false;
-                            /*cards.remove(selectedCard);
-                            selectedCard.remove();
-                            cardNo -= 1;
-                            shuffle();*/
-
-                        } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("MementoMori"))) {
                             int damage = 0;
                             int startingHP = 0;
                             selectedCard.setScale(1f);
+                            selectedCard.setPosition(selectedCardX, selectedCardY);
                             hero.changeMana(-selectedCard.getManaCost());
-                            if (!multipleEnemies) {
-                                startingHP = currentEnemy.getCurrentHp();
+
+                            if (selectedCard.isAoe()) {
+                                if (multipleEnemies) {
+                                    startingHP = currentEnemy.getCurrentHp() + currentEnemy2.getCurrentHp();
+                                    selectedCard.dealDamage(currentEnemy);
+                                    selectedCard.dealDamage(currentEnemy2);
+                                    damage = startingHP - currentEnemy.getCurrentHp() - currentEnemy2.getCurrentHp();
+                                } else {
+                                    startingHP = currentEnemy.getCurrentHp();
+                                    selectedCard.dealDamage(currentEnemy);
+                                    damage = startingHP - currentEnemy.getCurrentHp();
+                                }
+                            }
+                            else {
                                 Enemy enemy = (Enemy) hitActor;
-                                for (int i = 0; i < 5; i++) {
-                                    selectedCard.dealDamage((Enemy) hitActor);
-                                }
-                                damage = startingHP - currentEnemy.getCurrentHp();
-                            } else {
-                                startingHP = currentEnemy.getCurrentHp() + currentEnemy2.getCurrentHp();
-                                for (int i = 0; i < 5; i++) {
-                                    int random = rand.nextInt(2);
-                                    if (random == 0) {
-                                        selectedCard.dealDamage(currentEnemy);
-                                    } else {
-                                        selectedCard.dealDamage(currentEnemy2);
-                                    }
-                                }
-                                damage = startingHP - currentEnemy.getCurrentHp() - currentEnemy2.getCurrentHp();
+                                startingHP = enemy.getCurrentHp();
+                                selectedCard.dealDamage((Enemy) hitActor);
+                                damage = startingHP - enemy.getCurrentHp();
                             }
-                            if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
-                                hero.progressUltimate(damage);
+
+                            if (!hero.getUltimateSkill().isReady()) {
+                                if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
+                                    hero.progressUltimate(damage);
+                                }
+                                if (hero.getUltimateSkill() instanceof UltimateArmorGain) {
+                                    hero.progressUltimate(armor);
+                                }
                             }
+
                             cardSelected = false;
-                            cards.remove(selectedCard);
-                            selectedCard.remove();
-                            cardNo -= 1;
-                            shuffle();
+                            if (!selectedCard.getName().equals("attack")) {
+                                cards.remove(selectedCard);
+                                selectedCard.remove();
+                                cardNo -= 1;
+                                shuffle();
+                            }
+
+                        } else if ((hitActor instanceof Hero && cardSelected && selectedCard instanceof Defence)) {
+                            int damage = selectedCard.getAttack();
+                            int armor = selectedCard.getDefence();
+                            selectedCard.setScale(1f);
+                            selectedCard.setPosition(selectedCardX, selectedCardY);
+                            hero.changeMana(-selectedCard.getManaCost());
+
+                            selectedCard.addDefence(hero, defence, attack);
+
+                            if (!hero.getUltimateSkill().isReady()) {
+                                if (hero.getUltimateSkill() instanceof UltimateDamageDone) {
+                                    hero.progressUltimate(damage);
+                                }
+                                if (hero.getUltimateSkill() instanceof UltimateArmorGain) {
+                                    hero.progressUltimate(armor);
+                                }
+                            }
+
+                            cardSelected = false;
+                            if (!selectedCard.getName().equals("defence")) {
+                                cards.remove(selectedCard);
+                                selectedCard.remove();
+                                cardNo -= 1;
+                                shuffle();
+                            }
 
                         } else if ((hitActor.getName().equals("Elucidate") && cardSelected && selectedCard.getName().equals("Elucidate"))) {
                             drawCard(2);
@@ -462,24 +457,6 @@ public class MainGameScreen implements Screen {
                             selectedCard.remove();
                             cardNo -= 1;
                             shuffle();
-                        } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.isAoe())) {
-                                if (multipleEnemies) {
-                                    selectedCard.dealDamage(currentEnemy);
-                                    selectedCard.dealDamage(currentEnemy2);
-                                } else {
-                                    selectedCard.dealDamage(currentEnemy);
-                                }
-                        } else if ((hitActor instanceof Enemy && cardSelected && selectedCard.getName().equals("Ataxia"))) {
-                            Enemy enemy = (Enemy) hitActor;
-                            enemy.setAttackValue((int) enemy.getIntAttackValue() / 2);
-                            selectedCard.setScale(1f);
-                            hero.changeMana(-selectedCard.getManaCost());
-                            cardSelected = false;
-                            cards.remove(selectedCard);
-                            selectedCard.remove();
-                            cardNo -= 1;
-                            shuffle();
-
                         } else if (hitActor.getName().equals("ultimateSkill")) {
                             ultimateSkill.addAction(fadeOut(0f));
                             ultimateSkill.setTouchable(Touchable.disabled);
@@ -506,7 +483,7 @@ public class MainGameScreen implements Screen {
                             selectingRewards = true;
                         } else if (hitActor.getName().equals("attackReward") && !rewardSelected && rewardHitCount <= 2) {
                             rewardHitCount += 1;
-                        } else if (hitActor.getName().equals("attackReward") && !rewardSelected&& rewardHitCount > 2)  {
+                        } else if (hitActor.getName().equals("attackReward") && !rewardSelected && rewardHitCount > 2) {
                             rewardSelected = true;
                             selectedReward = attackReward;
                             rewardHitCount = 0;
@@ -522,7 +499,7 @@ public class MainGameScreen implements Screen {
                             attackReward.rewardEffect(hero, group);
                         } else if (hitActor.getName().equals("defenceReward") && !rewardSelected && rewardHitCount <= 2) {
                             rewardHitCount += 1;
-                        } else if (hitActor.getName().equals("defenceReward") && !rewardSelected && rewardHitCount > 2)  {
+                        } else if (hitActor.getName().equals("defenceReward") && !rewardSelected && rewardHitCount > 2) {
                             rewardSelected = true;
                             selectedReward = defenceReward;
                             rewardHitCount = 0;
@@ -538,7 +515,7 @@ public class MainGameScreen implements Screen {
                             defenceReward.rewardEffect(hero, group);
                         } else if (hitActor.getName().equals("hpReward") && !rewardSelected && rewardHitCount <= 2) {
                             rewardHitCount += 1;
-                        } else if (hitActor.getName().equals("hpReward") && !rewardSelected && rewardHitCount > 2)  {
+                        } else if (hitActor.getName().equals("hpReward") && !rewardSelected && rewardHitCount > 2) {
                             rewardSelected = true;
                             selectedReward = hpReward;
                             rewardHitCount = 0;

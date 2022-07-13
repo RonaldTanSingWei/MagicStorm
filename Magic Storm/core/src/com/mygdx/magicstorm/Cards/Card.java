@@ -26,8 +26,8 @@ public class Card extends Actor {
         enemy.takeDamage(attack);
     }
 
-    public void addDefence(Hero hero) {
-        hero.gainArmor(defence);
+    public void addDefence(Hero hero, Defence defence, Attack attack) {
+        hero.gainArmor(this.defence);
     }
 
     public void increaseAttack(int value) {

@@ -24,8 +24,8 @@ public class Deck extends Actor {
 
         for (int i = 0; i < maxDeckSize; i++) {
             Card tempactor;
-            if (i == 0) tempactor = new WildLightning(1);
-            else if (i % 2 == 0) tempactor = new SpellScour(2);
+            if (i % 2 == 0) tempactor = new DeepPlasma(5);
+            else if (i % 1 == 0) tempactor = new GatherPower(5);
             else tempactor = new ShortCircuit(2);
             cards.add(tempactor);
         }

@@ -24,8 +24,8 @@ public class GatherPower extends Defence {
         setDefence(getDefence() + value);
     }
 
-    public void addDefence(Hero hero) {
-        hero.gainArmor(getDefence());
+    public void addDefence(Hero hero, Defence defence, Attack attack) {
+        attack.increaseAttack(getDefence());
     }
 
     @Override
