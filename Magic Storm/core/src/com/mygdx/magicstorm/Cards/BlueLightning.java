@@ -9,7 +9,7 @@ import com.mygdx.magicstorm.Enemies.Enemy;
 
 //deal 13 dmg to all enemies
 public class BlueLightning extends Attack {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("BlueLightning.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("BlueLightning.png")));
     private int manaCost = 2;
 
     private boolean aoe = true;
@@ -45,10 +45,13 @@ public class BlueLightning extends Attack {
         sprite.setScale(getScaleX(),getScaleY());
         super.scaleChanged();
     }
+    public boolean isAoe() {
+        return aoe;
+    }
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Deal " + getAttack() + " damage to an enemy";}
+    public String getDescription() {return "Deal " + getAttack() + " damage to all enemies";}
 }
 
 

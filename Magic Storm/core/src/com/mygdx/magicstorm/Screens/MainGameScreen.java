@@ -63,7 +63,9 @@ public class MainGameScreen implements Screen {
     private boolean selectingRewards;
     private boolean rewardSelected;
     private Reward selectedReward;
-    private int rewardHitCount = 0;
+    private int selectedRewardX;
+    private int selectedRewardY;
+
 
     private Hero hero;
     private Group group = new Group();
@@ -387,6 +389,7 @@ public class MainGameScreen implements Screen {
                             hero.changeMana(-selectedCard.getManaCost());
 
                             if (selectedCard.isAoe()) {
+                                System.out.println("card is aoe");
                                 if (multipleEnemies) {
                                     startingHP = currentEnemy.getCurrentHp() + currentEnemy2.getCurrentHp();
                                     selectedCard.dealDamage(currentEnemy);
@@ -422,6 +425,27 @@ public class MainGameScreen implements Screen {
                                 shuffle();
                             }
 
+                        } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("Overcharge"))) {
+                            drawCard(3);
+                            selectedCard.setScale(1f);
+                            hero.changeMana(3 - selectedCard.getManaCost());
+                            hero.takeDamage(3);
+                            cardSelected = false;
+                            cards.remove(selectedCard);
+                            selectedCard.remove();
+                            cardNo -= 1;
+                            shuffle();
+
+                        } else if ((hitActor instanceof Hero && cardSelected && selectedCard.getName().equals("Spell Scour"))) {
+                            drawCard(2);
+                            selectedCard.setScale(1f);
+                            hero.changeMana(-selectedCard.getManaCost());
+                            cardSelected = false;
+                            cards.remove(selectedCard);
+                            selectedCard.remove();
+                            cardNo -= 1;
+                            shuffle();
+
                         } else if ((hitActor instanceof Hero && cardSelected && selectedCard instanceof Defence)) {
                             int damage = selectedCard.getAttack();
                             int armor = selectedCard.getDefence();
@@ -448,15 +472,6 @@ public class MainGameScreen implements Screen {
                                 shuffle();
                             }
 
-                        } else if ((hitActor.getName().equals("Elucidate") && cardSelected && selectedCard.getName().equals("Elucidate"))) {
-                            drawCard(2);
-                            selectedCard.setScale(1f);
-                            hero.changeMana(-selectedCard.getManaCost());
-                            cardSelected = false;
-                            cards.remove(selectedCard);
-                            selectedCard.remove();
-                            cardNo -= 1;
-                            shuffle();
                         } else if (hitActor.getName().equals("ultimateSkill")) {
                             ultimateSkill.addAction(fadeOut(0f));
                             ultimateSkill.setTouchable(Touchable.disabled);
@@ -469,7 +484,6 @@ public class MainGameScreen implements Screen {
                         } else if (hitActor.getName().equals("endTurnButton")) {
                             enemyTurn = true;
                             this.state = State.ENEMYTURN;
-
                         } else if (hitActor.getName().equals("rewardsButton")) {
                             availableRewards = false;
                             rewardsButton.setTouchable(Touchable.disabled);
@@ -481,50 +495,59 @@ public class MainGameScreen implements Screen {
                             hpReward.setTouchable(Touchable.enabled);
                             hpReward.addAction(fadeIn(0f));
                             selectingRewards = true;
-                        } else if (hitActor.getName().equals("attackReward") && !rewardSelected && rewardHitCount <= 2) {
-                            rewardHitCount += 1;
-                        } else if (hitActor.getName().equals("attackReward") && !rewardSelected && rewardHitCount > 2) {
+                        } else if (hitActor.getName().equals("attackReward") && !rewardSelected) {
                             rewardSelected = true;
                             selectedReward = attackReward;
-                            rewardHitCount = 0;
+                            selectedRewardX = (int) selectedReward.getX();
+                            selectedRewardY = (int) selectedReward.getY();
+                            defenceReward.setTouchable(Touchable.disabled);
+                            defenceReward.addAction(fadeOut(0f));
+                            hpReward.setTouchable(Touchable.disabled);
+                            hpReward.addAction(fadeOut(0f));
+                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                            hitActor.setScale(1.5f);
                         } else if (hitActor.getName().equals("attackReward") && rewardSelected) {
                             rewardSelected = false;
+                            selectedReward.setScale(1f);
+                            selectedReward.setPosition(selectedRewardX, selectedRewardY);
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
-                            defenceReward.setTouchable(Touchable.disabled);
-                            defenceReward.addAction(fadeOut(0f));
-                            hpReward.setTouchable(Touchable.disabled);
-                            hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
                             attackReward.rewardEffect(hero, group);
-                        } else if (hitActor.getName().equals("defenceReward") && !rewardSelected && rewardHitCount <= 2) {
-                            rewardHitCount += 1;
-                        } else if (hitActor.getName().equals("defenceReward") && !rewardSelected && rewardHitCount > 2) {
+                        } else if (hitActor.getName().equals("defenceReward") && !rewardSelected) {
                             rewardSelected = true;
                             selectedReward = defenceReward;
-                            rewardHitCount = 0;
-                        } else if (hitActor.getName().equals("defenceReward") && rewardSelected) {
-                            rewardSelected = false;
+                            selectedRewardX = (int) selectedReward.getX();
+                            selectedRewardY = (int) selectedReward.getY();
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
-                            defenceReward.setTouchable(Touchable.disabled);
-                            defenceReward.addAction(fadeOut(0f));
                             hpReward.setTouchable(Touchable.disabled);
                             hpReward.addAction(fadeOut(0f));
+                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                            hitActor.setScale(1.5f);
+                        } else if (hitActor.getName().equals("defenceReward") && rewardSelected) {
+                            rewardSelected = false;
+                            selectedReward.setScale(1f);
+                            selectedReward.setPosition(selectedRewardX, selectedRewardY);
+                            defenceReward.setTouchable(Touchable.disabled);
+                            defenceReward.addAction(fadeOut(0f));
                             selectingRewards = false;
                             defenceReward.rewardEffect(hero, group);
-                        } else if (hitActor.getName().equals("hpReward") && !rewardSelected && rewardHitCount <= 2) {
-                            rewardHitCount += 1;
-                        } else if (hitActor.getName().equals("hpReward") && !rewardSelected && rewardHitCount > 2) {
+                        } else if (hitActor.getName().equals("hpReward") && !rewardSelected) {
                             rewardSelected = true;
                             selectedReward = hpReward;
-                            rewardHitCount = 0;
-                        } else if (hitActor.getName().equals("hpReward") && rewardSelected) {
-                            rewardSelected = false;
+                            selectedRewardX = (int) selectedReward.getX();
+                            selectedRewardY = (int) selectedReward.getY();
                             attackReward.setTouchable(Touchable.disabled);
                             attackReward.addAction(fadeOut(0f));
                             defenceReward.setTouchable(Touchable.disabled);
                             defenceReward.addAction(fadeOut(0f));
+                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                            hitActor.setScale(1.5f);
+                        } else if (hitActor.getName().equals("hpReward") && rewardSelected) {
+                            rewardSelected = false;
+                            selectedReward.setScale(1f);
+                            selectedReward.setPosition(selectedRewardX, selectedRewardY);
                             hpReward.setTouchable(Touchable.disabled);
                             hpReward.addAction(fadeOut(0f));
                             selectingRewards = false;
@@ -592,6 +615,17 @@ public class MainGameScreen implements Screen {
                         selectedCard.setPosition(selectedCardX, selectedCardY);
                         selectedCard.setScale(1f);
                         cardSelected = false;
+                    }
+                    else if (rewardSelected) {
+                        rewardSelected = false;
+                        selectedReward.setScale(1f);
+                        selectedReward.setPosition(selectedRewardX, selectedRewardY);
+                        attackReward.setTouchable(Touchable.enabled);
+                        attackReward.addAction(fadeIn(0f));
+                        defenceReward.setTouchable(Touchable.enabled);
+                        defenceReward.addAction(fadeIn(0f));
+                        hpReward.setTouchable(Touchable.enabled);
+                        hpReward.addAction(fadeIn(0f));
                     }
                 }
                 break;

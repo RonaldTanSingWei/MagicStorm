@@ -44,6 +44,11 @@ public class DefenceReward extends Reward {
         super.positionChanged();
     }
 
+    protected void scaleChanged() {
+        sprite.setScale(getScaleX(),getScaleY());
+        super.scaleChanged();
+    }
+
     public String getDescription() {
         return "Increase defence value of cards by 5";
     }

@@ -47,6 +47,6 @@ public class Overcharge extends Defence {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Draw 3 cards. Gain 3 mana. Take " + getDefence() + "damage.";}
+    public String getDescription() {return "Draw 3 cards. Gain 3 mana. Take " + getDefence() + " damage.";}
 
 }

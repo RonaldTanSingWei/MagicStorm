@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.mygdx.magicstorm.hero.Hero;
 
 
 //Effect: Draws 2 cards
@@ -22,6 +23,11 @@ public class SpellScour extends Defence {
     public void draw(Batch batch, float parentAlpha) {
         sprite.setColor(getColor());
         sprite.draw(batch, parentAlpha);
+    }
+    public void addDefence(Hero hero, Defence defence, Attack attack) {
+        for (int i = 0; i < 2; i++) {
+            hero.getDeck().drawCard();
+        }
     }
 
     @Override
