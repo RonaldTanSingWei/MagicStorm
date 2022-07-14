@@ -13,6 +13,7 @@ public class WildLightning extends Attack {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("WildLightning.png")));
     private int manaCost = 3;
     private Random rand = new Random();
+    private boolean aoe = true;
 
     public WildLightning(int value) {
         super(value);
@@ -45,6 +46,9 @@ public class WildLightning extends Attack {
     protected void scaleChanged() {
         sprite.setScale(getScaleX(),getScaleY());
         super.scaleChanged();
+    }
+    public boolean isAoe() {
+        return aoe;
     }
 
     public int getManaCost() {return manaCost;}

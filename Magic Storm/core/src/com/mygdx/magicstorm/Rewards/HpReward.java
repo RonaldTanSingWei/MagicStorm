@@ -30,6 +30,10 @@ public class HpReward extends Reward {
         sprite.setPosition(getX(),getY());
         super.positionChanged();
     }
+    protected void scaleChanged() {
+        sprite.setScale(getScaleX(),getScaleY());
+        super.scaleChanged();
+    }
 
     public String getDescription() {
         return "Restore current HP by 10, increase max HP by 5";

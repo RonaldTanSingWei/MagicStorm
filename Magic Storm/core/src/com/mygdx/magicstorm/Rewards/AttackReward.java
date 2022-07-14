@@ -44,6 +44,11 @@ public class AttackReward extends Reward {
         super.positionChanged();
     }
 
+    protected void scaleChanged() {
+        sprite.setScale(getScaleX(),getScaleY());
+        super.scaleChanged();
+    }
+
     public String getDescription() {
         return "Increase attack value of cards by 3";
     }

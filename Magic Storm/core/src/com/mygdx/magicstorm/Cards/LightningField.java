@@ -45,6 +45,9 @@ public class LightningField extends Attack {
         sprite.setScale(getScaleX(),getScaleY());
         super.scaleChanged();
     }
+    public boolean isAoe() {
+        return aoe;
+    }
 
     public int getManaCost() {return manaCost;}
 

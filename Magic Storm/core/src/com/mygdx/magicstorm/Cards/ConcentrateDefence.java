@@ -24,8 +24,8 @@ public class ConcentrateDefence extends Defence {
         setDefence(getDefence() + value);
     }
 
-    public void addDefence(Hero hero) {
-        hero.gainArmor(getDefence());
+    public void addDefence(Hero hero, Defence defence, Attack attack) {
+        defence.increaseDefence(getDefence());
     }
 
     @Override
@@ -48,5 +48,5 @@ public class ConcentrateDefence extends Defence {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Add " + getDefence() + " armor";}
+    public String getDescription() {return "Increase the armor granted by defences this combat by  " + getDefence() + ".";}
 }
