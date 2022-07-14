@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
 public class Recharge extends Defence {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Recharge.png")));
     private int manaCost = 1;
 
     public Recharge(int value) {

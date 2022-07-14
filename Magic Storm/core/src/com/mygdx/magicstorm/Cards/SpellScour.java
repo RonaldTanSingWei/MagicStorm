@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 //Effect: Draws 2 cards
 public class SpellScour extends Defence {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Elucidate.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("SpellScour.png")));
     private int manaCost = 1;
     public SpellScour(int value) {
         super(value);

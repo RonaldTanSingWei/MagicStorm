@@ -8,7 +8,7 @@ import com.mygdx.magicstorm.Enemies.Enemy;
 
 //deal 10 dmg, reduce dmg dealt by 5
 public class LightningField extends Attack {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MementoMori.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("LightningField.png")));
     private int manaCost = 2;
 
     private boolean aoe = true;

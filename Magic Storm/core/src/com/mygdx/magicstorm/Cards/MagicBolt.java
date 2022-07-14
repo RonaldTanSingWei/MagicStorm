@@ -10,7 +10,7 @@ import java.util.Random;
 
 //deal 12 dmg
 public class MagicBolt extends Attack {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MementoMori.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MagicBolt.png")));
     private int manaCost = 1;
 
     public MagicBolt(int value) {

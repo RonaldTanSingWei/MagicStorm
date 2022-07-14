@@ -10,7 +10,7 @@ import java.util.Random;
 
 //Effect: Random (Atk, Atk + 10) x 5 dmg to enemies (works with multiple enemies)
 public class WildLightning extends Attack {
-    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("MementoMori.jpg")));
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("WildLightning.png")));
     private int manaCost = 3;
     private Random rand = new Random();
 
