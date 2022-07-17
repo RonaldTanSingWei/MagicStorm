@@ -48,6 +48,9 @@ public class UltimateDamageDone extends UltimateSkill {
     public void enemyEffect(Enemy enemy) {
         enemy.takeDamage(ultValue);
     };
+
+    public void increaseUltValue(int value) {ultValue += value;};
+
     public String getUltimateDescription() {
         return this.ultimateDescription;
     }

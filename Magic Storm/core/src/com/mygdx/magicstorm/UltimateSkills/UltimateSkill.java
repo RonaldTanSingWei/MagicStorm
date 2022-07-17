@@ -9,6 +9,7 @@ public class UltimateSkill extends Actor {
 
     private int progress;
 
+    private int ultValue;
 
     private int maxCounter;
 
@@ -56,6 +57,7 @@ public class UltimateSkill extends Actor {
     public void enemyEffect(Enemy enemy) {
 
     }
+    public void increaseUltValue(int value) {ultValue += value;};
 
     public void heroEffect(Hero hero){}
 }
