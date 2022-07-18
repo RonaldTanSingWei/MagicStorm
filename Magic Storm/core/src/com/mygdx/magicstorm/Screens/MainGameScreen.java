@@ -22,8 +22,11 @@ import com.mygdx.magicstorm.Cards.Deck;
 import com.mygdx.magicstorm.Cards.Defence;
 import com.mygdx.magicstorm.Enemies.*;
 import com.mygdx.magicstorm.Rewards.AttackReward;
+import com.mygdx.magicstorm.Rewards.AttackReward2;
 import com.mygdx.magicstorm.Rewards.DefenceReward;
+import com.mygdx.magicstorm.Rewards.DefenceReward2;
 import com.mygdx.magicstorm.Rewards.HpReward;
+import com.mygdx.magicstorm.Rewards.HpReward2;
 import com.mygdx.magicstorm.Rewards.Reward;
 import com.mygdx.magicstorm.Rewards.UltimateReward;
 import com.mygdx.magicstorm.UltimateSkills.UltimateArmorGain;
@@ -89,9 +92,15 @@ public class MainGameScreen implements Screen {
 
     private Deck deck;
 
+    private ArrayList<AttackReward> attackRewards = new ArrayList<AttackReward>();
+
     private AttackReward attackReward = new AttackReward();
 
+    private ArrayList<DefenceReward> defenceRewards = new ArrayList<DefenceReward>();
+
     private DefenceReward defenceReward = new DefenceReward();
+
+    private ArrayList<HpReward> HpRewards = new ArrayList<HpReward>();
 
     private HpReward hpReward = new HpReward();
 
@@ -160,9 +169,16 @@ public class MainGameScreen implements Screen {
         startTurn.setName("startTurn");
         nextStage.setName("nextStage");
         rewardsButton.setName("rewardsButton");
-        attackReward.setName("attackReward");
-        defenceReward.setName("defenceReward");
-        hpReward.setName("hpReward");
+
+        attackRewards.add(new AttackReward());
+        attackRewards.add(new AttackReward2());
+
+        defenceRewards.add(new DefenceReward());
+        defenceRewards.add(new DefenceReward2());
+
+        HpRewards.add(new HpReward());
+        HpRewards.add(new HpReward2());
+
         ultimateReward.setName("ultimateReward");
         deck = copyDeck(hero.getDeck());
         ultimateSkill.setName("ultimateSkill");
@@ -180,9 +196,6 @@ public class MainGameScreen implements Screen {
         group.addActor(startTurn);
         group.addActor(nextStage);
         group.addActor(rewardsButton);
-        group.addActor(attackReward);
-        group.addActor(defenceReward);
-        group.addActor(hpReward);
         group.addActor(ultimateReward);
         group.addActor(ultimateSkill);
         group.addActor(cardback);
@@ -226,13 +239,7 @@ public class MainGameScreen implements Screen {
         nextStage.addAction(sequence(fadeOut(0f)));
         rewardsButton.setPosition(stage.getWidth() * 4 / 5, stage.getHeight() * 4 / 5);
         rewardsButton.addAction(fadeOut(0f));
-        attackReward.setPosition(stage.getWidth() * 1 / 4, stage.getHeight() * 1 / 2);
-        attackReward.addAction(fadeOut(0f));
-        defenceReward.setPosition(attackReward.getX() + attackReward.getWidth() + 100, stage.getHeight() * 1 / 2);
-        defenceReward.addAction(fadeOut(0f));
-        hpReward.setPosition(defenceReward.getX() + defenceReward.getWidth() + 100, stage.getHeight() * 1 / 2);
-        hpReward.addAction(fadeOut(0f));
-        ultimateReward.setPosition(hpReward.getX() + hpReward.getWidth() + 100, stage.getHeight() * 1 / 2);
+        ultimateReward.setPosition(stage.getWidth() / 4 + 660, stage.getHeight() * 1 / 2);
         ultimateReward.addAction(fadeOut(0f));
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
         deck.setPosition(50, 50);
@@ -241,7 +248,6 @@ public class MainGameScreen implements Screen {
         ultimateSkill.addAction(fadeOut(0f));
         attack.setPosition(stage.getWidth() * 1 / 7, stage.getHeight() * 7 / 10);
         defence.setPosition(stage.getWidth() * 1 / 19, stage.getHeight() * 7 / 10);
-
 
         shuffle();
 
@@ -274,9 +280,6 @@ public class MainGameScreen implements Screen {
         final Actor startTurn = group.findActor("startTurn");
         final Actor nextStage = group.findActor("nextStage");
         final Actor endTurnButton = group.findActor("endTurnButton");
-        AttackReward attackReward = group.findActor("attackReward");
-        DefenceReward defenceReward = group.findActor("defenceReward");
-        HpReward hpReward = group.findActor("hpReward");
         nextStage.setTouchable(Touchable.disabled);
         Actor rewardsButton = group.findActor("rewardsButton");
         rewardsButton.setTouchable(Touchable.disabled);
@@ -495,12 +498,22 @@ public class MainGameScreen implements Screen {
                             availableRewards = false;
                             rewardsButton.setTouchable(Touchable.disabled);
                             rewardsButton.addAction(fadeOut(0f));
-                            attackReward.setTouchable(Touchable.enabled);
-                            attackReward.addAction(fadeIn(0f));
-                            defenceReward.setTouchable(Touchable.enabled);
-                            defenceReward.addAction(fadeIn(0f));
-                            hpReward.setTouchable(Touchable.enabled);
-                            hpReward.addAction(fadeIn(0f));
+
+                            attackReward = attackRewards.get(rand.nextInt(attackRewards.size()));
+                            attackReward.setName("attackReward");
+                            group.addActor(attackReward);
+                            attackReward.setPosition(stage.getWidth() * 1 / 4, stage.getHeight() * 1 / 2);
+
+                            defenceReward = defenceRewards.get(rand.nextInt(defenceRewards.size()));
+                            defenceReward.setName("defenceReward");
+                            group.addActor(defenceReward);
+                            defenceReward.setPosition(attackReward.getX() + attackReward.getWidth() + 100, stage.getHeight() * 1 / 2);
+
+                            hpReward = HpRewards.get(rand.nextInt(HpRewards.size()));
+                            hpReward.setName("hpReward");
+                            group.addActor(hpReward);
+                            hpReward.setPosition(defenceReward.getX() + defenceReward.getWidth() + 100, stage.getHeight() * 1 / 2);
+
                             ultimateReward.setTouchable(Touchable.enabled);
                             ultimateReward.addAction(fadeIn(0f));
                             selectingRewards = true;
@@ -541,9 +554,7 @@ public class MainGameScreen implements Screen {
                         } else if (hitActor.getName().equals("defenceReward") && rewardSelected) {
                             rewardSelected = false;
                             selectedReward.setScale(1f);
-                            selectedReward.setPosition(selectedRewardX, selectedRewardY);
-                            defenceReward.setTouchable(Touchable.disabled);
-                            defenceReward.addAction(fadeOut(0f));
+                            defenceReward.remove();
                             selectingRewards = false;
                             defenceReward.rewardEffect(hero, group);
                         } else if (hitActor.getName().equals("hpReward") && !rewardSelected) {

@@ -36,6 +36,6 @@ public class HpReward extends Reward {
     }
 
     public String getDescription() {
-        return "Restore current HP by 10, increase max HP by 5";
+        return "Restore current HP by 10.";
     }
 }

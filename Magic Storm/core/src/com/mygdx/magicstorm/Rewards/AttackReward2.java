@@ -14,19 +14,21 @@ import com.mygdx.magicstorm.hero.Hero;
 
 import java.util.ArrayList;
 
-//Buffs default attack
-public class AttackReward extends Reward {
+public class AttackReward2 extends AttackReward {
 
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Attack.png")));
 
-    public AttackReward() {
+    public AttackReward2() {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
     }
     public void rewardEffect(Hero hero, Group group) {
-        Card attack = group.findActor("attack");
-        attack.increaseAttack(3);
-        attack.increaseOriginalValue(3);
+        ArrayList<Card> cards = hero.getDeck().getCards();
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i) instanceof Attack) {
+                cards.get(i).increaseAttack(3);
+            }
+        }
     }
 
     public void draw(Batch batch, float parentAlpha) {
@@ -45,6 +47,6 @@ public class AttackReward extends Reward {
     }
 
     public String getDescription() {
-        return "Increases attack value of default attack card by 3";
+        return "Increase attack value of all attack spell by 3";
     }
 }

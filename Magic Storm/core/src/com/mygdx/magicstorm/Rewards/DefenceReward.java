@@ -14,6 +14,7 @@ import com.mygdx.magicstorm.hero.Hero;
 
 import java.util.ArrayList;
 
+// Buffs default defence
 public class DefenceReward extends Reward {
 
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Defend.png")));
@@ -23,12 +24,6 @@ public class DefenceReward extends Reward {
         setTouchable(Touchable.enabled);
     }
     public void rewardEffect(Hero hero, Group group) {
-        ArrayList<Card> cards = hero.getDeck().getCards();
-        for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i) instanceof Defence) {
-                cards.get(i).increaseDefence(5);
-            }
-        }
         Card defence = group.findActor("defence");
         defence.increaseDefence(5);
         defence.increaseOriginalValue(5);
@@ -50,6 +45,6 @@ public class DefenceReward extends Reward {
     }
 
     public String getDescription() {
-        return "Increase defence value of cards by 5";
+        return "Increase defence value of default defence card by 5";
     }
 }
