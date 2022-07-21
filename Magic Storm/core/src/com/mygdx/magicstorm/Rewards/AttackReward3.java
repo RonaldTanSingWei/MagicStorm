@@ -14,18 +14,19 @@ import com.mygdx.magicstorm.hero.Hero;
 
 import java.util.ArrayList;
 
-public class AttackReward2 extends AttackReward {
+//Buffs aoe cards
+public class AttackReward3 extends AttackReward {
 
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Attack.png")));
 
-    public AttackReward2() {
+    public AttackReward3() {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
     }
     public void rewardEffect(Hero hero, Group group) {
         ArrayList<Card> cards = hero.getDeck().getCards();
         for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i) instanceof Attack) {
+            if (cards.get(i) instanceof Attack && cards.get(i).isAoe()) {
                 cards.get(i).increaseAttack(3);
             }
         }
@@ -47,6 +48,7 @@ public class AttackReward2 extends AttackReward {
     }
 
     public String getDescription() {
-        return "Increase attack value of all attack spells by 3";
+        return "Increase attack value of all aoe attack spells by 3";
     }
 }
+

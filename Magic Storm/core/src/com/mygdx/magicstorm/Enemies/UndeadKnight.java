@@ -133,4 +133,6 @@ public class UndeadKnight extends Enemy{
     public void setAttackValue(int value) {
         this.attackValue = value;
     }
+
+    public String getDescription() {return " ";}
 }

@@ -137,4 +137,6 @@ public class Bash extends Enemy {
     public void setSmash(Smash smash) {
         this.smash = smash;
     }
+
+    public String getDescription() {return "Power of Friendship";}
 }

@@ -136,6 +136,8 @@ public class Drake extends Enemy {
     public void setAttackValue(int value) {
         this.attackValue = value;
     }
+
+    public String getDescription() {return "Unpredictable Strikes";}
 }
 
 

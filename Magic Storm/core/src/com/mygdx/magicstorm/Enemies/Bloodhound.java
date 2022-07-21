@@ -128,4 +128,6 @@ public class Bloodhound extends Enemy {
     public void setAttackValue(int value) {
         this.attackValue = value;
     }
+
+    public String getDescription() {return " ";}
 }

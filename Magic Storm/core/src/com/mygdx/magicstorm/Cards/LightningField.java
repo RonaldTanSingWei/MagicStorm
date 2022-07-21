@@ -51,6 +51,6 @@ public class LightningField extends Attack {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Deal " + getAttack() + " damage to an enemy and reduce its attack damage by half the damage dealt";}
+    public String getDescription() {return "Deal " + getAttack() + " damage to all enemies and reduce their attack damage by half the damage dealt";}
 }
 

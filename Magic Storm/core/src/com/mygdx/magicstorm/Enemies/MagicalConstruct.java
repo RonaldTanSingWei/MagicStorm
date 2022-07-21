@@ -141,7 +141,11 @@ public class MagicalConstruct extends Enemy {
     public int getIntAttackValue() {
         return this.attackValue;
     }
+
     public void setAttackValue(int value) {
         this.attackValue = value;
     }
+
+    public String getDescription() {return "Increasingly aggressive when provoked";}
+
 }

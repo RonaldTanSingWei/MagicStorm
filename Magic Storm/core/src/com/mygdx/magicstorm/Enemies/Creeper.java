@@ -143,4 +143,6 @@ public class Creeper extends Enemy{
     public boolean isBoss() {
         return boss;
     }
+
+    public String getDescription() {return "Anthropophagist";}
 }

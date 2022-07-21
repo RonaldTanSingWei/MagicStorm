@@ -143,4 +143,7 @@ public class RenegadeMage extends Enemy {
     public void setAttackValue(int value) {
         this.attackValue = value;
     }
+
+    public String getDescription() {return "Necromancy";}
+
 }

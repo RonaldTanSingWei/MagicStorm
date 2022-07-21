@@ -8,7 +8,7 @@ import com.mygdx.magicstorm.Enemies.Enemy;
 
 import java.util.Random;
 
-//Effect: Random (Atk, Atk + 10) x 5 dmg to enemies (works with multiple enemies)
+//Effect: Random (Atk, Atk + 10) to single enemy
 public class WildLightning extends Attack {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("WildLightning.png")));
     private int manaCost = 3;
@@ -53,5 +53,5 @@ public class WildLightning extends Attack {
 
     public int getManaCost() {return manaCost;}
 
-    public String getDescription() {return "Deal randomised 0 - " + (getAttack() + 10)+ " to random enemy target";}
+    public String getDescription() {return "Deal randomised 0 - " + (getAttack() + 10)+ " to all enemies" ;}
 }

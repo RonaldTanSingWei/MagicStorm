@@ -130,5 +130,5 @@ public class Warg extends Enemy {
         return this.attackValue;
     }
 
-
+    public String getDescription() {return "Debilitating Strikes";}
 }

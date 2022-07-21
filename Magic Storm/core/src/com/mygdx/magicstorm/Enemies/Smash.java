@@ -150,4 +150,5 @@ public class Smash extends Enemy {
         return this.attackValue;
     }
 
+    public String getDescription() {return "Power of Friendship";}
 }

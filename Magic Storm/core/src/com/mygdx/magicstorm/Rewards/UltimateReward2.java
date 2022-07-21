@@ -14,21 +14,16 @@ import com.mygdx.magicstorm.hero.Hero;
 
 import java.util.ArrayList;
 
-public class AttackReward2 extends AttackReward {
+public class UltimateReward2 extends UltimateReward {
 
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Attack.png")));
 
-    public AttackReward2() {
+    public UltimateReward2() {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         setTouchable(Touchable.enabled);
     }
     public void rewardEffect(Hero hero, Group group) {
-        ArrayList<Card> cards = hero.getDeck().getCards();
-        for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i) instanceof Attack) {
-                cards.get(i).increaseAttack(3);
-            }
-        }
+        hero.getUltimateSkill().setMaxCounter(hero.getUltimateSkill().getMaxCounter() - 5);
     }
 
     public void draw(Batch batch, float parentAlpha) {
@@ -47,6 +42,6 @@ public class AttackReward2 extends AttackReward {
     }
 
     public String getDescription() {
-        return "Increase attack value of all attack spells by 3";
+        return "Decrease cost of ultimate ability by 5";
     }
 }

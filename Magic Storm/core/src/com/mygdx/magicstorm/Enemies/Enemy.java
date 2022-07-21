@@ -114,4 +114,6 @@ public class Enemy extends Actor {
     public boolean isBoss() {
         return boss;
     }
+
+    public String getDescription() {return "Default";}
 }

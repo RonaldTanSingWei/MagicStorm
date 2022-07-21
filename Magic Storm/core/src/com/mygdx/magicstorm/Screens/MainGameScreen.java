@@ -23,12 +23,14 @@ import com.mygdx.magicstorm.Cards.Defence;
 import com.mygdx.magicstorm.Enemies.*;
 import com.mygdx.magicstorm.Rewards.AttackReward;
 import com.mygdx.magicstorm.Rewards.AttackReward2;
+import com.mygdx.magicstorm.Rewards.AttackReward3;
 import com.mygdx.magicstorm.Rewards.DefenceReward;
 import com.mygdx.magicstorm.Rewards.DefenceReward2;
 import com.mygdx.magicstorm.Rewards.HpReward;
 import com.mygdx.magicstorm.Rewards.HpReward2;
 import com.mygdx.magicstorm.Rewards.Reward;
 import com.mygdx.magicstorm.Rewards.UltimateReward;
+import com.mygdx.magicstorm.Rewards.UltimateReward2;
 import com.mygdx.magicstorm.UltimateSkills.UltimateArmorGain;
 import com.mygdx.magicstorm.UltimateSkills.UltimateDamageDone;
 import com.mygdx.magicstorm.hero.Hero;
@@ -106,6 +108,8 @@ public class MainGameScreen implements Screen {
 
     private UltimateReward ultimateReward = new UltimateReward();
 
+    private ArrayList<UltimateReward> ultimateRewards = new ArrayList<UltimateReward>();
+
 
     public enum State {
         PAUSE,
@@ -172,6 +176,7 @@ public class MainGameScreen implements Screen {
 
         attackRewards.add(new AttackReward());
         attackRewards.add(new AttackReward2());
+        attackRewards.add(new AttackReward3());
 
         defenceRewards.add(new DefenceReward());
         defenceRewards.add(new DefenceReward2());
@@ -179,7 +184,9 @@ public class MainGameScreen implements Screen {
         HpRewards.add(new HpReward());
         HpRewards.add(new HpReward2());
 
-        ultimateReward.setName("ultimateReward");
+        ultimateRewards.add(new UltimateReward());
+        ultimateRewards.add(new UltimateReward2());
+
         deck = copyDeck(hero.getDeck());
         ultimateSkill.setName("ultimateSkill");
         cardback.setName("cardback");
@@ -196,7 +203,6 @@ public class MainGameScreen implements Screen {
         group.addActor(startTurn);
         group.addActor(nextStage);
         group.addActor(rewardsButton);
-        group.addActor(ultimateReward);
         group.addActor(ultimateSkill);
         group.addActor(cardback);
         group.addActor(attack);
@@ -239,8 +245,6 @@ public class MainGameScreen implements Screen {
         nextStage.addAction(sequence(fadeOut(0f)));
         rewardsButton.setPosition(stage.getWidth() * 4 / 5, stage.getHeight() * 4 / 5);
         rewardsButton.addAction(fadeOut(0f));
-        ultimateReward.setPosition(stage.getWidth() / 4 + 660, stage.getHeight() * 1 / 2);
-        ultimateReward.addAction(fadeOut(0f));
         hero.setHpBarPos(0, (int) ((stage.getHeight() / 3) - 30));
         deck.setPosition(50, 50);
         cardback.setPosition(50, 50);
@@ -297,6 +301,7 @@ public class MainGameScreen implements Screen {
                 if (!currentEnemy.isDead()) {
                     game.font.draw(game.batch, "Attack Damage: " + currentEnemy.getAttackValue(), currentEnemy.getX(), currentEnemy.getY() - 50);
                     game.font.draw(game.batch, currentEnemy.getName(), currentEnemy.getX(), currentEnemy.getY() + currentEnemy.getHeight() + 10);
+                    game.font.draw(game.batch, currentEnemy.getDescription(), currentEnemy.getX(), currentEnemy.getY() - 70);
                 }
                 if (!currentEnemy2.isDead()) {
                     game.font.draw(game.batch, "Attack Damage: " + currentEnemy2.getAttackValue(), currentEnemy2.getX(), currentEnemy2.getY() - 50);
@@ -514,9 +519,21 @@ public class MainGameScreen implements Screen {
                             group.addActor(hpReward);
                             hpReward.setPosition(defenceReward.getX() + defenceReward.getWidth() + 100, stage.getHeight() * 1 / 2);
 
+                            ultimateReward = ultimateRewards.get(rand.nextInt(ultimateRewards.size()));
+                            ultimateReward.setName("ultimateReward");
+                            group.addActor(ultimateReward);
+                            ultimateReward.setPosition(hpReward.getX() + hpReward.getWidth() + 100, stage.getHeight() * 1 / 2);
+
+                            selectingRewards = true;
+
+                            attackReward.setTouchable(Touchable.enabled);
+                            attackReward.addAction(fadeIn(0f));
+                            defenceReward.setTouchable(Touchable.enabled);
+                            defenceReward.addAction(fadeIn(0f));
+                            hpReward.setTouchable(Touchable.enabled);
+                            hpReward.addAction(fadeIn(0f));
                             ultimateReward.setTouchable(Touchable.enabled);
                             ultimateReward.addAction(fadeIn(0f));
-                            selectingRewards = true;
                         } else if (hitActor.getName().equals("attackReward") && !rewardSelected) {
                             rewardSelected = true;
                             selectedReward = attackReward;
@@ -528,7 +545,7 @@ public class MainGameScreen implements Screen {
                             hpReward.addAction(fadeOut(0f));
                             ultimateReward.setTouchable(Touchable.disabled);
                             ultimateReward.addAction(fadeOut(0f));
-                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2) - 100));
                             hitActor.setScale(1.5f);
                         } else if (hitActor.getName().equals("attackReward") && rewardSelected) {
                             rewardSelected = false;
@@ -549,12 +566,13 @@ public class MainGameScreen implements Screen {
                             hpReward.addAction(fadeOut(0f));
                             ultimateReward.setTouchable(Touchable.disabled);
                             ultimateReward.addAction(fadeOut(0f));
-                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2) - 100));
                             hitActor.setScale(1.5f);
                         } else if (hitActor.getName().equals("defenceReward") && rewardSelected) {
                             rewardSelected = false;
                             selectedReward.setScale(1f);
-                            defenceReward.remove();
+                            defenceReward.setTouchable(Touchable.disabled);
+                            defenceReward.addAction(fadeOut(0f));
                             selectingRewards = false;
                             defenceReward.rewardEffect(hero, group);
                         } else if (hitActor.getName().equals("hpReward") && !rewardSelected) {
@@ -568,7 +586,7 @@ public class MainGameScreen implements Screen {
                             defenceReward.addAction(fadeOut(0f));
                             ultimateReward.setTouchable(Touchable.disabled);
                             ultimateReward.addAction(fadeOut(0f));
-                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2) - 100));
                             hitActor.setScale(1.5f);
                         } else if (hitActor.getName().equals("hpReward") && rewardSelected) {
                             rewardSelected = false;
@@ -589,7 +607,7 @@ public class MainGameScreen implements Screen {
                             defenceReward.addAction(fadeOut(0f));
                             hpReward.setTouchable(Touchable.disabled);
                             hpReward.addAction(fadeOut(0f));
-                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)));
+                            hitActor.setPosition((float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2)), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2) - 100));
                             hitActor.setScale(1.5f);
                         } else if (hitActor.getName().equals("ultimateReward") && rewardSelected) {
                             rewardSelected = false;
