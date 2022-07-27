@@ -67,9 +67,6 @@ public class Goblin extends Enemy {
             setCurrentHpString("");
             currentHp = 0;
         }
-
-
-
     }
 
     public int getCurrentHp() {
@@ -137,4 +134,5 @@ public class Goblin extends Enemy {
     }
 
     public String getDescription() {return " ";}
+
 }

@@ -14,6 +14,8 @@ import com.mygdx.magicstorm.hero.Hero;
 
 import java.util.Random;
 
+
+// Randomised attack value
 public class Drake extends Enemy {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("drake.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();

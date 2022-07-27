@@ -306,6 +306,7 @@ public class MainGameScreen implements Screen {
                 if (!currentEnemy2.isDead()) {
                     game.font.draw(game.batch, "Attack Damage: " + currentEnemy2.getAttackValue(), currentEnemy2.getX(), currentEnemy2.getY() - 50);
                     game.font.draw(game.batch, currentEnemy2.getName(), currentEnemy2.getX(), currentEnemy2.getY() + currentEnemy2.getHeight() + 10);
+                    game.font.draw(game.batch, currentEnemy.getDescription(), currentEnemy2.getX(), currentEnemy2.getY() - 70);
                 }
                 if (cardSelected) {
                     game.font.draw(game.batch, "Mana cost: " + selectedCard.getManaCost(), (float) ((stage.getWidth() / 2) - ((cardWidth * 1.5) / 2) - 25), (float) ((stage.getHeight()) / 2 - ((cardHeight * 1.5) / 2)) - 50);
@@ -646,7 +647,11 @@ public class MainGameScreen implements Screen {
                                 currentEnemy.setHpBarPos((int) (stage.getWidth() - currentEnemy.getWidth()), (int) ((stage.getHeight() / 3) - 30));
                                 if (currentEnemy.getName().equals("Bloodhound")) {
                                     multipleEnemies = true;
-                                    currentEnemy2 = new Bloodhound(28, 28);
+                                    Bloodhound temp = (Bloodhound) currentEnemy;
+                                    Bloodhound bloodhound = new Bloodhound(28,28);
+                                    currentEnemy2 = bloodhound;
+                                    temp.setOtherBloodhound(bloodhound);
+                                    bloodhound.setOtherBloodhound((Bloodhound) currentEnemy);
                                     currentEnemy2.setName("Bloodhound");
                                     stage.addActor(currentEnemy2);
                                     currentEnemy2.draw(batch, delta);

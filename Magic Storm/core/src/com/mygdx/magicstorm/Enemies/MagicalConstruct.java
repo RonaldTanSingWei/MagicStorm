@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.magicstorm.hero.Hero;
 
+
+// Attack value increases as current HP decreases
 public class MagicalConstruct extends Enemy {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("Construct.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -146,6 +148,6 @@ public class MagicalConstruct extends Enemy {
         this.attackValue = value;
     }
 
-    public String getDescription() {return "Increasingly aggressive when provoked";}
+    public String getDescription() {return "Sleeping Dogs";}
 
 }

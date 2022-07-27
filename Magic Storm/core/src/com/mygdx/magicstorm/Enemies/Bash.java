@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
+
 public class Bash extends Enemy {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("bash.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();

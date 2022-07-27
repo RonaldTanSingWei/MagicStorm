@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
+
+// Receives less damage the more HP it currently has
 public class Golem extends Enemy{
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("golem.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -59,7 +61,10 @@ public class Golem extends Enemy{
 
     @Override
     public void takeDamage(int damage) {
-        int damageTaken = damage - 5;
+        int damageTaken;
+        if (currentHp > 2 * maxHp / 3) {damageTaken = damage - 10;}
+        else if (currentHp > maxHp / 3) {damageTaken = damage - 5;}
+        else {damageTaken = damage;}
         currentHp -= damageTaken;
         currentHpString = currentHp + "/" + maxHp;
         hpBar.setWidth(widthCheck * currentHp / maxHp);
@@ -135,5 +140,5 @@ public class Golem extends Enemy{
         this.attackValue = value;
     }
 
-    public String getDescription() {return " ";}
+    public String getDescription() {return "Natural Defenses";}
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
+// Lifesteal
 public class Creeper extends Enemy{
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("creeper.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();

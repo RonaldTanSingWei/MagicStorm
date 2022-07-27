@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
+// Attack value and HP increases every turn
 public class UndeadKnight extends Enemy{
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("undeadKnight.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -120,8 +121,19 @@ public class UndeadKnight extends Enemy{
     public void attack(Hero hero) {
         super.attack(hero);
         hero.takeDamage(attackValue);
+        setAttackValue(attackValue + 10);
+        this.gainHp(10);
 
     }
+
+    public void gainHp(int hp) {
+        this.currentHp += hp;
+        if (currentHp >= maxHp) {
+            this.currentHp = maxHp;
+        }
+        this.currentHpString = currentHp + "/" + maxHp;
+    }
+
     public String getAttackValue() {
         return String.valueOf(this.attackValue);
     }
@@ -134,5 +146,5 @@ public class UndeadKnight extends Enemy{
         this.attackValue = value;
     }
 
-    public String getDescription() {return " ";}
+    public String getDescription() {return "Tick Tock";}
 }

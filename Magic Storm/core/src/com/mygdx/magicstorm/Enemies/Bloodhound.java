@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.mygdx.magicstorm.hero.Hero;
 
+// Attack value halves on death of ally
 public class Bloodhound extends Enemy {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("bloodhound.png")));
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -25,6 +26,7 @@ public class Bloodhound extends Enemy {
     private int attackValue = 13;
 
     private boolean boss = false;
+    private Bloodhound otherBloodhound;
 
     public Bloodhound(int currentHp, int maxHp) {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
@@ -63,6 +65,9 @@ public class Bloodhound extends Enemy {
             this.die();
             setCurrentHpString("");
             currentHp = 0;
+            if (!otherBloodhound.isDead()) {
+                otherBloodhound.rout();
+            }
         }
 
     }
@@ -129,5 +134,11 @@ public class Bloodhound extends Enemy {
         this.attackValue = value;
     }
 
-    public String getDescription() {return " ";}
+    public String getDescription() {return "Pack Mentality";}
+
+    public void setOtherBloodhound(Bloodhound bloodhound) {
+        this.otherBloodhound = bloodhound;
+    }
+
+    public void rout() {setAttackValue(attackValue / 2);}
 }
